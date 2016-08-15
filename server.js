@@ -43,12 +43,12 @@ app.use(methodOverride());
     technologicalSummary  : String,
     usecase               : String,
     newproject            : Boolean,
-    tags                  : [String],
     projectType           : { type: Number, min: 0, max: 2 },
     pi                    : { type: Schema.ObjectId, ref: 'Person' },
     copi                  : { type: Schema.ObjectId, ref: 'Person' },
     members               : [{ type: Schema.ObjectId, ref: 'Person' }],
     teams                 : [{ type: Schema.ObjectId, ref: 'Team' }],
+    tags                  : [{ type: Schema.ObjectId, ref: 'Tag' }],
     relatedProjects       : [{ type: Schema.ObjectId, ref: 'RelatedProject' }],
     shortDeliverable      : [{ type: Schema.ObjectId, ref: 'ShortDeliverable' }],
     publications          : [{ type: Schema.ObjectId, ref: 'Publication' }],
@@ -134,4 +134,35 @@ app.use(methodOverride());
   var Task = mongoose.model('Task', {
     name  : String,
     grant : { type: Schema.ObjectId, ref: 'Grant' }
+  });
+
+  // Tag -----------------------------------------------------------------------
+  var Tag = mongoose.model('Tag', {
+    name  : String
+  });
+
+  // Requirement ---------------------------------------------------------------
+  var Requirement = mongoose.model('Requirement', {
+    title       : String,
+    type        : String,
+    requirement : String,
+    feature     : String,
+    input       : [{ type: Schema.ObjectId, ref: 'Input' }],
+    output      : [{ type: Schema.ObjectId, ref: 'Output' }]
+  });
+
+  // Input ---------------------------------------------------------------------
+  var Input = mongoose.model('Input', {
+    tag : String,
+    format : String,
+    number : { type: Number, min:0 },
+    size : { type: Number, min:0 }
+  });
+
+  // Output --------------------------------------------------------------------
+  var Output = mongoose.model('Output', {
+    tag : String,
+    format : String,
+    number : { type: Number, min:0 },
+    size : { type: Number, min:0 }
   });
