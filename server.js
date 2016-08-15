@@ -48,7 +48,7 @@ app.use(methodOverride());
     pi                    : { type: Schema.ObjectId, ref: 'Person' },
     copi                  : { type: Schema.ObjectId, ref: 'Person' },
     members               : [{ type: Schema.ObjectId, ref: 'Person' }],
-    teams                 : [{ type: Schema.ObjectId, ref:'Team' }],
+    teams                 : [{ type: Schema.ObjectId, ref: 'Team' }],
     relatedProjects       : [{ type: Schema.ObjectId, ref: 'RelatedProject' }],
     shortDeliverable      : [{ type: Schema.ObjectId, ref: 'ShortDeliverable' }],
     publications          : [{ type: Schema.ObjectId, ref: 'Publication' }],
@@ -58,4 +58,19 @@ app.use(methodOverride());
     deliverables          : [{ type: Schema.ObjectId, ref: 'Deliverable' }],
   });
 
-  //
+  // Person --------------------------------------------------------------------
+  var Person = mongoose.model('Person', {
+    id            : Number,
+    updatedAt     : Date,
+    username      : String,
+    givenName     : String,
+    familyName    : String,
+    displayName   : String,
+    title:        : String,
+    profile       : String,
+    picture       : String,
+    emails        : [{ type: Schema.ObjectId, ref: 'Email'}],
+    phones        : [{ type: Schema.ObjectId, ref: 'Phone'}],
+    institutions  : [{ type: Schema.ObjectId, ref: 'Institution'}],
+    ims           : [String]
+  });
