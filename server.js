@@ -74,3 +74,27 @@ app.use(methodOverride());
     institutions  : [{ type: Schema.ObjectId, ref: 'Institution'}],
     ims           : [String]
   });
+
+  // Email ---------------------------------------------------------------------
+  var Email = mongoose.model('Email',{
+    value     : String,
+    primary   : Boolean,
+    verified  : Boolean
+  });
+
+  // Phone ---------------------------------------------------------------------
+  var Phone = mangoose.model('Phone', {
+    value     : String,
+    primary   : Boolean
+  });
+
+  // Institution ---------------------------------------------------------------
+  var Institution = mangoose.model('Institution', {
+    name : String,
+    department : String,
+    postalAdress : String,
+    title : String,
+    primary : Boolean
+  });
+
+  
