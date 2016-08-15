@@ -69,9 +69,9 @@ app.use(methodOverride());
     title:        : String,
     profile       : String,
     picture       : String,
-    emails        : [{ type: Schema.ObjectId, ref: 'Email'}],
-    phones        : [{ type: Schema.ObjectId, ref: 'Phone'}],
-    institutions  : [{ type: Schema.ObjectId, ref: 'Institution'}],
+    emails        : [{ type: Schema.ObjectId, ref: 'Email' }],
+    phones        : [{ type: Schema.ObjectId, ref: 'Phone' }],
+    institutions  : [{ type: Schema.ObjectId, ref: 'Institution' }],
     ims           : [String]
   });
 
@@ -90,11 +90,48 @@ app.use(methodOverride());
 
   // Institution ---------------------------------------------------------------
   var Institution = mangoose.model('Institution', {
-    name : String,
-    department : String,
-    postalAdress : String,
-    title : String,
-    primary : Boolean
+    name          : String,
+    department    : String,
+    postalAdress  : String,
+    title         : String,
+    primary       : Boolean
   });
 
-  
+  // Team ----------------------------------------------------------------------
+  var Team = mangoose.model('Team', {
+    name        : String,
+    shortName   : String,
+    displayName : String
+  });
+
+  // Related Project -----------------------------------------------------------
+  var RelatedProject = mongoose.model('RelatedProject', {
+    name          : String,
+    startDate     : Date,
+    endDate       : Date,
+    description   : String
+  });
+
+  // Short Deliverable ---------------------------------------------------------
+  var ShortDeliverable = mongoose.model('ShortDeliverable', {
+    name          : String,
+    deliveryDate  : Date,
+    pm            : { type: Number, min: 0 }
+  });
+
+  // Publication ---------------------------------------------------------------
+  var Publication = mongoose.model('Publication', {
+    name  : String,
+    link  : String
+  });
+
+  // Grant ---------------------------------------------------------------------
+  var Grant = mongoose.model('Grant', {
+    name  : String
+  });
+
+  // Task ----------------------------------------------------------------------
+  var Task = mongoose.model('Task', {
+    name  : String,
+    grant : { type: Schema.ObjectId, ref: 'Grant' }
+  });
