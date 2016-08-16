@@ -21,7 +21,7 @@ app.use(methodOverride());
   // Project -------------------------------------------------------------------
   var Project = mongoose.model('Project', {
     proposal  : { type: Schema.ObjectId, ref: 'Proposal' },
-    review    : { type: Schema.ObjectId, ref: 'Review' }
+    review    : { type: Schema.ObjectId, ref: 'GeneralReview' }
   });
 
   // Proposal ------------------------------------------------------------------
@@ -275,3 +275,40 @@ app.use(methodOverride());
   var Role = mongoose.model('Role', {
     name  : String
   });
+
+  // General Review ------------------------------------------------------------
+  var GeneralReview = mongoose.model('GeneralReview', {
+    grade : Number,
+    reviews : [{ type: Schema.ObjectId, ref: 'Review' }]
+  });
+
+  // Review --------------------------------------------------------------------
+  var Review = mongoose.model('Review', {
+    reviewer  : { type: Schema.ObjectId, ref: 'Person' },
+    comments  : [{ type: Schema.ObjectId, ref: 'Comment' }],
+    notes     : [{ type: Schema.ObjectId, ref: 'Note' }]
+  });
+
+  // Comment -------------------------------------------------------------------
+  var Comment = mongoose.model('Comment', {
+    timestamp : Date,
+    field     : String,
+    value     : String
+  });
+
+  // Note -------------------------------------------------------------------
+  var Note = mongoose.model('Note', {
+    timestamp : Date,
+    field     : String,
+    value     : String
+  });
+
+// Routes ======================================================================
+
+  // API -----------------------------------------------------------------------
+
+  // Application ---------------------------------------------------------------
+
+// Listen ======================================================================
+app.listen(80);
+console.log("App listening on port 80.");
