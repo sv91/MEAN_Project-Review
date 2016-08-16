@@ -322,6 +322,48 @@ app.use(methodOverride());
     // Institution .............................................................
 
     // Team ....................................................................
+    // Get all
+    app.get('/api/teams', function(req, res){
+      Team.find(function(err, team){
+        if(err)
+          res.send(err);
+        res.json(team);
+      });
+    });
+
+    // Create new Team
+    app.post('/api/teams', function(req, res){
+      Team.create({
+        name        : req.body.name,
+        shortName   : req.body.shortName,
+        displayName : 'BBP Team: ' + req.body.shortName
+      }, function(err,team){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Team.find(function(err, team){
+          if(err)
+            res.send(err);
+          res.json(team);
+        });
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/teams/:team_id/delete', function(req,res) {
+      Team.remove({
+        _id : req.params.team_id
+      }, function(err, team) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Team.find(function(err, team){
+          if(err)
+            res.send(err);
+          res.json(team);
+        });
+      });
+    });
 
     // Related Project .........................................................
 
@@ -330,10 +372,131 @@ app.use(methodOverride());
     // Publication .............................................................
 
     // Grant ...................................................................
+    // Get all
+    app.get('/api/grants', function(req, res){
+      Grant.find(function(err, grant){
+        if(err)
+          res.send(err);
+        res.json(grant);
+      });
+    });
+
+    // Create new Grant
+    app.post('/api/grants', function(req, res){
+      Grant.create({
+        name  : req.body.name
+      }, function(err,grant){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Grant.find(function(err, grant){
+          if(err)
+            res.send(err);
+          res.json(grant);
+        });
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/grants/:grant_id/delete', function(req,res) {
+      Grant.remove({
+        _id : req.params.grant_id
+      }, function(err, grant) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Grant.find(function(err, grant){
+          if(err)
+            res.send(err);
+          res.json(grant);
+        });
+      });
+    });
 
     // Task ....................................................................
+    // Get all
+    app.get('/api/tasks', function(req, res){
+      Task.find(function(err, task){
+        if(err)
+          res.send(err);
+        res.json(task);
+      });
+    });
+
+    // Create new Task
+    app.post('/api/tasks', function(req, res){
+      Task.create({
+        name  : req.body.name,
+        grant  : req.body.grant
+      }, function(err,task){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Task.find(function(err, task){
+          if(err)
+            res.send(err);
+          res.json(task);
+        });
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/tasks/:task_id/delete', function(req,res) {
+      Task.remove({
+        _id : req.params.task_id
+      }, function(err, task) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Task.find(function(err, task){
+          if(err)
+            res.send(err);
+          res.json(task);
+        });
+      });
+    });
 
     // Tag .....................................................................
+    // Get all
+    app.get('/api/tags', function(req, res){
+      Tag.find(function(err, tag){
+        if(err)
+          res.send(err);
+        res.json(tag);
+      });
+    });
+
+    // Create new Tag
+    app.post('/api/tags', function(req, res){
+      Tag.create({
+        name  : req.body.name
+      }, function(err,tag){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Tag.find(function(err, tag){
+          if(err)
+            res.send(err);
+          res.json(tag);
+        });
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/tags/:tag_id/delete', function(req,res) {
+      Tag.remove({
+        _id : req.params.tag_id
+      }, function(err, tag) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Tag.find(function(err, tag){
+          if(err)
+            res.send(err);
+          res.json(tag);
+        });
+      });
+    });
 
     // Requirement .............................................................
 
@@ -370,6 +533,7 @@ app.use(methodOverride());
       });
     });
 
+    // Delete the specified element
     app.delete('/api/softdevs/:softdev_id/delete', function(req,res) {
       SoftDev.remove({
         _id : req.params.softdev_id
@@ -386,26 +550,271 @@ app.use(methodOverride());
     });
 
     // Data Transfer ...........................................................
+    // Get all
+    app.get('/api/datatransfers', function(req, res){
+      DataTransfer.find(function(err, datatransfer){
+        if(err)
+          res.send(err);
+        res.json(datatransfer);
+      });
+    });
+
+    // Create new DataTransfer
+    app.post('/api/datatransfers', function(req, res){
+      DataTransfer.create({
+        name  : req.body.name,
+        desc  : req.body.desc
+      }, function(err,datatransfer){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        DataTransfer.find(function(err, datatransfer){
+          if(err)
+            res.send(err);
+          res.json(datatransfer);
+        });
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/datatransfers/:datatransfer_id/delete', function(req,res) {
+      DataTransfer.remove({
+        _id : req.params.datatransfer_id
+      }, function(err, datatransfer) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        DataTransfer.find(function(err, datatransfer){
+          if(err)
+            res.send(err);
+          res.json(datatransfer);
+        });
+      });
+    });
 
     // Collab ..................................................................
 
     // Virtualization ..........................................................
+    // Get all
+    app.get('/api/virtualizations', function(req, res){
+      Virtualization.find(function(err, virtualization){
+        if(err)
+          res.send(err);
+        res.json(virtualization);
+      });
+    });
+
+    // Create new Virtualization
+    app.post('/api/virtualizations', function(req, res){
+      Virtualization.create({
+        name  : req.body.name,
+        desc  : req.body.desc
+      }, function(err,virtualization){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Virtualization.find(function(err, virtualization){
+          if(err)
+            res.send(err);
+          res.json(virtualization);
+        });
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/virtualizations/:virtualization_id/delete', function(req,res) {
+      Virtualization.remove({
+        _id : req.params.virtualization_id
+      }, function(err, virtualization) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Virtualization.find(function(err, virtualization){
+          if(err)
+            res.send(err);
+          res.json(virtualization);
+        });
+      });
+    });
 
     // Development Environment .................................................
+    // Get all
+    app.get('/api/devenvs', function(req, res){
+      DevEnv.find(function(err, devenv){
+        if(err)
+          res.send(err);
+        res.json(devenv);
+      });
+    });
+
+    // Create new DevEnv
+    app.post('/api/devenvs', function(req, res){
+      DevEnv.create({
+        name  : req.body.name,
+        desc  : req.body.desc
+      }, function(err,devenv){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        DevEnv.find(function(err, devenv){
+          if(err)
+            res.send(err);
+          res.json(devenv);
+        });
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/devenvs/:devenv_id/delete', function(req,res) {
+      DevEnv.remove({
+        _id : req.params.devenv_id
+      }, function(err, devenv) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        DevEnv.find(function(err, devenv){
+          if(err)
+            res.send(err);
+          res.json(devenv);
+        });
+      });
+    });
 
     // HPC Ressources ..........................................................
 
     // HPC Type ................................................................
+    // Get all
+    app.get('/api/hpctypes', function(req, res){
+      HpcType.find(function(err, hpctype){
+        if(err)
+          res.send(err);
+        res.json(hpctype);
+      });
+    });
+
+    // Create new HpcType
+    app.post('/api/hpctypes', function(req, res){
+      HpcType.create({
+        name  : req.body.name,
+        desc  : req.body.desc
+      }, function(err,hpctype){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        HpcType.find(function(err, hpctype){
+          if(err)
+            res.send(err);
+          res.json(hpctype);
+        });
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/hpctypes/:hpctype_id/delete', function(req,res) {
+      HpcType.remove({
+        _id : req.params.hpctype_id
+      }, function(err, hpctype) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        HpcType.find(function(err, hpctype){
+          if(err)
+            res.send(err);
+          res.json(hpctype);
+        });
+      });
+    });
 
     // Cloud Ressources ........................................................
 
     // Cloud Type ..............................................................
+    // Get all
+    app.get('/api/cloudtypes', function(req, res){
+      CloudType.find(function(err, cloudtype){
+        if(err)
+          res.send(err);
+        res.json(cloudtype);
+      });
+    });
+
+    // Create new CloudType
+    app.post('/api/cloudtypes', function(req, res){
+      CloudType.create({
+        name  : req.body.name,
+        desc  : req.body.desc
+      }, function(err,cloudtype){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        CloudType.find(function(err, cloudtype){
+          if(err)
+            res.send(err);
+          res.json(cloudtype);
+        });
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/cloudtypes/:cloudtype_id/delete', function(req,res) {
+      CloudType.remove({
+        _id : req.params.cloudtype_id
+      }, function(err, cloudtype) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        CloudType.find(function(err, cloudtype){
+          if(err)
+            res.send(err);
+          res.json(cloudtype);
+        });
+      });
+    });
 
     // Hardware ................................................................
 
     // Human Ressources ........................................................
 
     // Role ....................................................................
+    // Get all
+    app.get('/api/roles', function(req, res){
+      Role.find(function(err, role){
+        if(err)
+          res.send(err);
+        res.json(role);
+      });
+    });
+
+    // Create new Role
+    app.post('/api/roles', function(req, res){
+      Role.create({
+        name  : req.body.name
+      }, function(err,role){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Role.find(function(err, role){
+          if(err)
+            res.send(err);
+          res.json(role);
+        });
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/roles/:role_id/delete', function(req,res) {
+      Role.remove({
+        _id : req.params.role_id
+      }, function(err, role) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        Role.find(function(err, role){
+          if(err)
+            res.send(err);
+          res.json(role);
+        });
+      });
+    });
 
     // General Review ..........................................................
 
