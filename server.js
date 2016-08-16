@@ -2,6 +2,7 @@
 var express         = require('express');
 var app             = express();
 var mongoose        = require('mongoose');
+var Schema          = mongoose.Schema;
 var morgan          = require('morgan');
 var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
@@ -20,19 +21,19 @@ app.use(methodOverride());
 
   // Project -------------------------------------------------------------------
   var Project = mongoose.model('Project', {
-    proposal  : { type: Schema.ObjectId, ref: 'Proposal' },
-    review    : { type: Schema.ObjectId, ref: 'GeneralReview' }
+    proposal  : { type: Schema.Types.ObjectId, ref: 'Proposal' },
+    review    : { type: Schema.Types.ObjectId, ref: 'GeneralReview' }
   });
 
   // Proposal ------------------------------------------------------------------
   var Proposal = mongoose.model('Proposal', {
-    author      : { type: Schema.ObjectId, ref: 'Person' },
+    author      : { type: Schema.Types.ObjectId, ref: 'Person' },
     subDate     : Date,
-    submission  : { type: Schema.ObjectId, ref: 'Submission' }
+    submission  : { type: Schema.Types.ObjectId, ref: 'Submission' }
   });
 
   // Submission ----------------------------------------------------------------
-  var Submission = mangoose.model('Submission', {
+  var Submission = mongoose.model('Submission', {
     projectStartDate      : Date,
     projectEndDate        : Date,
     projectTitle          : String,
@@ -44,18 +45,18 @@ app.use(methodOverride());
     usecase               : String,
     newproject            : Boolean,
     projectType           : { type: Number, min: 0, max: 2 },
-    pi                    : { type: Schema.ObjectId, ref: 'Person' },
-    copi                  : { type: Schema.ObjectId, ref: 'Person' },
-    members               : [{ type: Schema.ObjectId, ref: 'Person' }],
-    teams                 : [{ type: Schema.ObjectId, ref: 'Team' }],
-    tags                  : [{ type: Schema.ObjectId, ref: 'Tag' }],
-    relatedProjects       : [{ type: Schema.ObjectId, ref: 'RelatedProject' }],
-    shortDeliverable      : [{ type: Schema.ObjectId, ref: 'ShortDeliverable' }],
-    publications          : [{ type: Schema.ObjectId, ref: 'Publication' }],
-    grants                : [{ type: Schema.ObjectId, ref: 'Grant' }],
-    tasks                 : [{ type: Schema.ObjectId, ref: 'Task' }],
-    requirements          : [{ type: Schema.ObjectId, ref: 'Requirement' }],
-    deliverables          : [{ type: Schema.ObjectId, ref: 'Deliverable' }],
+    pi                    : { type: Schema.Types.ObjectId, ref: 'Person' },
+    copi                  : { type: Schema.Types.ObjectId, ref: 'Person' },
+    members               : [{ type: Schema.Types.ObjectId, ref: 'Person' }],
+    teams                 : [{ type: Schema.Types.ObjectId, ref: 'Team' }],
+    tags                  : [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
+    relatedProjects       : [{ type: Schema.Types.ObjectId, ref: 'RelatedProject' }],
+    shortDeliverable      : [{ type: Schema.Types.ObjectId, ref: 'ShortDeliverable' }],
+    publications          : [{ type: Schema.Types.ObjectId, ref: 'Publication' }],
+    grants                : [{ type: Schema.Types.ObjectId, ref: 'Grant' }],
+    tasks                 : [{ type: Schema.Types.ObjectId, ref: 'Task' }],
+    requirements          : [{ type: Schema.Types.ObjectId, ref: 'Requirement' }],
+    deliverables          : [{ type: Schema.Types.ObjectId, ref: 'Deliverable' }],
   });
 
   // Person --------------------------------------------------------------------
@@ -66,12 +67,12 @@ app.use(methodOverride());
     givenName     : String,
     familyName    : String,
     displayName   : String,
-    title:        : String,
+    title         : String,
     profile       : String,
     picture       : String,
-    emails        : [{ type: Schema.ObjectId, ref: 'Email' }],
-    phones        : [{ type: Schema.ObjectId, ref: 'Phone' }],
-    institutions  : [{ type: Schema.ObjectId, ref: 'Institution' }],
+    emails        : [{ type: Schema.Types.ObjectId, ref: 'Email' }],
+    phones        : [{ type: Schema.Types.ObjectId, ref: 'Phone' }],
+    institutions  : [{ type: Schema.Types.ObjectId, ref: 'Institution' }],
     ims           : [String]
   });
 
@@ -83,13 +84,13 @@ app.use(methodOverride());
   });
 
   // Phone ---------------------------------------------------------------------
-  var Phone = mangoose.model('Phone', {
+  var Phone = mongoose.model('Phone', {
     value     : String,
     primary   : Boolean
   });
 
   // Institution ---------------------------------------------------------------
-  var Institution = mangoose.model('Institution', {
+  var Institution = mongoose.model('Institution', {
     name          : String,
     department    : String,
     postalAdress  : String,
@@ -98,7 +99,7 @@ app.use(methodOverride());
   });
 
   // Team ----------------------------------------------------------------------
-  var Team = mangoose.model('Team', {
+  var Team = mongoose.model('Team', {
     name        : String,
     shortName   : String,
     displayName : String
@@ -133,7 +134,7 @@ app.use(methodOverride());
   // Task ----------------------------------------------------------------------
   var Task = mongoose.model('Task', {
     name  : String,
-    grant : { type: Schema.ObjectId, ref: 'Grant' }
+    grant : { type: Schema.Types.ObjectId, ref: 'Grant' }
   });
 
   // Tag -----------------------------------------------------------------------
@@ -147,8 +148,8 @@ app.use(methodOverride());
     type        : String,
     requirement : String,
     feature     : String,
-    input       : [{ type: Schema.ObjectId, ref: 'Input' }],
-    output      : [{ type: Schema.ObjectId, ref: 'Output' }]
+    input       : [{ type: Schema.Types.ObjectId, ref: 'Input' }],
+    output      : [{ type: Schema.Types.ObjectId, ref: 'Output' }]
   });
 
   // Input ---------------------------------------------------------------------
@@ -173,19 +174,19 @@ app.use(methodOverride());
     date            : Date,
     description     : String,
     risks           : String,
-    dependency      : [{ type: Schema.ObjectId, ref: 'Deliverable' }],
-    requirements    : [{ type: Schema.ObjectId, ref: 'Requirement' }],
-    softdev         : [{ type: Schema.ObjectId, ref: 'SoftDev' }],
-    datatransfer    : [{ type: Schema.ObjectId, ref: 'DataTransfer' }],
-    collabs         : [{ type: Schema.ObjectId, ref: 'Collab' }],
-    virtualization  : [{ type: Schema.ObjectId, ref: 'Virtualization' }],
-    devenv          : [{ type: Schema.ObjectId, ref: 'DevEnv' }],
+    dependency      : [{ type: Schema.Types.ObjectId, ref: 'Deliverable' }],
+    requirements    : [{ type: Schema.Types.ObjectId, ref: 'Requirement' }],
+    softdev         : [{ type: Schema.Types.ObjectId, ref: 'SoftDev' }],
+    datatransfer    : [{ type: Schema.Types.ObjectId, ref: 'DataTransfer' }],
+    collabs         : [{ type: Schema.Types.ObjectId, ref: 'Collab' }],
+    virtualization  : [{ type: Schema.Types.ObjectId, ref: 'Virtualization' }],
+    devenv          : [{ type: Schema.Types.ObjectId, ref: 'DevEnv' }],
     hpcRessource    : Boolean,
     cloudRessource  : Boolean,
-    hpc             : [{ type: Schema.ObjectId, ref:'Hpc'}],
-    cloud           : [{ type: Schema.ObjectId, ref:'Cloud'}],
-    hardware        : [{ type: Schema.ObjectId, ref:'Hardware'}],
-    hr              : [{ type: Schema.ObjectId, ref:'HumanRessource'}]
+    hpc             : [{ type: Schema.Types.ObjectId, ref:'Hpc'}],
+    cloud           : [{ type: Schema.Types.ObjectId, ref:'Cloud'}],
+    hardware        : [{ type: Schema.Types.ObjectId, ref:'Hardware'}],
+    hr              : [{ type: Schema.Types.ObjectId, ref:'HumanRessource'}]
   });
 
   // Software Development ------------------------------------------------------
@@ -225,7 +226,7 @@ app.use(methodOverride());
 
   // HPC Ressources ------------------------------------------------------------
   var Hpc = mongoose.model('Hpc', {
-    type : { type: Schema.ObjectId, ref: 'HpcType' },
+    type : { type: Schema.Types.ObjectId, ref: 'HpcType' },
     runs : { type: Number, min: 0 },
     time : { type: Number, min: 0 },
     part : { type: Number, min: 0 },
@@ -241,7 +242,7 @@ app.use(methodOverride());
 
   // Cloud Ressources ----------------------------------------------------------
   var Cloud = mongoose.model('Cloud', {
-    type : { type: Schema.ObjectId, ref: 'CloudType' },
+    type : { type: Schema.Types.ObjectId, ref: 'CloudType' },
     runs : { type: Number, min: 0 },
     time : { type: Number, min: 0 },
     part : { type: Number, min: 0 },
@@ -266,7 +267,7 @@ app.use(methodOverride());
   // Human Ressources ----------------------------------------------------------
   var HumanRessource = mongoose.model('HumanRessource', {
     name        : String,
-    role        : { type : Schema.ObjectId, ref : 'Role' },
+    role        : { type : Schema.Types.ObjectId, ref : 'Role' },
     pm          : { type : Number, min : 0 },
     description : String
   });
@@ -279,14 +280,14 @@ app.use(methodOverride());
   // General Review ------------------------------------------------------------
   var GeneralReview = mongoose.model('GeneralReview', {
     grade : Number,
-    reviews : [{ type: Schema.ObjectId, ref: 'Review' }]
+    reviews : [{ type: Schema.Types.ObjectId, ref: 'Review' }]
   });
 
   // Review --------------------------------------------------------------------
   var Review = mongoose.model('Review', {
-    reviewer  : { type: Schema.ObjectId, ref: 'Person' },
-    comments  : [{ type: Schema.ObjectId, ref: 'Comment' }],
-    notes     : [{ type: Schema.ObjectId, ref: 'Note' }]
+    reviewer  : { type: Schema.Types.ObjectId, ref: 'Person' },
+    comments  : [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+    notes     : [{ type: Schema.Types.ObjectId, ref: 'Note' }]
   });
 
   // Comment -------------------------------------------------------------------
@@ -343,6 +344,46 @@ app.use(methodOverride());
     // Deliverable .............................................................
 
     // Software Development ....................................................
+    // Get all
+    app.get('/api/softdevs', function(req, res){
+      SoftDev.find(function(err, softdev){
+        if(err)
+          res.send(err);
+        res.json(softdev);
+      });
+    });
+
+    // Create new SoftDev
+    app.post('/api/softdevs', function(req, res){
+      SoftDev.create({
+        name  : req.body.name,
+        desc  : req.body.desc
+      }, function(err,softdev){
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        SoftDev.find(function(err, softdev){
+          if(err)
+            res.send(err);
+          res.json(softdev);
+        });
+      });
+    });
+
+    app.delete('/api/softdevs/:softdev_id/delete', function(req,res) {
+      SoftDev.remove({
+        _id : req.params.softdev_id
+      }, function(err, softdev) {
+        if (err)
+          res.send(err);
+        // Return the whole list after creating new element
+        SoftDev.find(function(err, softdev){
+          if(err)
+            res.send(err);
+          res.json(softdev);
+        });
+      });
+    });
 
     // Data Transfer ...........................................................
 
@@ -375,7 +416,9 @@ app.use(methodOverride());
     // Note ....................................................................
 
   // Application ---------------------------------------------------------------
-
+  app.get('*', function(req, res) {
+    res.sendfile('./public/index.html'); //load the single view file
+  })
 // Listen ======================================================================
-app.listen(80);
-console.log("App listening on port 80.");
+app.listen(8080);
+console.log("App listening on port 8080.");
