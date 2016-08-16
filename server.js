@@ -153,39 +153,39 @@ app.use(methodOverride());
 
   // Input ---------------------------------------------------------------------
   var Input = mongoose.model('Input', {
-    tag : String,
-    format : String,
-    number : { type: Number, min:0 },
-    size : { type: Number, min:0 }
+    tag     : String,
+    format  : String,
+    number  : { type: Number, min:0 },
+    size    : { type: Number, min:0 }
   });
 
   // Output --------------------------------------------------------------------
   var Output = mongoose.model('Output', {
-    tag : String,
-    format : String,
-    number : { type: Number, min:0 },
-    size : { type: Number, min:0 }
+    tag     : String,
+    format  : String,
+    number  : { type: Number, min:0 },
+    size    : { type: Number, min:0 }
   });
 
   // Deliverable ---------------------------------------------------------------
   var Deliverable = mongoose.model('Deliverable', {
-    name : String,
-    date : Date,
-    description : String,
-    risks : String,
-    dependency : [{ type: Schema.ObjectId, ref:'Deliverable'}],
-    requirements : [{ type: Schema.ObjectId, ref:'Requirement'}],
-    softdev:[{ type: Schema.ObjectId, ref:'SoftDev'}],
-    datatransfer:[{ type: Schema.ObjectId, ref:'DataTransfer'}],
-    collabs:[{ type: Schema.ObjectId, ref:'Collab'}],
-    virtualization:[{ type: Schema.ObjectId, ref:'Virtualization'}],
-    devenv:[{ type: Schema.ObjectId, ref:'DevEnv'}],
-    hpcRessource: Boolean,
-    cloudRessource: Boolean,
-    hpc:[{ type: Schema.ObjectId, ref:'Hpc'}],
-    cloud:[{ type: Schema.ObjectId, ref:'Cloud'}],
-    hardware:[{ type: Schema.ObjectId, ref:'Hadrware'}],
-    hr:[{ type: Schema.ObjectId, ref:'HumanRessource'}]
+    name            : String,
+    date            : Date,
+    description     : String,
+    risks           : String,
+    dependency      : [{ type: Schema.ObjectId, ref: 'Deliverable' }],
+    requirements    : [{ type: Schema.ObjectId, ref: 'Requirement' }],
+    softdev         : [{ type: Schema.ObjectId, ref: 'SoftDev' }],
+    datatransfer    : [{ type: Schema.ObjectId, ref: 'DataTransfer' }],
+    collabs         : [{ type: Schema.ObjectId, ref: 'Collab' }],
+    virtualization  : [{ type: Schema.ObjectId, ref: 'Virtualization' }],
+    devenv          : [{ type: Schema.ObjectId, ref: 'DevEnv' }],
+    hpcRessource    : Boolean,
+    cloudRessource  : Boolean,
+    hpc             : [{ type: Schema.ObjectId, ref:'Hpc'}],
+    cloud           : [{ type: Schema.ObjectId, ref:'Cloud'}],
+    hardware        : [{ type: Schema.ObjectId, ref:'Hardware'}],
+    hr              : [{ type: Schema.ObjectId, ref:'HumanRessource'}]
   });
 
   // Software Development ------------------------------------------------------
@@ -221,4 +221,57 @@ app.use(methodOverride());
   var DevEnv = mongoose.model('DevEnv',{
     name : String,
     desc : String
-  })
+  });
+
+  // HPC Ressources ------------------------------------------------------------
+  var Hpc = mongoose.model('Hpc', {
+    type : { type: Schema.ObjectId, ref: 'HpcType' },
+    runs : { type: Number, min: 0 },
+    time : { type: Number, min: 0 },
+    part : { type: Number, min: 0 },
+    arte : { type: Number, min: 0 },
+    size : { type: Number, min: 0 }
+  });
+
+  // HPC Type ------------------------------------------------------------------
+  var HpcType = mongoose.model('HpcType', {
+    name : String,
+    desc : String
+  });
+
+  // Cloud Ressources ----------------------------------------------------------
+  var Cloud = mongoose.model('Cloud', {
+    type : { type: Schema.ObjectId, ref: 'CloudType' },
+    runs : { type: Number, min: 0 },
+    time : { type: Number, min: 0 },
+    part : { type: Number, min: 0 },
+    arte : { type: Number, min: 0 },
+    size : { type: Number, min: 0 }
+  });
+
+  // Cloud Type ----------------------------------------------------------------
+  var CloudType = mongoose.model('HCloudType', {
+    name : String,
+    desc : String
+  });
+
+  // Hardware ------------------------------------------------------------------
+  var Hardware = mongoose.model('Hardware', {
+    name        : String,
+    price       : Number,
+    link        : String,
+    description : String
+  });
+
+  // Human Ressources ----------------------------------------------------------
+  var HumanRessource = mongoose.model('HumanRessource', {
+    name        : String,
+    role        : { type : Schema.ObjectId, ref : 'Role' },
+    pm          : { type : Number, min : 0 },
+    description : String
+  });
+
+  // Role ----------------------------------------------------------------------
+  var Role = mongoose.model('Role', {
+    name  : String
+  });
