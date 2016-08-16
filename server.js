@@ -166,3 +166,59 @@ app.use(methodOverride());
     number : { type: Number, min:0 },
     size : { type: Number, min:0 }
   });
+
+  // Deliverable ---------------------------------------------------------------
+  var Deliverable = mongoose.model('Deliverable', {
+    name : String,
+    date : Date,
+    description : String,
+    risks : String,
+    dependency : [{ type: Schema.ObjectId, ref:'Deliverable'}],
+    requirements : [{ type: Schema.ObjectId, ref:'Requirement'}],
+    softdev:[{ type: Schema.ObjectId, ref:'SoftDev'}],
+    datatransfer:[{ type: Schema.ObjectId, ref:'DataTransfer'}],
+    collabs:[{ type: Schema.ObjectId, ref:'Collab'}],
+    virtualization:[{ type: Schema.ObjectId, ref:'Virtualization'}],
+    devenv:[{ type: Schema.ObjectId, ref:'DevEnv'}],
+    hpcRessource: Boolean,
+    cloudRessource: Boolean,
+    hpc:[{ type: Schema.ObjectId, ref:'Hpc'}],
+    cloud:[{ type: Schema.ObjectId, ref:'Cloud'}],
+    hardware:[{ type: Schema.ObjectId, ref:'Hadrware'}],
+    hr:[{ type: Schema.ObjectId, ref:'HumanRessource'}]
+  });
+
+  // Software Development ------------------------------------------------------
+  var SoftDev = mongoose.model('SoftDev', {
+    name : String,
+    desc : String
+  });
+
+  // Data Transfer -------------------------------------------------------------
+  var DataTransfer = mongoose.model('DataTransfer', {
+    name : String,
+    desc : String
+  });
+
+  // Collab --------------------------------------------------------------------
+  var Collab = mongoose.model('Collab', {
+    id      : Number,
+    created : Date,
+    edited  : Date,
+    title   : String,
+    content : String,
+    private : Boolean,
+    deleted : String
+  });
+
+  // Virtualization ------------------------------------------------------------
+  var Virtualization = mongoose.model('Virtualization',{
+    name : String,
+    desc : String
+  });
+
+  // Development Environment ---------------------------------------------------
+  var DevEnv = mongoose.model('DevEnv',{
+    name : String,
+    desc : String
+  })
