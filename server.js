@@ -795,6 +795,34 @@ app.use(methodOverride());
     });
 
     // Input ...................................................................
+    // Get all
+    app.get('/api/inputs', function(req, res){
+      findAll(res, Input);
+    });
+
+    // Get one
+    app.get('/api/inputs/:target_id', function(req, res){
+      findOne(req,res, Input);
+    });
+
+    // Create new Input
+    app.post('/api/inputs', function(req, res){
+      Input.create({
+        tag     : req.body.tag,
+        format  : req.body.format,
+        number  : req.body.number,
+        size    : req.body.size
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Input);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/inputs/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Input);
+    });
 
     // Output ..................................................................
 
