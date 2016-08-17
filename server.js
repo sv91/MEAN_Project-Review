@@ -331,10 +331,10 @@ app.use(methodOverride());
     function findOne(req,res,target){
       target.findOne({
         _id : req.params.target_id
-      },function(err, project){
+      },function(err, tar){
         if(err)
           HandleError(err,res);
-        res.json(project);
+        res.json(tar);
       });
     };
 
@@ -344,10 +344,10 @@ app.use(methodOverride());
     function deleteOne(req,res,target){
       target.remove({
         _id : req.params.target_id
-      }, function(err, tag) {
+      }, function(err, tar) {
         if (err)
           HandleError(err,res);
-        findAll(res, Tag);
+        findAll(res, target);
       });
     };
 
@@ -365,9 +365,8 @@ app.use(methodOverride());
     // Create new Project
     app.post('/api/projects', function(req, res){
       Project.create({
-        name        : req.body.name,
-        shortName   : req.body.shortName,
-        displayName : 'BBP Team: ' + req.body.shortName
+        proposal  : req.body.proposal,
+        review    : req.body.review,
       }, function(err,project){
         if (err)
           HandleError(err,res);
@@ -381,10 +380,121 @@ app.use(methodOverride());
     });
 
     // Proposal ................................................................
+    // Get all
+    app.get('/api/proposals', function(req, res){
+      findAll(res, Proposal);
+    });
+
+    // Get one
+    app.get('/api/proposals/:target_id', function(req, res){
+      findOne(req,res, Proposal);
+    });
+
+    // Create new Proposal
+    app.post('/api/proposals', function(req, res){
+      Proposal.create({
+        author      : req.body.author,
+        subDate     : req.body.subDate,
+        submission  : req.body.submission
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Proposal);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/proposals/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Proposal);
+    });
 
     // Submission ..............................................................
+    // Get all
+    app.get('/api/submissions', function(req, res){
+      findAll(res, Submission);
+    });
+
+    // Get one
+    app.get('/api/submissions/:target_id', function(req, res){
+      findOne(req,res, Submission);
+    });
+
+    // Create new Proposal
+    app.post('/api/submissions', function(req, res){
+      Submission.create({
+        projectStartDate      : req.body.projectStartDate,
+        projectEndDate        : req.body.projectEndDate,
+        projectTitle          : req.body.projectTitle,
+        executiveSummary      : req.body.executiveSummary,
+        impactStatement       : req.body.impactStatement,
+        benefitToCommunity    : req.body.benefitToCommunity,
+        scientificSummary     : req.body.scientificSummary,
+        technologicalSummary  : req.body.technologicalSummary,
+        usecase               : req.body.usecase,
+        newproject            : req.body.newproject,
+        projectType           : req.body.projectType,
+        pi                    : req.body.pi,
+        copi                  : req.body.copi,
+        members               : req.body.members,
+        teams                 : req.body.teams,
+        tags                  : req.body.tags,
+        relatedProjects       : req.body.relatedProjects,
+        shortDeliverable      : req.body.shortDeliverable,
+        publications          : req.body.publications,
+        grants                : req.body.grants,
+        tasks                 : req.body.tasks,
+        requirements          : req.body.requirements,
+        deliverables          : req.body.deliverables
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Submission);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/submissions/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Submission);
+    });
 
     // Person ..................................................................
+    // Get all
+    app.get('/api/persons', function(req, res){
+      findAll(res, Person);
+    });
+
+    // Get one
+    app.get('/api/persons/:target_id', function(req, res){
+      findOne(req,res, Person);
+    });
+
+    // Create new Proposal
+    app.post('/api/persons', function(req, res){
+      Person.create({
+        id            : req.body.id,
+        updatedAt     : req.body.updatedAt,
+        username      : req.body.username,
+        givenName     : req.body.givenName,
+        familyName    : req.body.familyName,
+        displayName   : req.body.displayName,
+        title         : req.body.title,
+        profile       : req.body.profile,
+        picture       : req.body.picture,
+        emails        : req.body.emails,
+        phones        : req.body.phones,
+        institutions  : req.body.institutions,
+        ims           : req.body.ims
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Person);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/persons/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Person);
+    });
 
     // Email ...................................................................
 
