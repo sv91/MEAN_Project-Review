@@ -468,7 +468,7 @@ app.use(methodOverride());
       findOne(req,res, Person);
     });
 
-    // Create new Proposal
+    // Create new Person
     app.post('/api/persons', function(req, res){
       Person.create({
         id            : req.body.id,
@@ -497,6 +497,33 @@ app.use(methodOverride());
     });
 
     // Email ...................................................................
+    // Get all
+    app.get('/api/emails', function(req, res){
+      findAll(res, Email);
+    });
+
+    // Get one
+    app.get('/api/emails/:target_id', function(req, res){
+      findOne(req,res, Email);
+    });
+
+    // Create new Email
+    app.post('/api/emails', function(req, res){
+      Email.create({
+        value     : req.body.value,
+        primary   : req.body.primary,
+        verified  : req.body.verified
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Email);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/emails/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Email);
+    });
 
     // Phone ...................................................................
 
