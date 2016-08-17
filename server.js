@@ -538,7 +538,7 @@ app.use(methodOverride());
 
     // Create new Phone
     app.post('/api/phones', function(req, res){
-      Email.create({
+      Phone.create({
         value     : req.body.value,
         primary   : req.body.primary
       }, function(err,project){
@@ -554,6 +554,35 @@ app.use(methodOverride());
     });
 
     // Institution .............................................................
+    // Get all
+    app.get('/api/institutions', function(req, res){
+      findAll(res, Institution);
+    });
+
+    // Get one
+    app.get('/api/institutions/:target_id', function(req, res){
+      findOne(req,res, Institution);
+    });
+
+    // Create new Institution
+    app.post('/api/institutions', function(req, res){
+      Institution.create({
+        name          : req.body.name,
+        department    : req.body.department,
+        postalAdress  : req.body.postalAdress,
+        title         : req.body.title,
+        primary       : req.body.primary
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Institution);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/institutions/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Institution);
+    });
 
     // Team ....................................................................
     // Get all
