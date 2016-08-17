@@ -307,7 +307,78 @@ app.use(methodOverride());
 // Routes ======================================================================
 
   // API -----------------------------------------------------------------------
+    // Needed functions ........................................................
+    // HandleError
+    // Manage what to do in case of errors.
+    function HandleError(err, res){
+      res.send(err);
+    }
+
+    // findAll
+    // Get all the element from a model
+    //    target : Model from where the data should be get.
+    function findAll(res,target){
+      target.find(function(err, tar){
+        if(err)
+          HandleError(err,res);
+        res.json(tar);
+      });
+    };
+
+    // findOne
+    // Get one of the element from a model by getting the id through route params.
+    //    target : Model from where the data should be get.
+    function findOne(req,res,target){
+      target.findOne({
+        _id : req.params.target_id
+      },function(err, project){
+        if(err)
+          HandleError(err,res);
+        res.json(project);
+      });
+    };
+
+    // deleteOne
+    // Delete an element from a model by getting the id through route params.
+    //    target : Model wher the element should be deleted.
+    function deleteOne(req,res,target){
+      target.remove({
+        _id : req.params.target_id
+      }, function(err, tag) {
+        if (err)
+          HandleError(err,res);
+        findAll(res, Tag);
+      });
+    };
+
     // Project .................................................................
+    // Get all
+    app.get('/api/projects', function(req, res){
+      findAll(res, Project);
+    });
+
+    // Get one
+    app.get('/api/projects/:target_id', function(req, res){
+      findOne(req,res, Project);
+    });
+
+    // Create new Project
+    app.post('/api/projects', function(req, res){
+      Project.create({
+        name        : req.body.name,
+        shortName   : req.body.shortName,
+        displayName : 'BBP Team: ' + req.body.shortName
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Project);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/projects/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Project);
+    });
 
     // Proposal ................................................................
 
@@ -324,11 +395,7 @@ app.use(methodOverride());
     // Team ....................................................................
     // Get all
     app.get('/api/teams', function(req, res){
-      Team.find(function(err, team){
-        if(err)
-          res.send(err);
-        res.json(team);
-      });
+      findAll(res, Team);
     });
 
     // Create new Team
@@ -339,30 +406,14 @@ app.use(methodOverride());
         displayName : 'BBP Team: ' + req.body.shortName
       }, function(err,team){
         if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        Team.find(function(err, team){
-          if(err)
-            res.send(err);
-          res.json(team);
-        });
+          HandleError(err,res);
+        findAll(res, Team);
       });
     });
 
     // Delete the specified element
     app.delete('/api/teams/:team_id/delete', function(req,res) {
-      Team.remove({
-        _id : req.params.team_id
-      }, function(err, team) {
-        if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        Team.find(function(err, team){
-          if(err)
-            res.send(err);
-          res.json(team);
-        });
-      });
+      deleteOne(req,res,Team);
     });
 
     // Related Project .........................................................
@@ -374,11 +425,7 @@ app.use(methodOverride());
     // Grant ...................................................................
     // Get all
     app.get('/api/grants', function(req, res){
-      Grant.find(function(err, grant){
-        if(err)
-          res.send(err);
-        res.json(grant);
-      });
+      findAll(res, Grant);
     });
 
     // Create new Grant
@@ -387,40 +434,20 @@ app.use(methodOverride());
         name  : req.body.name
       }, function(err,grant){
         if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        Grant.find(function(err, grant){
-          if(err)
-            res.send(err);
-          res.json(grant);
-        });
+          HandleError(err,res);
+        findAll(res, Grant);
       });
     });
 
     // Delete the specified element
-    app.delete('/api/grants/:grant_id/delete', function(req,res) {
-      Grant.remove({
-        _id : req.params.grant_id
-      }, function(err, grant) {
-        if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        Grant.find(function(err, grant){
-          if(err)
-            res.send(err);
-          res.json(grant);
-        });
-      });
+    app.delete('/api/grants/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Grant)
     });
 
     // Task ....................................................................
     // Get all
     app.get('/api/tasks', function(req, res){
-      Task.find(function(err, task){
-        if(err)
-          res.send(err);
-        res.json(task);
-      });
+      findAll(res, Task);
     });
 
     // Create new Task
@@ -430,40 +457,20 @@ app.use(methodOverride());
         grant  : req.body.grant
       }, function(err,task){
         if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        Task.find(function(err, task){
-          if(err)
-            res.send(err);
-          res.json(task);
-        });
+          HandleError(err,res);
+        findAll(res, Task);
       });
     });
 
     // Delete the specified element
-    app.delete('/api/tasks/:task_id/delete', function(req,res) {
-      Task.remove({
-        _id : req.params.task_id
-      }, function(err, task) {
-        if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        Task.find(function(err, task){
-          if(err)
-            res.send(err);
-          res.json(task);
-        });
-      });
+    app.delete('/api/tasks/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Task);
     });
 
     // Tag .....................................................................
     // Get all
     app.get('/api/tags', function(req, res){
-      Tag.find(function(err, tag){
-        if(err)
-          res.send(err);
-        res.json(tag);
-      });
+      findAll(res, Tag);
     });
 
     // Create new Tag
@@ -472,30 +479,14 @@ app.use(methodOverride());
         name  : req.body.name
       }, function(err,tag){
         if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        Tag.find(function(err, tag){
-          if(err)
-            res.send(err);
-          res.json(tag);
-        });
+          HandleError(err,res);
+        findAll(res, Tag);
       });
     });
 
     // Delete the specified element
-    app.delete('/api/tags/:tag_id/delete', function(req,res) {
-      Tag.remove({
-        _id : req.params.tag_id
-      }, function(err, tag) {
-        if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        Tag.find(function(err, tag){
-          if(err)
-            res.send(err);
-          res.json(tag);
-        });
-      });
+    app.delete('/api/tags/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Tag);
     });
 
     // Requirement .............................................................
@@ -506,14 +497,11 @@ app.use(methodOverride());
 
     // Deliverable .............................................................
 
+
     // Software Development ....................................................
     // Get all
     app.get('/api/softdevs', function(req, res){
-      SoftDev.find(function(err, softdev){
-        if(err)
-          res.send(err);
-        res.json(softdev);
-      });
+      findAll(res,SoftDev);
     });
 
     // Create new SoftDev
@@ -523,40 +511,20 @@ app.use(methodOverride());
         desc  : req.body.desc
       }, function(err,softdev){
         if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        SoftDev.find(function(err, softdev){
-          if(err)
-            res.send(err);
-          res.json(softdev);
-        });
+          HandleError(err,res);
+        findAll(res,SoftDev);
       });
     });
 
     // Delete the specified element
-    app.delete('/api/softdevs/:softdev_id/delete', function(req,res) {
-      SoftDev.remove({
-        _id : req.params.softdev_id
-      }, function(err, softdev) {
-        if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        SoftDev.find(function(err, softdev){
-          if(err)
-            res.send(err);
-          res.json(softdev);
-        });
-      });
+    app.delete('/api/softdevs/:target_id/delete', function(req,res) {
+      deleteOne(req,res,SoftDev);
     });
 
     // Data Transfer ...........................................................
     // Get all
     app.get('/api/datatransfers', function(req, res){
-      DataTransfer.find(function(err, datatransfer){
-        if(err)
-          res.send(err);
-        res.json(datatransfer);
-      });
+      findAll(res,DataTransfer);
     });
 
     // Create new DataTransfer
@@ -566,30 +534,14 @@ app.use(methodOverride());
         desc  : req.body.desc
       }, function(err,datatransfer){
         if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        DataTransfer.find(function(err, datatransfer){
-          if(err)
-            res.send(err);
-          res.json(datatransfer);
-        });
+          HandleError(err,res);
+        findAll(res,DataTransfer);
       });
     });
 
     // Delete the specified element
-    app.delete('/api/datatransfers/:datatransfer_id/delete', function(req,res) {
-      DataTransfer.remove({
-        _id : req.params.datatransfer_id
-      }, function(err, datatransfer) {
-        if (err)
-          res.send(err);
-        // Return the whole list after creating new element
-        DataTransfer.find(function(err, datatransfer){
-          if(err)
-            res.send(err);
-          res.json(datatransfer);
-        });
-      });
+    app.delete('/api/datatransfers/:target_id/delete', function(req,res) {
+      deleteOne(req,res,DataTransfer);
     });
 
     // Collab ..................................................................
@@ -599,7 +551,7 @@ app.use(methodOverride());
     app.get('/api/virtualizations', function(req, res){
       Virtualization.find(function(err, virtualization){
         if(err)
-          res.send(err);
+          HandleError(err,res);
         res.json(virtualization);
       });
     });
@@ -611,11 +563,11 @@ app.use(methodOverride());
         desc  : req.body.desc
       }, function(err,virtualization){
         if (err)
-          res.send(err);
+          HandleError(err,res);
         // Return the whole list after creating new element
         Virtualization.find(function(err, virtualization){
           if(err)
-            res.send(err);
+            HandleError(err,res);
           res.json(virtualization);
         });
       });
@@ -627,11 +579,11 @@ app.use(methodOverride());
         _id : req.params.virtualization_id
       }, function(err, virtualization) {
         if (err)
-          res.send(err);
+          HandleError(err,res);
         // Return the whole list after creating new element
         Virtualization.find(function(err, virtualization){
           if(err)
-            res.send(err);
+            HandleError(err,res);
           res.json(virtualization);
         });
       });
@@ -642,7 +594,7 @@ app.use(methodOverride());
     app.get('/api/devenvs', function(req, res){
       DevEnv.find(function(err, devenv){
         if(err)
-          res.send(err);
+          HandleError(err,res);
         res.json(devenv);
       });
     });
@@ -654,11 +606,11 @@ app.use(methodOverride());
         desc  : req.body.desc
       }, function(err,devenv){
         if (err)
-          res.send(err);
+          HandleError(err,res);
         // Return the whole list after creating new element
         DevEnv.find(function(err, devenv){
           if(err)
-            res.send(err);
+            HandleError(err,res);
           res.json(devenv);
         });
       });
@@ -670,11 +622,11 @@ app.use(methodOverride());
         _id : req.params.devenv_id
       }, function(err, devenv) {
         if (err)
-          res.send(err);
+          HandleError(err,res);
         // Return the whole list after creating new element
         DevEnv.find(function(err, devenv){
           if(err)
-            res.send(err);
+            HandleError(err,res);
           res.json(devenv);
         });
       });
@@ -687,7 +639,7 @@ app.use(methodOverride());
     app.get('/api/hpctypes', function(req, res){
       HpcType.find(function(err, hpctype){
         if(err)
-          res.send(err);
+          HandleError(err,res);
         res.json(hpctype);
       });
     });
@@ -699,11 +651,11 @@ app.use(methodOverride());
         desc  : req.body.desc
       }, function(err,hpctype){
         if (err)
-          res.send(err);
+          HandleError(err,res);
         // Return the whole list after creating new element
         HpcType.find(function(err, hpctype){
           if(err)
-            res.send(err);
+            HandleError(err,res);
           res.json(hpctype);
         });
       });
@@ -715,11 +667,11 @@ app.use(methodOverride());
         _id : req.params.hpctype_id
       }, function(err, hpctype) {
         if (err)
-          res.send(err);
+          HandleError(err,res);
         // Return the whole list after creating new element
         HpcType.find(function(err, hpctype){
           if(err)
-            res.send(err);
+            HandleError(err,res);
           res.json(hpctype);
         });
       });
@@ -732,7 +684,7 @@ app.use(methodOverride());
     app.get('/api/cloudtypes', function(req, res){
       CloudType.find(function(err, cloudtype){
         if(err)
-          res.send(err);
+          HandleError(err,res);
         res.json(cloudtype);
       });
     });
@@ -744,11 +696,11 @@ app.use(methodOverride());
         desc  : req.body.desc
       }, function(err,cloudtype){
         if (err)
-          res.send(err);
+          HandleError(err,res);
         // Return the whole list after creating new element
         CloudType.find(function(err, cloudtype){
           if(err)
-            res.send(err);
+            HandleError(err,res);
           res.json(cloudtype);
         });
       });
@@ -760,11 +712,11 @@ app.use(methodOverride());
         _id : req.params.cloudtype_id
       }, function(err, cloudtype) {
         if (err)
-          res.send(err);
+          HandleError(err,res);
         // Return the whole list after creating new element
         CloudType.find(function(err, cloudtype){
           if(err)
-            res.send(err);
+            HandleError(err,res);
           res.json(cloudtype);
         });
       });
@@ -779,7 +731,7 @@ app.use(methodOverride());
     app.get('/api/roles', function(req, res){
       Role.find(function(err, role){
         if(err)
-          res.send(err);
+          HandleError(err,res);
         res.json(role);
       });
     });
@@ -790,11 +742,11 @@ app.use(methodOverride());
         name  : req.body.name
       }, function(err,role){
         if (err)
-          res.send(err);
+          HandleError(err,res);
         // Return the whole list after creating new element
         Role.find(function(err, role){
           if(err)
-            res.send(err);
+            HandleError(err,res);
           res.json(role);
         });
       });
@@ -806,11 +758,11 @@ app.use(methodOverride());
         _id : req.params.role_id
       }, function(err, role) {
         if (err)
-          res.send(err);
+          HandleError(err,res);
         // Return the whole list after creating new element
         Role.find(function(err, role){
           if(err)
-            res.send(err);
+            HandleError(err,res);
           res.json(role);
         });
       });
