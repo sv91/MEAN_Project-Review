@@ -526,6 +526,32 @@ app.use(methodOverride());
     });
 
     // Phone ...................................................................
+    // Get all
+    app.get('/api/phones', function(req, res){
+      findAll(res, Phone);
+    });
+
+    // Get one
+    app.get('/api/phones/:target_id', function(req, res){
+      findOne(req,res, Phone);
+    });
+
+    // Create new Phone
+    app.post('/api/phones', function(req, res){
+      Email.create({
+        value     : req.body.value,
+        primary   : req.body.primary
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Phone);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/phones/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Phone);
+    });
 
     // Institution .............................................................
 
