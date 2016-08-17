@@ -1163,6 +1163,34 @@ app.use(methodOverride());
     });
 
     // Human Ressources ........................................................
+    // Get all
+    app.get('/api/humanressources', function(req, res){
+      findAll(res, HumanRessource);
+    });
+
+    // Get one
+    app.get('/api/humanressources/:target_id', function(req, res){
+      findOne(req,res, HumanRessource);
+    });
+
+    // Create new HumanRessource
+    app.post('/api/humanressources', function(req, res){
+      HumanRessource.create({
+        name        : req.body.name,
+        role        : req.body.role,
+        pm          : req.body.pm,
+        description : req.body.description
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, HumanRessource);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/humanressources/:target_id/delete', function(req,res) {
+      deleteOne(req,res,HumanRessource);
+    });
 
     // Role ....................................................................
     // Get all
