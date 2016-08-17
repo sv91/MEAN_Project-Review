@@ -967,7 +967,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, collabs);
+        findAll(res, Collab);
       });
     });
 
@@ -975,7 +975,6 @@ app.use(methodOverride());
     app.delete('/api/deliverables/:target_id/delete', function(req,res) {
       deleteOne(req,res,Collab);
     });
-
 
     // Virtualization ..........................................................
     // Get all
@@ -1024,6 +1023,36 @@ app.use(methodOverride());
     });
 
     // HPC Ressources ..........................................................
+    // Get all
+    app.get('/api/hpcressources', function(req, res){
+      findAll(res, Hpc);
+    });
+
+    // Get one
+    app.get('/api/hpcressources/:target_id', function(req, res){
+      findOne(req,res, Hpc);
+    });
+
+    // Create new HPC Ressource
+    app.post('/api/hpcressources', function(req, res){
+      Hpc.create({
+        type : req.body.type,
+        runs : req.body.runs,
+        time : req.body.time,
+        part : req.body.part,
+        arte : req.body.arte,
+        size : req.body.size
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Hpc);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/hpcressources/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Hpc);
+    });
 
     // HPC Type ................................................................
     // Get all
