@@ -609,6 +609,34 @@ app.use(methodOverride());
     });
 
     // Related Project .........................................................
+    // Get all
+    app.get('/api/relatedprojects', function(req, res){
+      findAll(res, RelatedProject);
+    });
+
+    // Get one
+    app.get('/api/relatedprojects/:target_id', function(req, res){
+      findOne(req,res, RelatedProject);
+    });
+
+    // Create new Related Project
+    app.post('/api/relatedprojects', function(req, res){
+      RelatedProject.create({
+        name          : req.body.name,
+        startDate     : req.body.startDate,
+        endDate       : req.body.endDate,
+        description   : req.body.description
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, RelatedProject);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/relatedprojects/:target_id/delete', function(req,res) {
+      deleteOne(req,res,RelatedProject);
+    });
 
     // Short Deliverable .......................................................
 
