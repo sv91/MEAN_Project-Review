@@ -639,6 +639,33 @@ app.use(methodOverride());
     });
 
     // Short Deliverable .......................................................
+    // Get all
+    app.get('/api/shortdeliverables', function(req, res){
+      findAll(res, ShortDeliverable);
+    });
+
+    // Get one
+    app.get('/api/shortdeliverables/:target_id', function(req, res){
+      findOne(req,res, ShortDeliverable);
+    });
+
+    // Create new Short Deliverable
+    app.post('/api/shortdeliverables', function(req, res){
+      ShortDeliverable.create({
+        name          : req.body.name,
+        deliveryDate  : req.body.deliveryDate,
+        pm            : req.body.pm
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, ShortDeliverable);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/shortdeliverables/:target_id/delete', function(req,res) {
+      deleteOne(req,res,ShortDeliverable);
+    });
 
     // Publication .............................................................
 
