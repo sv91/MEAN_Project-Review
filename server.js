@@ -865,7 +865,7 @@ app.use(methodOverride());
       findOne(req,res, Deliverable);
     });
 
-    // Create new Output
+    // Create new Deliverable
     app.post('/api/deliverables', function(req, res){
       Deliverable.create({
         name            : req.body.name,
@@ -944,6 +944,38 @@ app.use(methodOverride());
     });
 
     // Collab ..................................................................
+    // Get all
+    app.get('/api/collabs', function(req, res){
+      findAll(res, Collab);
+    });
+
+    // Get one
+    app.get('/api/collabs/:target_id', function(req, res){
+      findOne(req,res, Collab);
+    });
+
+    // Create new Collab
+    app.post('/api/collabs', function(req, res){
+      Collab.create({
+        id      : req.body.id,
+        created : req.body.created,
+        edited  : req.body.edited,
+        title   : req.body.title,
+        content : req.body.content,
+        private : req.body.private,
+        deleted : req.body.deleted
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, collabs);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/deliverables/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Collab);
+    });
+
 
     // Virtualization ..........................................................
     // Get all
