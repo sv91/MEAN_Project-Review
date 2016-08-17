@@ -412,7 +412,7 @@ app.use(methodOverride());
     });
 
     // Delete the specified element
-    app.delete('/api/teams/:team_id/delete', function(req,res) {
+    app.delete('/api/teams/:target_id/delete', function(req,res) {
       deleteOne(req,res,Team);
     });
 
@@ -565,7 +565,7 @@ app.use(methodOverride());
     });
 
     // Delete the specified element
-    app.delete('/api/virtualizations/:virtualization_id/delete', function(req,res) {
+    app.delete('/api/virtualizations/:target_id/delete', function(req,res) {
       deleteOne(res, Virtualization);
     });
 
@@ -588,7 +588,7 @@ app.use(methodOverride());
     });
 
     // Delete the specified element
-    app.delete('/api/devenvs/:devenv_id/delete', function(req,res) {
+    app.delete('/api/devenvs/:target_id/delete', function(req,res) {
       deleteOne(res, DevEnv);
     });
 
@@ -613,7 +613,7 @@ app.use(methodOverride());
     });
 
     // Delete the specified element
-    app.delete('/api/hpctypes/:hpctype_id/delete', function(req,res) {
+    app.delete('/api/hpctypes/:target_id/delete', function(req,res) {
       deleteOne(res, HpcType);
     });
 
@@ -638,7 +638,7 @@ app.use(methodOverride());
     });
 
     // Delete the specified element
-    app.delete('/api/cloudtypes/:cloudtype_id/delete', function(req,res) {
+    app.delete('/api/cloudtypes/:target_id/delete', function(req,res) {
       deleteOne(res, CloudType);
     });
 
@@ -664,7 +664,7 @@ app.use(methodOverride());
     });
 
     // Delete the specified element
-    app.delete('/api/roles/:role_id/delete', function(req,res) {
+    app.delete('/api/roles/:target_id/delete', function(req,res) {
       delteOne(res, Role);
     });
 
