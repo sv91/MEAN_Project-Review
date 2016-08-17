@@ -1133,6 +1133,34 @@ app.use(methodOverride());
     });
 
     // Hardware ................................................................
+    // Get all
+    app.get('/api/hardwares', function(req, res){
+      findAll(res, Hardware);
+    });
+
+    // Get one
+    app.get('/api/hardwares/:target_id', function(req, res){
+      findOne(req,res, Hardware);
+    });
+
+    // Create new Hardware
+    app.post('/api/hardwares', function(req, res){
+      Hardware.create({
+        name        : req.body.name,
+        price       : req.body.price,
+        link        : req.body.link,
+        description : req.body.description
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Hardware);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/hardwares/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Hardware);
+    });
 
     // Human Ressources ........................................................
 
