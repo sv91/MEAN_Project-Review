@@ -695,7 +695,6 @@ app.use(methodOverride());
       deleteOne(req,res,Publication);
     });
 
-
     // Grant ...................................................................
     // Get all
     app.get('/api/grants', function(req, res){
@@ -764,6 +763,36 @@ app.use(methodOverride());
     });
 
     // Requirement .............................................................
+    // Get all
+    app.get('/api/requirements', function(req, res){
+      findAll(res, Requirement);
+    });
+
+    // Get one
+    app.get('/api/requirements/:target_id', function(req, res){
+      findOne(req,res, Requirement);
+    });
+
+    // Create new Requirement
+    app.post('/api/requirements', function(req, res){
+      Requirement.create({
+        title       : req.body.title,
+        type        : req.body.type,
+        requirement : req.body.requirement,
+        feature     : req.body.feature,
+        input       : req.body.input,
+        output      : req.body.output
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Requirement);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/requirements/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Requirement);
+    });
 
     // Input ...................................................................
 
