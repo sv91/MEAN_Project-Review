@@ -668,6 +668,33 @@ app.use(methodOverride());
     });
 
     // Publication .............................................................
+    // Get all
+    app.get('/api/publications', function(req, res){
+      findAll(res, Publication);
+    });
+
+    // Get one
+    app.get('/api/publications/:target_id', function(req, res){
+      findOne(req,res, Publication);
+    });
+
+    // Create new Publication
+    app.post('/api/publications', function(req, res){
+      Publication.create({
+        name  : req.body.name,
+        link  : req.body.link
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Publication);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/publications/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Publication);
+    });
+
 
     // Grant ...................................................................
     // Get all
