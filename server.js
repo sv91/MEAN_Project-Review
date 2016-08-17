@@ -825,9 +825,77 @@ app.use(methodOverride());
     });
 
     // Output ..................................................................
+    // Get all
+    app.get('/api/outputs', function(req, res){
+      findAll(res, Output);
+    });
+
+    // Get one
+    app.get('/api/outputs/:target_id', function(req, res){
+      findOne(req,res, Output);
+    });
+
+    // Create new Output
+    app.post('/api/outputs', function(req, res){
+      Output.create({
+        tag     : req.body.tag,
+        format  : req.body.format,
+        number  : req.body.number,
+        size    : req.body.size
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Output);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/outputs/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Output);
+    });
 
     // Deliverable .............................................................
+    // Get all
+    app.get('/api/deliverables', function(req, res){
+      findAll(res, Deliverable);
+    });
 
+    // Get one
+    app.get('/api/deliverables/:target_id', function(req, res){
+      findOne(req,res, Deliverable);
+    });
+
+    // Create new Output
+    app.post('/api/deliverables', function(req, res){
+      Deliverable.create({
+        name            : req.body.name,
+        date            : req.body.date,
+        description     : req.body.description,
+        risks           : req.body.risks,
+        dependency      : req.body.dependency,
+        requirements    : req.body.requirements,
+        softdev         : req.body.softdev,
+        datatransfer    : req.body.datatransfer,
+        collabs         : req.body.collabs,
+        virtualization  : req.body.virtualization,
+        devenv          : req.body.devenv,
+        hpcRessource    : req.body.hpcRessource,
+        cloudRessource  : req.body.cloudRessource,
+        hpc             : req.body.hpc,
+        cloud           : req.body.cloud,
+        hardware        : req.body.hardware,
+        hr              : req.body.hr
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Deliverable);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/deliverables/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Deliverable);
+    });
 
     // Software Development ....................................................
     // Get all
