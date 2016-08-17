@@ -549,11 +549,7 @@ app.use(methodOverride());
     // Virtualization ..........................................................
     // Get all
     app.get('/api/virtualizations', function(req, res){
-      Virtualization.find(function(err, virtualization){
-        if(err)
-          HandleError(err,res);
-        res.json(virtualization);
-      });
+      findAll(res, Virtualization);
     });
 
     // Create new Virtualization
@@ -564,39 +560,19 @@ app.use(methodOverride());
       }, function(err,virtualization){
         if (err)
           HandleError(err,res);
-        // Return the whole list after creating new element
-        Virtualization.find(function(err, virtualization){
-          if(err)
-            HandleError(err,res);
-          res.json(virtualization);
-        });
+        findAll(res, Virtualization);
       });
     });
 
     // Delete the specified element
     app.delete('/api/virtualizations/:virtualization_id/delete', function(req,res) {
-      Virtualization.remove({
-        _id : req.params.virtualization_id
-      }, function(err, virtualization) {
-        if (err)
-          HandleError(err,res);
-        // Return the whole list after creating new element
-        Virtualization.find(function(err, virtualization){
-          if(err)
-            HandleError(err,res);
-          res.json(virtualization);
-        });
-      });
+      deleteOne(res, Virtualization);
     });
 
     // Development Environment .................................................
     // Get all
     app.get('/api/devenvs', function(req, res){
-      DevEnv.find(function(err, devenv){
-        if(err)
-          HandleError(err,res);
-        res.json(devenv);
-      });
+      findAll(res, DevEnv);
     });
 
     // Create new DevEnv
@@ -607,29 +583,13 @@ app.use(methodOverride());
       }, function(err,devenv){
         if (err)
           HandleError(err,res);
-        // Return the whole list after creating new element
-        DevEnv.find(function(err, devenv){
-          if(err)
-            HandleError(err,res);
-          res.json(devenv);
-        });
+        findAll(res, DevEnv);
       });
     });
 
     // Delete the specified element
     app.delete('/api/devenvs/:devenv_id/delete', function(req,res) {
-      DevEnv.remove({
-        _id : req.params.devenv_id
-      }, function(err, devenv) {
-        if (err)
-          HandleError(err,res);
-        // Return the whole list after creating new element
-        DevEnv.find(function(err, devenv){
-          if(err)
-            HandleError(err,res);
-          res.json(devenv);
-        });
-      });
+      deleteOne(res, DevEnv);
     });
 
     // HPC Ressources ..........................................................
@@ -637,11 +597,7 @@ app.use(methodOverride());
     // HPC Type ................................................................
     // Get all
     app.get('/api/hpctypes', function(req, res){
-      HpcType.find(function(err, hpctype){
-        if(err)
-          HandleError(err,res);
-        res.json(hpctype);
-      });
+      findAll(res, HpcType);
     });
 
     // Create new HpcType
@@ -652,29 +608,13 @@ app.use(methodOverride());
       }, function(err,hpctype){
         if (err)
           HandleError(err,res);
-        // Return the whole list after creating new element
-        HpcType.find(function(err, hpctype){
-          if(err)
-            HandleError(err,res);
-          res.json(hpctype);
-        });
+        findAll(res, HpcType);
       });
     });
 
     // Delete the specified element
     app.delete('/api/hpctypes/:hpctype_id/delete', function(req,res) {
-      HpcType.remove({
-        _id : req.params.hpctype_id
-      }, function(err, hpctype) {
-        if (err)
-          HandleError(err,res);
-        // Return the whole list after creating new element
-        HpcType.find(function(err, hpctype){
-          if(err)
-            HandleError(err,res);
-          res.json(hpctype);
-        });
-      });
+      deleteOne(res, HpcType);
     });
 
     // Cloud Ressources ........................................................
@@ -682,11 +622,7 @@ app.use(methodOverride());
     // Cloud Type ..............................................................
     // Get all
     app.get('/api/cloudtypes', function(req, res){
-      CloudType.find(function(err, cloudtype){
-        if(err)
-          HandleError(err,res);
-        res.json(cloudtype);
-      });
+      findAll(res, CloudType);
     });
 
     // Create new CloudType
@@ -697,29 +633,13 @@ app.use(methodOverride());
       }, function(err,cloudtype){
         if (err)
           HandleError(err,res);
-        // Return the whole list after creating new element
-        CloudType.find(function(err, cloudtype){
-          if(err)
-            HandleError(err,res);
-          res.json(cloudtype);
-        });
+        findAll(res, CloudType);
       });
     });
 
     // Delete the specified element
     app.delete('/api/cloudtypes/:cloudtype_id/delete', function(req,res) {
-      CloudType.remove({
-        _id : req.params.cloudtype_id
-      }, function(err, cloudtype) {
-        if (err)
-          HandleError(err,res);
-        // Return the whole list after creating new element
-        CloudType.find(function(err, cloudtype){
-          if(err)
-            HandleError(err,res);
-          res.json(cloudtype);
-        });
-      });
+      deleteOne(res, CloudType);
     });
 
     // Hardware ................................................................
@@ -729,11 +649,7 @@ app.use(methodOverride());
     // Role ....................................................................
     // Get all
     app.get('/api/roles', function(req, res){
-      Role.find(function(err, role){
-        if(err)
-          HandleError(err,res);
-        res.json(role);
-      });
+      findAll(res, Role);
     });
 
     // Create new Role
@@ -743,29 +659,13 @@ app.use(methodOverride());
       }, function(err,role){
         if (err)
           HandleError(err,res);
-        // Return the whole list after creating new element
-        Role.find(function(err, role){
-          if(err)
-            HandleError(err,res);
-          res.json(role);
-        });
+        findAll(res, Role);
       });
     });
 
     // Delete the specified element
     app.delete('/api/roles/:role_id/delete', function(req,res) {
-      Role.remove({
-        _id : req.params.role_id
-      }, function(err, role) {
-        if (err)
-          HandleError(err,res);
-        // Return the whole list after creating new element
-        Role.find(function(err, role){
-          if(err)
-            HandleError(err,res);
-          res.json(role);
-        });
-      });
+      delteOne(res, Role);
     });
 
     // General Review ..........................................................
