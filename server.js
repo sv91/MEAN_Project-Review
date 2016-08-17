@@ -1078,6 +1078,36 @@ app.use(methodOverride());
     });
 
     // Cloud Ressources ........................................................
+    // Get all
+    app.get('/api/cloudressources', function(req, res){
+      findAll(res, Cloud);
+    });
+
+    // Get one
+    app.get('/api/cloudressources/:target_id', function(req, res){
+      findOne(req,res, Cloud);
+    });
+
+    // Create new Cloud Ressource
+    app.post('/api/cloudressources', function(req, res){
+      Cloud.create({
+        type : req.body.type,
+        runs : req.body.runs,
+        time : req.body.time,
+        part : req.body.part,
+        arte : req.body.arte,
+        size : req.body.size
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, Cloud);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/cloudressources/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Cloud);
+    });
 
     // Cloud Type ..............................................................
     // Get all
