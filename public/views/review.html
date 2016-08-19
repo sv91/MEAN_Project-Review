@@ -1,0 +1,24 @@
+<div ng-repeat="proposal in data.proposals">
+  <div id="{{proposal.name}}" class="listElement evenElement{{$even}}" onclick="goTo(this.id);">
+    <div class="typeSquare">
+      <img src={{proposal.picture}} alt={{proposal.type}} height="80" width="80">
+    </div>
+    <b>{{proposal.name}}</b><hr class="smallHr" />
+    <i>{{proposal.author}}</i><br />
+    {{proposal.startDate}} - {{proposal.endDate}}<br/>
+    <div style="text-align:right;"><u>Submitted:</u> {{proposal.subDate}}</div>
+  </div>
+  <hr />
+</div>
+ <!-- For tests
+      <pre>
+        {{ proposals | json }}
+      </pre>
+      -->
+<script>
+function goTo(address, $window){
+  console.log('go to ', address);
+  var _open = window.open('/#/review/'+address.replace(/\s+/g, ''), "_self");
+}
+
+</script>

@@ -1,0 +1,44 @@
+{
+  "name": "angular-hbp-collaboratory",
+  "description": "An AngularJS tool to develop web application based on the HBP Collaboratory",
+  "version": "0.1.5",
+  "main": "angular-hbp-collaboratory.js",
+  "authors": [
+    "Olivier Amblet <olivier.amblet@epfl.ch>",
+    "Stefano Zaninetta <stefano.zaninetta@epfl.ch>"
+  ],
+  "license": "MIT",
+  "moduleType": [
+    "globals"
+  ],
+  "homepage": "https://github.com/HumanBrainProject/angular-hbp-collaboratory",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "*.log"
+  ],
+  "dependencies": {
+    "angular": "^1.5.0",
+    "angular-hbp-common": "^2.0.1",
+    "angular-hbp-document-client": "^0.5.2",
+    "angular-uuid4": "^0.3.1"
+  },
+  "resolutions": {
+    "angular": "1.5.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.5.0",
+    "hbp-collaboratory-app-toolkit": "^0.1.1",
+    "angular-ui-codemirror": "^0.3.0"
+  },
+  "_release": "0.1.5",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.5",
+    "commit": "bc80ecbf54ac776f6e63a216d07b6476a82fc0b3"
+  },
+  "_source": "https://github.com/HumanBrainProject/angular-hbp-collaboratory.git",
+  "_target": "~0.1.3",
+  "_originalSource": "angular-hbp-collaboratory"
+}

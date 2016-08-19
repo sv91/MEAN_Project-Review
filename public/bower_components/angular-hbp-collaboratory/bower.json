@@ -1,0 +1,35 @@
+{
+  "name": "angular-hbp-collaboratory",
+  "description": "An AngularJS tool to develop web application based on the HBP Collaboratory",
+  "version": "0.1.5",
+  "main": "angular-hbp-collaboratory.js",
+  "authors": [
+    "Olivier Amblet <olivier.amblet@epfl.ch>",
+    "Stefano Zaninetta <stefano.zaninetta@epfl.ch>"
+  ],
+  "license": "MIT",
+  "moduleType": [
+    "globals"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "*.log"
+  ],
+  "dependencies": {
+    "angular": "^1.5.0",
+    "angular-hbp-common": "^2.0.1",
+    "angular-hbp-document-client": "^0.5.2",
+    "angular-uuid4": "^0.3.1"
+  },
+  "resolutions": {
+    "angular": "1.5.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.5.0",
+    "hbp-collaboratory-app-toolkit": "^0.1.1",
+    "angular-ui-codemirror": "^0.3.0"
+  }
+}

@@ -62,40 +62,7 @@ app.use(methodOverride());
   // Person --------------------------------------------------------------------
   var Person = mongoose.model('Person', {
     id            : Number,
-    updatedAt     : Date,
-    username      : String,
-    givenName     : String,
-    familyName    : String,
     displayName   : String,
-    title         : String,
-    profile       : String,
-    picture       : String,
-    emails        : [{ type: Schema.Types.ObjectId, ref: 'Email' }],
-    phones        : [{ type: Schema.Types.ObjectId, ref: 'Phone' }],
-    institutions  : [{ type: Schema.Types.ObjectId, ref: 'Institution' }],
-    ims           : [String]
-  });
-
-  // Email ---------------------------------------------------------------------
-  var Email = mongoose.model('Email',{
-    value     : String,
-    primary   : Boolean,
-    verified  : Boolean
-  });
-
-  // Phone ---------------------------------------------------------------------
-  var Phone = mongoose.model('Phone', {
-    value     : String,
-    primary   : Boolean
-  });
-
-  // Institution ---------------------------------------------------------------
-  var Institution = mongoose.model('Institution', {
-    name          : String,
-    department    : String,
-    postalAdress  : String,
-    title         : String,
-    primary       : Boolean
   });
 
   // Team ----------------------------------------------------------------------
@@ -178,7 +145,7 @@ app.use(methodOverride());
     requirements    : [{ type: Schema.Types.ObjectId, ref: 'Requirement' }],
     softdev         : [{ type: Schema.Types.ObjectId, ref: 'SoftDev' }],
     datatransfer    : [{ type: Schema.Types.ObjectId, ref: 'DataTransfer' }],
-    collabs         : [{ type: Schema.Types.ObjectId, ref: 'Collab' }],
+    collabs         : [String],
     virtualization  : [{ type: Schema.Types.ObjectId, ref: 'Virtualization' }],
     devenv          : [{ type: Schema.Types.ObjectId, ref: 'DevEnv' }],
     hpcRessource    : Boolean,
@@ -199,17 +166,6 @@ app.use(methodOverride());
   var DataTransfer = mongoose.model('DataTransfer', {
     name : String,
     desc : String
-  });
-
-  // Collab --------------------------------------------------------------------
-  var Collab = mongoose.model('Collab', {
-    id      : Number,
-    created : Date,
-    edited  : Date,
-    title   : String,
-    content : String,
-    private : Boolean,
-    deleted : String
   });
 
   // Virtualization ------------------------------------------------------------
@@ -472,18 +428,7 @@ app.use(methodOverride());
     app.post('/api/persons', function(req, res){
       Person.create({
         id            : req.body.id,
-        updatedAt     : req.body.updatedAt,
-        username      : req.body.username,
-        givenName     : req.body.givenName,
-        familyName    : req.body.familyName,
-        displayName   : req.body.displayName,
-        title         : req.body.title,
-        profile       : req.body.profile,
-        picture       : req.body.picture,
-        emails        : req.body.emails,
-        phones        : req.body.phones,
-        institutions  : req.body.institutions,
-        ims           : req.body.ims
+        displayName   : req.body.displayName
       }, function(err,project){
         if (err)
           HandleError(err,res);
@@ -494,94 +439,6 @@ app.use(methodOverride());
     // Delete the specified element
     app.delete('/api/persons/:target_id/delete', function(req,res) {
       deleteOne(req,res,Person);
-    });
-
-    // Email ...................................................................
-    // Get all
-    app.get('/api/emails', function(req, res){
-      findAll(res, Email);
-    });
-
-    // Get one
-    app.get('/api/emails/:target_id', function(req, res){
-      findOne(req,res, Email);
-    });
-
-    // Create new Email
-    app.post('/api/emails', function(req, res){
-      Email.create({
-        value     : req.body.value,
-        primary   : req.body.primary,
-        verified  : req.body.verified
-      }, function(err,project){
-        if (err)
-          HandleError(err,res);
-        findAll(res, Email);
-      });
-    });
-
-    // Delete the specified element
-    app.delete('/api/emails/:target_id/delete', function(req,res) {
-      deleteOne(req,res,Email);
-    });
-
-    // Phone ...................................................................
-    // Get all
-    app.get('/api/phones', function(req, res){
-      findAll(res, Phone);
-    });
-
-    // Get one
-    app.get('/api/phones/:target_id', function(req, res){
-      findOne(req,res, Phone);
-    });
-
-    // Create new Phone
-    app.post('/api/phones', function(req, res){
-      Phone.create({
-        value     : req.body.value,
-        primary   : req.body.primary
-      }, function(err,project){
-        if (err)
-          HandleError(err,res);
-        findAll(res, Phone);
-      });
-    });
-
-    // Delete the specified element
-    app.delete('/api/phones/:target_id/delete', function(req,res) {
-      deleteOne(req,res,Phone);
-    });
-
-    // Institution .............................................................
-    // Get all
-    app.get('/api/institutions', function(req, res){
-      findAll(res, Institution);
-    });
-
-    // Get one
-    app.get('/api/institutions/:target_id', function(req, res){
-      findOne(req,res, Institution);
-    });
-
-    // Create new Institution
-    app.post('/api/institutions', function(req, res){
-      Institution.create({
-        name          : req.body.name,
-        department    : req.body.department,
-        postalAdress  : req.body.postalAdress,
-        title         : req.body.title,
-        primary       : req.body.primary
-      }, function(err,project){
-        if (err)
-          HandleError(err,res);
-        findAll(res, Institution);
-      });
-    });
-
-    // Delete the specified element
-    app.delete('/api/institutions/:target_id/delete', function(req,res) {
-      deleteOne(req,res,Institution);
     });
 
     // Team ....................................................................
@@ -943,39 +800,6 @@ app.use(methodOverride());
       deleteOne(req,res,DataTransfer);
     });
 
-    // Collab ..................................................................
-    // Get all
-    app.get('/api/collabs', function(req, res){
-      findAll(res, Collab);
-    });
-
-    // Get one
-    app.get('/api/collabs/:target_id', function(req, res){
-      findOne(req,res, Collab);
-    });
-
-    // Create new Collab
-    app.post('/api/collabs', function(req, res){
-      Collab.create({
-        id      : req.body.id,
-        created : req.body.created,
-        edited  : req.body.edited,
-        title   : req.body.title,
-        content : req.body.content,
-        private : req.body.private,
-        deleted : req.body.deleted
-      }, function(err,project){
-        if (err)
-          HandleError(err,res);
-        findAll(res, Collab);
-      });
-    });
-
-    // Delete the specified element
-    app.delete('/api/deliverables/:target_id/delete', function(req,res) {
-      deleteOne(req,res,Collab);
-    });
-
     // Virtualization ..........................................................
     // Get all
     app.get('/api/virtualizations', function(req, res){
@@ -1224,8 +1048,12 @@ app.use(methodOverride());
 
   // Application ---------------------------------------------------------------
   app.get('*', function(req, res) {
-    res.sendfile('./public/index.html'); //load the single view file
-  })
+    res.sendfile('./public/review/index.html'); //load the single view file
+  });
+
+  app.get('/proposal/*', function(req, res) {
+    res.sendfile('./public/proposal/index.html'); //load the single view file
+  });
 // Listen ======================================================================
 app.listen(8080);
 console.log("App listening on port 8080.");

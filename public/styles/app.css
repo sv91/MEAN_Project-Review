@@ -1,0 +1,525 @@
+/* Remove this part to integrate in Collaboratory */
+.container-fluid {
+  padding-left: 24px;
+}
+
+.navbar-form.navbar-fixed-bottom {
+  padding-left: 24px;
+}
+
+@media screen and (min-width: 800px) {
+  .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+/* END Remove to integrate in Collaboratory */
+
+.table {
+  font-size: 13px;
+}
+.form-step {
+  margin-bottom: 60px;
+}
+
+.navbar-form.navbar-fixed-bottom {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+label.input-group {
+  font-weight: normal;
+}
+
+.input-group-btn > .btn {
+  height: 33px;
+}
+
+/* User Card */
+
+.hbp-usercard {
+  min-height: 80px;
+  position: relative;
+}
+.hbp-usercard-pix {
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+}
+.hbp-usercard-pix.hbp-generated-icon {
+  display: inline-block;
+  height: 80px;
+  width: 80px;
+}
+.hbp-usercard-pix > img {
+  border: 0;
+  height: auto;
+  vertical-align: middle;
+  width: 80px;
+}
+
+.hbp-usercard-name {
+  margin-bottom: 8px;
+  margin-top: 12px;
+}
+
+.hbp-usercard-name,
+.hbp-usercard-institution,
+.hbp-usercard-contact {
+  margin-left: 92px;
+}
+
+.hbp-usercard-contact-item {
+  padding-right: 12px;
+}
+
+
+/* Form */
+.team-role {
+  margin-left: 92px;
+}
+
+.form-group > .list-group {
+  padding-top: 0;
+  margin-bottom: 0;
+}
+
+.user-select-form-group {
+  margin-bottom: 150px;
+}
+
+.selected-user {
+  display: block;
+  padding-bottom: 12px;
+}
+
+
+.resourceDetails {
+  padding: 0 0 0 24px;
+}
+
+.plan {
+  padding-left: 16px;
+  position: relative;
+}
+
+.plan input[type='radio'] {
+  position: absolute;
+  left: -8px;
+  margin-top: 8px;
+}
+
+label .list-group {
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.project-keywords {
+  height: 33px;
+}
+
+.container {
+  width: 744px;
+}
+
+.form {
+  background-color: rgb(245,245,245);
+  border-style: none solid solid none;
+  border-color:rgba(25,25,25,0.1);
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.midform {
+  background-color: rgb(235,235,235);
+  border-style: none solid solid none;
+  border-color:rgba(25,25,25,0.1);
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.bubble {
+  background-color: rgb(235,235,235);
+  border-style: none solid solid none;
+  border-color:rgba(25,25,25,0.1);
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.middlePart{
+  float:left;
+  width: 744px;
+}
+
+.leftSide{
+  float:left;
+  /* Firefox */
+  width: -moz-calc((100% - 744px)/2);
+  /* WebKit */
+  width: -webkit-calc((100% - 744px)/2);
+  /* Opera */
+  width: -o-calc((100% - 744px)/2);
+  /* Standard */
+  width: calc((100% - 744px)/2);
+
+  vertical-align: middle;
+}
+
+.rightSide{
+  padding: 0px 10px 10px;
+  float:left;
+  /* Firefox */
+  width: -moz-calc((100% - 744px)/2);
+  /* WebKit */
+  width: -webkit-calc((100% - 744px)/2);
+  /* Opera */
+  width: -o-calc((100% - 744px)/2);
+  /* Standard */
+  width: calc((100% - 744px)/2);
+}
+
+/* format of invalid inputs */
+input.ng-invalid.ng-touched {
+  background-color: #FA787E;
+  border-color: #CA5B5B;
+}
+
+/* format of invalid inputs */
+textarea.ng-invalid.ng-touched {
+  background-color: #FA787E;
+  border-color: #CA5B5B;
+}
+
+/* numbered buttons */
+#status-buttons                 {  }
+#status-buttons a               { color:#000; display:inline-block; font-size:12px; margin-right:15px; text-align:center; text-transform:uppercase;width:80px; }
+#status-buttons a:hover         { text-decoration:none; }
+
+/* we will style the span as the circled number */
+#status-buttons span            { background:#080808; color:#FFF; display:block; height:30px; margin:0 auto 10px; padding-top:8px; width:30px; border-radius:50%; }
+
+/* active buttons turn light green-blue*/
+#status-buttons a.active span   { background:#00BC8C; }
+
+#status-buttons a.pN span   { background:#C0C0C0; }
+
+#status-buttons a.finalN.disabled span   { background:#700000; }
+#status-buttons a.finalN span   { background:#007000; }
+
+a.disabled {
+  pointer-events: none;
+}
+
+.page-header {
+  text-align: center;
+}
+
+.next-button {
+  vertical-align: middle;
+}
+
+hbp-user-selector input.form-control {
+  width:684px !important;
+  height: 33px !important;
+}
+
+.form-group input{
+  border: 1px solid #ccc;
+  padding: 3px 3px 0 3px;
+  height: 26px;
+}
+.form-group input[type=radio]{
+  border: 0px;
+  padding: 0px;
+  height: auto;
+}
+
+.form-group input[type=text]{
+  width:723px;
+}
+
+.form-group input[type=number]{
+  width:100%;
+  height: 31px;
+}
+
+.inTwo{
+  width:49%;
+  vertical-align:top;
+}
+
+.inTwoEmptySeparator{
+  width:2%;
+  vertical-align:top;
+}
+
+.hideOld{
+  display:none !important;
+}
+
+.p10-5{
+  padding:5px 10px;
+}
+
+.p10{
+  padding:0px 10px;
+}
+
+.memberName{
+  width:23%;
+  padding: 1px 5px;
+}
+
+.memberRole{
+  width:23%;
+  padding: 1px 5px;
+}
+
+.memberPm{
+  width:23%;
+  padding: 1px 5px;
+}
+
+.memberDesc{
+  width:23%;
+  padding: 1px 5px;
+}
+
+.memberButtom{
+  width:8%;
+}
+
+.memberName input{
+  width:100% !important;
+}
+.memberRole input{
+  width:100% !important;
+}
+.memberPm input{
+  width:100% !important;
+}
+.memberDesc input{
+  width:100% !important;
+}
+
+table{
+  width:100%;
+}
+
+input:-moz-read-only { /* For Firefox */
+  background-color: rgb(245,245,245);
+}
+
+input:read-only {
+  background-color: rgb(245,245,245);
+}
+
+input[type=text]:read-only {
+  width: 708px !important;
+}
+
+input[type=number]:read-only {
+  width:100%;
+  height: 26px;
+}
+
+input[type=text]:-moz-read-only {
+  width: 708px !important;
+}
+
+input[type=number]:-moz-read-only {
+  width:100%;
+  height: 26px;
+}
+
+textarea:read-only {
+  background-color: rgb(245,245,245);
+  width:708px;
+  resize: vertical;
+}
+
+textarea:-moz-read-only {
+  background-color: rgb(245,245,245);
+  width:708px;
+  resize: vertical;
+  border-width: 1px;
+}
+
+textarea:required{
+  background-color: #FA787E !important;
+  border-color: #CA5B5B !important;
+}
+
+input:required:-moz-read-only { /* For Firefox */
+  background-color: #FA787E;
+  border-color: #CA5B5B;
+}
+
+input:read-only:required {
+  background-color: #FA787E;
+  border-color: #CA5B5B;
+}
+
+.padTop{
+  padding-top: 5px;
+}
+
+.gold{
+  background-color: #e0dcd0;
+}
+.silver{
+  background-color: #dedede;
+}
+.bronze{
+  background-color: #dfd7d0;
+}
+.goldSelected{
+  background-color: #D4AF37;
+}
+.silverSelected{
+  background-color: #C0C0D0;
+}
+.bronzeSelected{
+  background-color: #CD7F32;
+}
+.bottomBorder{
+  border:0px 0px 1px 1px solid #CCCCCC;
+}
+
+.placeholder{
+  visibility: hidden;
+}
+
+.cornerS{
+  width: 48px;
+  height: 175px;
+}
+
+.cornerB{
+  width: 54px;
+  height: 175px;
+}
+
+.empty{
+  background-color: #F5F5F5;
+}
+.titre{
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  color: rgba(0,0,0,0.6);
+}
+
+.description{
+  font-weight: normal;
+  font-size: 12px;
+}
+
+textarea{
+  min-height: 80px !important;
+  resize: vertical;
+}
+
+.plusMinus{
+  display:none;
+  float:left;
+}
+
+.glyphicon-minus {
+  display: none;
+}
+
+.ft{
+  float:left;
+}
+
+.css-label {
+  cursor: pointer;
+}
+
+.plusMinus:checked + .css-label .glyphicon-minus {
+  display: inline;
+}
+.plusMinus:checked + .css-label .glyphicon-plus {
+  display: none;
+}
+
+
+.md-datepicker-calendar {
+  width:308px;
+}
+
+.md-datepicker-calendar-pane {
+  width:308px;
+}
+.md-datepicker-input-mask{
+  width:308px;
+}
+
+
+.md-datepicker md-content {
+  padding-bottom: 200px;
+}
+.md-datepicker .validation-messages {
+  font-size: 12px;
+  color: #dd2c00;
+  margin: 10px 0 0 25px;
+}
+
+md-datepicker{
+  background: rgba(0,0,0,0);
+}
+
+.nonePadding {
+  padding-left: 10px;
+}
+
+.listElement{
+  width:100%;
+  border-style: none solid solid none;
+  border-color:rgba(25,25,25,0.1);
+  border-width: 1px;
+  border-radius: 3px;
+  padding: 10px;
+  display: inline-block;
+}
+
+.evenElementtrue{
+  background-color: rgb(245,245,245);
+}
+
+.evenElementfalse{
+  background-color: rgb(225,225,225);
+}
+
+.typeSquare{
+  float:left;
+  height: 80px;
+  width: 90px;
+  margin-right: 10px;
+  border-right: solid 1px #CCC;
+  padding-right: 10px;
+}
+
+.smallHr{
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+}
+
+.centeredText{
+  width: 100%;
+  text-align: center;
+}
+
+.rightAligned{
+  width: 100%;
+  text-align: right;
+}
