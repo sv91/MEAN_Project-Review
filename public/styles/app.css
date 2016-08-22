@@ -528,10 +528,9 @@ md-datepicker{
   color:#000;
   display:inline-block;
   font-size:18px;
-  margin-right:15px;
   text-align:center;
   text-transform:uppercase;
-  width:80px;
+  width:100px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.065);
   padding-bottom: 6px;
   padding-right: 80px;
