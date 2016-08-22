@@ -19,6 +19,7 @@ angular
 	})
 // Review App states
   .state('main.reviewApp', {
+	  templateUrl: 'views/review/form.html',
     controller:'reviewAppController'
   })
   .state('main.reviewApp.review', {
@@ -46,49 +47,49 @@ angular
 // Proposal App states
 	.state('main.proposalApp', {
 			url: '/form',
-			templateUrl: 'views/proposalform.html',
+			templateUrl: 'views/proposal/form.html',
 			controller:'proposalAppController'
 		})
 		.state('main.proposalApp.type', {
 			url: '/type',
-			templateUrl: 'views/proposaltype.html'
+			templateUrl: 'views/proposal/type.html'
 		})
 		.state('main.proposalApp.members', {
 			url: '/members',
-			templateUrl: 'views/proposalmembers.html',
+			templateUrl: 'views/proposal/members.html',
 			controller: 'MembersCtrl'
 		})
 		.state('main.proposalApp.summary', {
 			url: '/summary',
-			templateUrl: 'views/proposalsummary.html',
+			templateUrl: 'views/proposal/summary.html',
 			controller: 'SummaryCtrl'
 		})
 		.state('main.proposalApp.requirements', {
 			url: '/requirements',
-			templateUrl: 'views/proposalrequirements.html',
+			templateUrl: 'views/proposal/requirements.html',
 			controller: 'RequirementsCtrl'
 		})
 		.state('main.proposalApp.deliverables', {
 			url: '/deliverables',
-			templateUrl: 'views/proposaldeliverables.html',
+			templateUrl: 'views/proposal/deliverables.html',
 			controller: 'DeliverablesCtrl'
 		})
 		.state('main.proposalApp.review', {
 			url: '/review',
-			templateUrl: 'views/proposalreview.html',
+			templateUrl: 'views/proposal/review.html',
 			controller: 'ReviewCtrl'
 		})
 		.state('main.proposalApp.help', {
 			url: '/help',
-			templateUrl: 'views/proposalhelp.html'
+			templateUrl: 'views/proposal/help.html'
 		})
 		.state('main.proposalApp.updates', {
 			url: '/updates',
-			templateUrl: 'views/proposalupdates.html'
+			templateUrl: 'views/proposal/updates.html'
 		})
 		.state('main.proposalApp.finalize', {
 			url: '/finalize',
-			templateUrl: 'views/proposalfinalize.html',
+			templateUrl: 'views/proposal/finalize.html',
 			controller: 'FinalizeCtrl'
 		});
 

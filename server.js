@@ -8,7 +8,7 @@ var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 
 // Configuration ===============================================================
-mongoose.connect('mongodb://localhost:27017/proposaldb');
+mongoose.connect('mongodb://localhost:8080/proposaldb');
 
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
@@ -1055,5 +1055,5 @@ app.use(methodOverride());
     res.sendfile('./public/proposal/index.html'); //load the single view file
   });
 // Listen ======================================================================
-app.listen(8080);
-console.log("App listening on port 8080.");
+app.listen(80);
+console.log("App listening on port 80.");
