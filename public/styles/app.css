@@ -532,6 +532,7 @@ md-datepicker{
 
 #main-menu {
   border-bottom: 1px solid rgba(0, 0, 0, 0.065);
+  padding-bottom: 6px;
 }
 
 #main-menu a{
