@@ -537,9 +537,10 @@ md-datepicker{
   margin-right:15px;
   text-align:center;
   text-transform:uppercase;width:80px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.065);
+  padding-bottom: 6px;
 }
 #main-menu a:hover{
   text-decoration:none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.065);
-    padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
