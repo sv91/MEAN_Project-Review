@@ -1,0 +1,24 @@
+<div class="container form middlePart" id="req">
+  <div ng-show="record.projectType >= 0" >
+    <label>Use case description</label><br />
+    <textarea class="form-control" ng-required="record.projectType >= 2" ng-model="record.usecase" placeholder='Define which feature is missing.' maxlength="2000"></textarea>
+  </div>
+  <br />
+  <hr style="padding-top:10px;padding-bottom:10px;" />
+  <div>
+    <requirements-picker></requirements-picker>
+  </div>
+  <div style="visibility:hidden"><input type="text" id="hidden" ng-model="record.projectType"></div>
+</div>
+
+<script>
+setTimeout(function() {
+  var type = document.getElementById("hidden").value;
+  console.log('Type:"'+type+'"');
+  if (type >= 1){
+    updateLinks("summary","deliverables");
+  } else if (type == 0){
+    updateLinks("summary","review");
+  }
+},300);
+</script>

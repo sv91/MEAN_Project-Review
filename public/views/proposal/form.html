@@ -1,0 +1,85 @@
+<!-- form.html -->
+<div>
+  <div>
+    <div id="form-container">
+      <div class="page-header text-center">
+        <!-- the links to our nested states using relative paths -->
+        <!-- add the active class if the state matches our ui-sref -->
+        <div id="status-buttons" class="text-center">
+          <a ui-sref=".help"><span>?</span>Help</a>
+          <a style="visibility:hidden;"><span>?</span>place</a>
+          <a href="#/form/" id="prev" class="pN"><span><<</span>Previous</a>
+          <a ui-sref-active="active" ui-sref=".type"><span>1</span>Type</a>
+          <a ng-show="record.projectType >= 0" ui-sref-active="active" ui-sref=".members"><span>2</span> Members</a>
+          <a ng-show="record.projectType >= 0" ui-sref-active="active" ui-sref=".summary"><span>3</span>Summary</a>
+          <a ng-show="record.projectType >= 0" ui-sref-active="active" ui-sref=".requirements"><span>4</span>Requirements</a>
+          <a ng-show="record.projectType >= 1" ui-sref-active="active" ui-sref=".deliverables"><span>5</span>Deliverables</a>
+          <a ng-show="record.projectType >= 0" ui-sref-active="active" ui-sref=".review"><span ng-show="record.projectType >= 1">6</span><span ng-hide="record.projectType >= 1">5</span>Review</a>
+          <a href="#/form/" id="next" class="pN"><span>>></span> Next</a>
+          <a style="visibility:hidden;"><span>?</span>place</a>
+          <a href="#/form/final" id="final" class="finalN disabled" style="visibility:hidden;"><span>✓</span> Submit</a>
+        </div>
+      </div>
+
+      <!-- use ng-submit to catch the form submission and use our Angular function -->
+      <form id="signup-form" ng-submit="processForm()">
+        <div class="leftSide" style="visibility:hidden">
+          <!-- placeholder  -->
+          placeholder
+        </div>
+
+        <!-- our nested state views will be injected here -->
+        <div id="form-views" ui-view>
+        </div>
+
+        <div class="rightSide" id="rightSide">
+          <div id="bubble" class="bubble">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<pre>
+  {{ record | json }}
+</pre>
+<!-- For tests
+-->
+
+<script>
+/**
+* @ngdoc function
+* @name changeURL
+* @description
+* # changeURL
+* Change the target URL of an element.
+* @param {string} id      Id of the element.
+* @param {string} value   New URL adress.
+*/
+function changeURL(id,value){
+  var doc = document.getElementById(id)
+  doc.href = '#/form/'+value;
+  if(value == '' || value == null || value == undefined ){
+    doc.style = 'visibility:hidden';
+  } else {
+    doc.style = 'visibility:visible';
+  }
+}
+
+/**
+* @ngdoc function
+* @name updateLinks
+* @description
+* # updateLinks
+* Change the target URL of the "previous" and "next" buttons.
+* @param {string} prev   New URL adress for the "previous" button.
+* @param {string} next   New URL adress for the "next" button.
+*/
+function updateLinks(prev,next){
+  resetBubble();
+  changeURL('prev',prev);
+  changeURL('next',next);
+}
+</script>

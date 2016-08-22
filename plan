@@ -1,0 +1,7 @@
+Main page --------------------->
+  Proposal --------------------> Add project, filled proposal, empty review
+
+  Review ----------------------> Load all the projects, proposal, review
+    Project Review ------------> Need reviews for a specific proposal
+      Comment -----------------> Load proposal details 
+      Notes ------------------->
