@@ -43,7 +43,7 @@ angular
   .state('summary', {
 		url: '/review/:param/summary',
 		templateUrl: 'views/review/summary.html'
-	});
+	})
 // Proposal App states
 	.state('main.proposalApp', {
 			url: '/form',
