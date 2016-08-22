@@ -524,10 +524,8 @@ md-datepicker{
   text-align: right;
 }
 
-.vr{
-  border-left: solid 1px #CCC;
-  height: 100%;
-  padding-left: 1px;
+.menuSeparator{
+  border-bottom: 1px solid rgba(0, 0, 0, 0);
 }
 
 #main-menu a{
