@@ -14,7 +14,8 @@ angular
 	// link adresses to views and controllers
 	$stateProvider
 	.state('main', {
-	  templateUrl: 'views/form.html',
+		url: '/',
+	  templateUrl: 'views/main.html',
 		controller: 'MainController'
 	})
 // Review App states
