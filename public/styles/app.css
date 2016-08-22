@@ -530,6 +530,10 @@ md-datepicker{
   padding-left: 1px;
 }
 
+#main-menu {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.065);
+}
+
 #main-menu a{
   color:#000;
   display:inline-block;
