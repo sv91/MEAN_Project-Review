@@ -524,6 +524,10 @@ md-datepicker{
   text-align: right;
 }
 
+#main-menu {
+  padding-bottom: 8px;
+}
+
 #main-menu a{
   color:#000;
   display:inline-block;
