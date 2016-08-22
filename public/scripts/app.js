@@ -14,7 +14,7 @@ angular
 	// link adresses to views and controllers
 	$stateProvider
 	.state('main', {
-		url: '/welcome',
+		url: '/',
 	  templateUrl: 'views/main.html',
 		controller: 'MainController'
 	})
@@ -94,7 +94,7 @@ angular
 			controller: 'FinalizeCtrl'
 		});
 
-	$urlRouterProvider.otherwise('/welcome');
+	$urlRouterProvider.otherwise('/');
 })
 
 .controller('reviewAppController', function ($scope) {
@@ -114,7 +114,7 @@ angular
 })
 
 .controller('MainController', function($scope) {
-	
+
 })
 
 .controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage) {
