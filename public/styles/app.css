@@ -530,11 +530,6 @@ md-datepicker{
   padding-left: 1px;
 }
 
-#main-menu {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.065);
-  padding-bottom: 6px;
-}
-
 #main-menu a{
   color:#000;
   display:inline-block;
@@ -545,4 +540,6 @@ md-datepicker{
 }
 #main-menu a:hover{
   text-decoration:none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.065);
+    padding-bottom: 6px;
 }
