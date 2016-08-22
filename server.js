@@ -1048,12 +1048,9 @@ app.use(methodOverride());
 
   // Application ---------------------------------------------------------------
   app.get('*', function(req, res) {
-    res.sendfile('./public/review/index.html'); //load the single view file
+    res.sendfile('./public/index.html'); //load the single view file
   });
 
-  app.get('/proposal/*', function(req, res) {
-    res.sendfile('./public/proposal/index.html'); //load the single view file
-  });
 // Listen ======================================================================
 app.listen(80);
 console.log("App listening on port 80.");
