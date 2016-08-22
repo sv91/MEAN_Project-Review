@@ -527,4 +527,17 @@ md-datepicker{
 .vr{
   border-left: solid 1px #CCC;
   height: 100%;
+  padding-left: 1px;
+}
+
+#main-menu a{
+  color:#000;
+  display:inline-block;
+  font-size:18px;
+  margin-right:15px;
+  text-align:center;
+  text-transform:uppercase;width:80px;
+}
+#main-menu a:hover{
+  text-decoration:none;
 }
