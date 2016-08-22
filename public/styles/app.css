@@ -539,6 +539,11 @@ md-datepicker{
   margin-right: 40px;
   margin-left: 40px;
 }
+
+#main-menu a.active {
+  border-bottom: 1px solid #00BC8C;
+}
+
 #main-menu a:hover{
   text-decoration:none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);

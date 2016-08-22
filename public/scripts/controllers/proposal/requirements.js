@@ -8,7 +8,19 @@
 * Controller responsible for the .requirements page.
 */
 angular.module('proposalReviewApp')
-.controller('RequirementsCtrl', function () {
+.controller('RequirementsCtrl', function ($scope) {
+		$scope.availableFormats = [
+			{'name':'HDF5'},
+			{'name':'ASCII'}
+		];
+    $http.get('/api/requirements')
+      .success(function(data) {
+        $scope.availableRequirements = data;
+        console.log(data);
+      })
+      .error(function(data) {
+        console.log('Error: Loading Requirements: ' + data);
+      });
 })
 
 
