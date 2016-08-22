@@ -2,12 +2,12 @@
 
 /**
 * @ngdoc function
-* @name projectProposalApp.controller:DefinitionsCtrl
+* @name proposalReviewApp.controller:DefinitionsCtrl
 * @description
 * # DefinitionsCtrl
 * Controller responsible for the .deliverables page.
 */
-angular.module('projectProposalApp')
+angular.module('proposalReviewApp')
 .controller('DeliverablesCtrl', function ($scope) {
   /**
   * @ngdoc function
@@ -48,7 +48,7 @@ angular.module('projectProposalApp')
 
 /**
 * @ngdoc filter
-* @name projectProposalApp.filter:dependencyFilter
+* @name proposalReviewApp.filter:dependencyFilter
 * @description
 * # dependencyFilter
 * Filter used by the dependency field to remove deliverables that will cause a
@@ -98,7 +98,7 @@ angular.module('projectProposalApp')
 
 /**
 * @ngdoc directive
-* @name projectProposalApp.directive:deliverablePicker
+* @name proposalReviewApp.directive:deliverablePicker
 * @description
 * # deliverablePicker
 * Directive managing the deliverables for the .deliverables page.

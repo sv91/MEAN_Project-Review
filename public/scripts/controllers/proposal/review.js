@@ -2,12 +2,12 @@
 
 /**
 * @ngdoc function
-* @name projectProposalApp.controller:ReviewCtrl
+* @name proposalReviewApp.controller:ReviewCtrl
 * @description
 * # ReviewCtrl
 * Controller responsible for the .review page.
 */
-angular.module('projectProposalApp')
+angular.module('proposalReviewApp')
 .controller('ReviewCtrl', function ($scope) {
 
   $scope.summ.softdev=[];

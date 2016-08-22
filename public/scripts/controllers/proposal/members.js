@@ -2,19 +2,19 @@
 
 /**
 * @ngdoc function
-* @name projectProposalApp.controller:DefinitionsCtrl
+* @name proposalReviewApp.controller:DefinitionsCtrl
 * @description
 * # DefinitionsCtrl
 * Controller responsible for the .members page.
 */
-angular.module('projectProposalApp')
+angular.module('proposalReviewApp')
 .controller('MembersCtrl', function ($scope) {
 })
 
 
 /**
 * @ngdoc directive
-* @name projectProposalApp.directive:selectPi
+* @name proposalReviewApp.directive:selectPi
 * @description
 * # selectPi
 * Input form to select an user as the project leader.
@@ -66,7 +66,7 @@ angular.module('projectProposalApp')
 
 /**
 * @ngdoc directive
-* @name projectProposalApp.directive:selectCopi
+* @name proposalReviewApp.directive:selectCopi
 * @description
 * # selectCopi
 * Input form to select an user as the project co-leader.
@@ -118,7 +118,7 @@ angular.module('projectProposalApp')
 
 /**
 * @ngdoc directive
-* @name projectProposalApp.directive:multiUserSelect
+* @name proposalReviewApp.directive:multiUserSelect
 * @description
 * # multiUserSelect
 * Input form to select multiple user.
@@ -184,7 +184,7 @@ angular.module('projectProposalApp')
 
 /**
 * @ngdoc directive
-* @name projectProposalApp.directive:twoUserSelect
+* @name proposalReviewApp.directive:twoUserSelect
 * @description
 * # twoUserSelect
 * Input form to select two users max.

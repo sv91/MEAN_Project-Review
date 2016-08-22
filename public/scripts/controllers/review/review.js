@@ -2,12 +2,12 @@
 
 /**
 * @ngdoc function
-* @name projectReviewApp.controller:ReviewCtrl
+* @name proposalReviewApp.controller:ReviewCtrl
 * @description
 * # ReviewCtrl
 * Controller responsible for the .review page.
 */
-angular.module('projectReviewApp')
+angular.module('proposalReviewApp')
 .controller('ReviewCtrl', function ($scope, $stateParams) {
     $scope.data.params = $stateParams;
 });

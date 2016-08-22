@@ -2,12 +2,12 @@
 
 /**
 * @ngdoc function
-* @name projectProposalApp.controller:FinalizeCtrl
+* @name proposalReviewApp.controller:FinalizeCtrl
 * @description
 * # FinalizeCtrl
 * Controller responsible for the finalize page.
 */
-angular.module('projectProposalApp')
+angular.module('proposalReviewApp')
 .controller('FinalizeCtrl', function ($scope) {
   function generatePDF($scope){
     var doc = new jsPDF();

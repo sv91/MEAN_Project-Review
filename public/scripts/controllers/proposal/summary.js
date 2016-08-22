@@ -2,12 +2,12 @@
 
 /**
 * @ngdoc function
-* @name projectProposalApp.controller:SummaryCtrl
+* @name proposalReviewApp.controller:SummaryCtrl
 * @description
 * # DefinitionsCtrl
 * Controller responsible for the .summary page.
 */
-angular.module('projectProposalApp')
+angular.module('proposalReviewApp')
 .controller('SummaryCtrl', function ($scope) {
   // default value for the 'New Project' field.
   $scope.record.newproject = 'true';
@@ -16,7 +16,7 @@ angular.module('projectProposalApp')
 
 /**
 * @ngdoc directive
-* @name projectProposalApp.directive:publicationPicker
+* @name proposalReviewApp.directive:publicationPicker
 * @description
 * # publicationPicker
 * Directive managing the selection of one or more publication for the
@@ -67,7 +67,7 @@ angular.module('projectProposalApp')
 
 /**
 * @ngdoc filter
-* @name projectProposalApp.filter:taskFilter
+* @name proposalReviewApp.filter:taskFilter
 * @description
 * # taskFilter
 * Filter used by the Tags field to show tasks related to the selected grants.
@@ -93,7 +93,7 @@ angular.module('projectProposalApp')
 
 /**
 * @ngdoc directive
-* @name projectProposalApp.directive:relatedProjectPicker
+* @name proposalReviewApp.directive:relatedProjectPicker
 * @description
 * # relatedProjectPicker
 * Directive managing the selection of one or more related projects for the
@@ -146,7 +146,7 @@ angular.module('projectProposalApp')
 
 /**
 * @ngdoc directive
-* @name projectProposalApp.directive:shortDeliverablePicker
+* @name proposalReviewApp.directive:shortDeliverablePicker
 * @description
 * # shortDeliverablePicker
 * Directive managing the selection of one or more deliverables for the

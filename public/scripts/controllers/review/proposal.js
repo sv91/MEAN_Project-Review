@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('projectReviewApp')
+angular.module('proposalReviewApp')
 .controller('ProposalCtrl', function ($scope, $stateParams) {
   $scope.data.params = $stateParams;
   $scope.data.select.loaded = false;

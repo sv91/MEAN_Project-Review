@@ -2,19 +2,19 @@
 
 /**
 * @ngdoc function
-* @name projectProposalApp.controller:RequirementsCtrl
+* @name proposalReviewApp.controller:RequirementsCtrl
 * @description
 * # RequirementsCtrl
 * Controller responsible for the .requirements page.
 */
-angular.module('projectProposalApp')
+angular.module('proposalReviewApp')
 .controller('RequirementsCtrl', function () {
 })
 
 
 /**
 * @ngdoc directive
-* @name projectProposalApp.directive:publicationPicker
+* @name proposalReviewApp.directive:publicationPicker
 * @description
 * # publicationPicker
 * Directive managing the selection of one or more requirement for the
