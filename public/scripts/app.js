@@ -14,7 +14,7 @@ angular
 	// link adresses to views and controllers
 	$stateProvider
 	.state('main', {
-		url: '/',
+		url: '/welcome',
 	  templateUrl: 'views/main.html',
 		controller: 'MainController'
 	})
@@ -94,7 +94,7 @@ angular
 			controller: 'FinalizeCtrl'
 		});
 
-	$urlRouterProvider.otherwise('/');
+	$urlRouterProvider.otherwise('/welcome');
 })
 
 .controller('reviewAppController', function ($scope) {
