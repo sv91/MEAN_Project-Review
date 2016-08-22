@@ -8,7 +8,7 @@ var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 
 // Configuration ===============================================================
-mongoose.connect('mongodb://localhost:8080/proposaldb');
+mongoose.connect('mongodb://0.0.0.0:8080/proposaldb');
 
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
