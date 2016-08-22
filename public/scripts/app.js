@@ -113,6 +113,10 @@ angular
     });
 })
 
+.controller('MainController', function($scope) {
+	
+})
+
 .controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage) {
 	// we will store all of our form data in this object
 	if($scope.record == undefined | $scope.record == null){
