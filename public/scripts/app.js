@@ -9,7 +9,7 @@
  * Main module of the application.
  */
 angular
-.module('proposalReviewApp', ['ui.router','ui.select','angular.filter','hbpCommon','bbpOidcClient','ui.bootstrap','ngMaterial', 'ngMessages'])
+.module('proposalReviewApp', ['ui.router','ui.select','angular.filter','hbpCommon','bbpOidcClient','ui.bootstrap','ngMaterial', 'ngMessages', 'ngStorage'])
 .config(function ($stateProvider, $urlRouterProvider) {
 	// link adresses to views and controllers
 	$stateProvider
