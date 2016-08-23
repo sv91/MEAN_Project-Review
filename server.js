@@ -112,11 +112,17 @@ app.use(methodOverride());
   // Requirement ---------------------------------------------------------------
   var Requirement = mongoose.model('Requirement', {
     title       : String,
-    type        : String,
+    type        : { type: Schema.Types.ObjectId, ref: 'RequirementType' },
     requirement : String,
     feature     : String,
     input       : [{ type: Schema.Types.ObjectId, ref: 'Input' }],
     output      : [{ type: Schema.Types.ObjectId, ref: 'Output' }]
+  });
+
+  // RequirementType -----------------------------------------------------------
+  var RequirementType = mongoose.model('RequirementType', {
+    name  : String,
+    desc  : String
   });
 
   // Input ---------------------------------------------------------------------
@@ -649,6 +655,29 @@ app.use(methodOverride());
     // Delete the specified element
     app.delete('/api/requirements/:target_id/delete', function(req,res) {
       deleteOne(req,res,Requirement);
+    });
+
+    // RequirementType .............................................................
+    // Get all
+    app.get('/api/requirementtypes', function(req, res){
+      findAll(res, RequirementType);
+    });
+
+    // Create new Requirement
+    app.post('/api/requirementtypes', function(req, res){
+      RequirementType.create({
+        name  : req.body.name,
+        desc  : req.body.desc
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        findAll(res, RequirementType);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/requirementtypes/:target_id/delete', function(req,res) {
+      deleteOne(req,res,RequirementType);
     });
 
     // Input ...................................................................
