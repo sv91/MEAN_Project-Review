@@ -54,7 +54,7 @@ angular.module('proposalReviewApp')
         console.log('Error: Loading Architectures: ' + data);
       });
 
-    $http.get('/api/cloudressources')
+    $http.get('/api/cloudtypes')
       .success(function(data) {
         $scope.availableArchitectureCloud = data;
         console.log(data);
