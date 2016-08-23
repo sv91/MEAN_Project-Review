@@ -14,9 +14,19 @@ angular
 	// link adresses to views and controllers
 	$stateProvider
 	.state('main', {
-		url: '/',
 	  templateUrl: 'views/main.html',
 		controller: 'MainController'
+	})
+	.state('main.welcome', {
+		url: '/',
+	  templateUrl: 'views/welcome.html'
+	})
+
+// Database edit state
+	.state('edit', {
+		url: 'setup',
+	  templateUrl: 'views/edit.html',
+		controller: 'EditController'
 	})
 
 // Review App states
