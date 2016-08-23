@@ -8,6 +8,6 @@
 * Controller responsible for the .review page.
 */
 angular.module('proposalReviewApp')
-.controller('ReviewCtrl', function ($scope, $stateParams) {
+.controller('ReviewerCtrl', function ($scope, $stateParams) {
     $scope.data.params = $stateParams;
 });

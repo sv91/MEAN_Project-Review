@@ -31,7 +31,7 @@ angular
   .state('main.reviewApp.reviewing', {
 		url: '/review/:param',
 		templateUrl: 'views/review/reviewing.html',
-		controller:'ReviewCtrl'
+		controller:'ReviewerCtrl'
 	})
   .state('main.reviewApp.proposal', {
 		url: '/review/:param/proposal',
