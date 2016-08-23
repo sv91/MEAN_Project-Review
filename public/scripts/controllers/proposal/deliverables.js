@@ -8,7 +8,69 @@
 * Controller responsible for the .deliverables page.
 */
 angular.module('proposalReviewApp')
-.controller('DeliverablesCtrl', function ($scope) {
+.controller('DeliverablesCtrl', function ($scope, $http) {
+    $http.get('/api/softdevs')
+      .success(function(data) {
+        $scope.availableSoftDev = data;
+        console.log(data);
+      })
+      .error(function(data) {
+        console.log('Error: Loading SoftDevs: ' + data);
+      });
+
+    $http.get('/api/datatransfers')
+      .success(function(data) {
+        $scope.availableDataTransfer = data;
+        console.log(data);
+      })
+      .error(function(data) {
+        console.log('Error: Loading DataTransfers: ' + data);
+      });
+
+    $http.get('/api/virtualizations')
+      .success(function(data) {
+        $scope.availableVirtualization = data;
+        console.log(data);
+      })
+      .error(function(data) {
+        console.log('Error: Loading Virtualizations: ' + data);
+      });
+
+    $http.get('/api/devenvs')
+      .success(function(data) {
+        $scope.availableDevEnv = data;
+        console.log(data);
+      })
+      .error(function(data) {
+        console.log('Error: Loading DevEnvs: ' + data);
+      });
+
+    $http.get('/api/hpctypes')
+      .success(function(data) {
+        $scope.availableArchitecture = data;
+        console.log(data);
+      })
+      .error(function(data) {
+        console.log('Error: Loading Architectures: ' + data);
+      });
+
+    $http.get('/api/cloudressources')
+      .success(function(data) {
+        $scope.availableArchitectureCloud = data;
+        console.log(data);
+      })
+      .error(function(data) {
+        console.log('Error: Loading ArchitectureClouds: ' + data);
+      });
+
+    $http.get('/api/roles')
+      .success(function(data) {
+        $scope.availableRoles = data;
+        console.log(data);
+      })
+      .error(function(data) {
+        console.log('Error: Loading Roles: ' + data);
+      });
   /**
   * @ngdoc function
   * @name addPerson
