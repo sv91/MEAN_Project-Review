@@ -25,7 +25,7 @@ angular.module('proposalReviewApp')
 .directive('publicationPicker', function () {
   return {
     scope: true,
-    templateUrl: 'views/publicationPicker.html',
+    templateUrl: 'views/proposal/publicationPicker.html',
     link: function postLink(scope) {
       // Verify that the JSON part exists.
       if (!scope.record.publications) {
@@ -102,7 +102,7 @@ angular.module('proposalReviewApp')
 .directive('relatedProjectPicker', function () {
   return {
     scope: true,
-    templateUrl: 'views/relatedProjectPicker.html',
+    templateUrl: 'views/proposal/relatedProjectPicker.html',
     link: function postLink(scope) {
       // Verify that the JSON part exists.
       if (!scope.record.relatedProjects) {
@@ -155,7 +155,7 @@ angular.module('proposalReviewApp')
 .directive('shortDeliverablePicker', function () {
   return {
     scope: true,
-    templateUrl: 'views/shortDeliverablePicker.html',
+    templateUrl: 'views/proposal/shortDeliverablePicker.html',
     link: function postLink(scope) {
       // Verify that the JSON part exists.
       if (!scope.record.shortDeliverable) {

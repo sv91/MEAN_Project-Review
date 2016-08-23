@@ -106,7 +106,7 @@ angular.module('proposalReviewApp')
 .directive('deliverablePicker', function ($window, $timeout) {
   return {
     scope: true,
-    templateUrl: 'views/deliverablePicker.html',
+    templateUrl: 'views/proposal/deliverablePicker.html',
     link: function postLink(scope) {
       // Verify that the JSON part exists.
       if (!scope.record.deliverables) {

@@ -8,7 +8,15 @@
 * Controller responsible for the .members page.
 */
 angular.module('proposalReviewApp')
-.controller('MembersCtrl', function ($scope) {
+.controller('MembersCtrl', function ($scope, $http) {
+    $http.get('/api/teams')
+      .success(function(data) {
+        $scope.availableTeams = data;
+        console.log(data);
+      })
+      .error(function(data) {
+        console.log('Error: Loading Teams: ' + data);
+      });
 })
 
 

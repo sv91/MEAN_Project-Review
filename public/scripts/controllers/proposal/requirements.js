@@ -8,7 +8,7 @@
 * Controller responsible for the .requirements page.
 */
 angular.module('proposalReviewApp')
-.controller('RequirementsCtrl', function ($scope) {
+.controller('RequirementsCtrl', function ($scope, $http) {
 		$scope.availableFormats = [
 			{'name':'HDF5'},
 			{'name':'ASCII'}
@@ -35,7 +35,7 @@ angular.module('proposalReviewApp')
 .directive('requirementsPicker', function () {
   return {
     scope: true,
-    templateUrl: 'views/requirementsPicker.html',
+    templateUrl: 'views/proposal/requirementsPicker.html',
     link: function postLink(scope) {
       // Verify that the JSON part exists.
       if (!scope.record.requirements) {

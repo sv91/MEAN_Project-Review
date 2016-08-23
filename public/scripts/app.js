@@ -97,7 +97,7 @@ angular
 	$urlRouterProvider.otherwise('/');
 })
 
-.controller('reviewAppController', function ($scope) {
+.controller('reviewAppController', function ($scope, $http) {
 	$scope.data= {};
   $scope.data.select = {};
 	$scope.formData = {};
@@ -117,7 +117,7 @@ angular
 
 })
 
-.controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage) {
+.controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage, $http) {
 	// we will store all of our form data in this object
 	if($scope.record == undefined | $scope.record == null){
 		console.log('scope');
