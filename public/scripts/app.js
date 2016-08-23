@@ -49,7 +49,7 @@ angular
 
 // Proposal App states
 	.state('main.proposalApp', {
-			url: '/form',
+			url: '/proposal',
 			templateUrl: 'views/proposal/form.html',
 			controller:'proposalAppController'
 		})
