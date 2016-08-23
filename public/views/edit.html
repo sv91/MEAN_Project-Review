@@ -1,12 +1,22 @@
+<div class="leftSide" style="visibility:hidden">
+  <!-- placeholder  -->
+  placeholder
+</div>
+<div class="middlePart midform">
+
   <div ng-repeat="table in edit.tables">
     <label>{{table.name}}</label>
+    <pre>{{edit[table.name] | json}}</pre>
     <form>
-    <div>
-      Name: <input id="" type="text" ng-model="formData[table.name].name">
+    <div ng-repeat="field in table.fields">
+      {{field.name}} <input type="text" ng-model="formData[table.name][field.name]">
       <br />
-      Desc: <input type="text" ng-model="formData[table.name].desc">
+  </div>
+  <button type="submit" class="btn btn-primary btn-lg" ng-click="createElement(table.name)">Add</button>
+      </form>
+      <hr />
     </div>
-    <button type="submit" class="btn btn-primary btn-lg" ng-click="createElement(table.name)">Add</button>
-        </form>
-        <hr />
+  </div>
+
+  <div class="rightSide">
   </div>
