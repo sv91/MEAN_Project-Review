@@ -18,6 +18,7 @@ angular
 	  templateUrl: 'views/main.html',
 		controller: 'MainController'
 	})
+
 // Review App states
   .state('main.reviewApp', {
 	  templateUrl: 'views/review/form.html',
@@ -45,6 +46,7 @@ angular
 		url: '/review/:param/summary',
 		templateUrl: 'views/review/summary.html'
 	})
+
 // Proposal App states
 	.state('main.proposalApp', {
 			url: '/form',
@@ -114,10 +116,9 @@ angular
 })
 
 .controller('MainController', function($scope) {
-
 })
 
-.controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage, $http) {
+.controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage, $http, $state) {
 	// we will store all of our form data in this object
 	if($scope.record == undefined | $scope.record == null){
 		console.log('scope');
@@ -135,7 +136,6 @@ angular
 		$scope.minDate = new Date();
 		$scope.maxDate = new Date();
 	}
-
 
 	// Check if all the required values were filled
 	$scope.$watch('record', function(attrs) {
@@ -202,6 +202,54 @@ angular
 	}
 	loadCollabs();
 
+	// State order
+	var stateTransition = [
+		{'current':'type', 					'previous':'', 							'previousOpt':'', 						'next' : 'members', 			'nextOpt':''},
+		{'current':'members', 			'previous':'type', 					'previousOpt':'', 						'next' : 'summary', 			'nextOpt':''},
+		{'current':'summary', 			'previous':'members', 			'previousOpt':'', 						'next' : 'requirements',	'nextOpt':''},
+		{'current':'requirements',	'previous':'summary', 			'previousOpt':'', 						'next' : 'deliverables', 	'nextOpt':'review'},
+		{'current':'deliverables', 	'previous':'requirements',	'previousOpt':'', 						'next' : 'review', 				'nextOpt':''},
+		{'current':'review', 				'previous':'deliverables', 	'previousOpt':'requirements',	'next' : '', 							'nextOpt':''},
+		{'current':'help', 					'previous':'', 							'previousOpt':'', 						'next' : '', 							'nextOpt':''}
+	];
+
+	// Process to the next or previous step
+	function changeState(direction){
+		var stat = "main.proposalApp.";
+		var toReturn = '';
+		angular.forEach(stateTransition, function(val){
+			if (stat.concat(val.current) == $state.current.name){
+				var toState = '';
+				var key = direction;
+				if (($scope.record.projectType != undefined && $scope.record.projectType != null)& $scope.record.projectType<1){
+					key += 'Opt';
+					if (val[key] != ''){
+						toState = val[key];
+					} else {
+						toState = val[direction];
+					}
+				} else {
+					toState = val[direction];
+				}
+				toReturn = stat.concat(toState);
+			}
+		});
+		return toReturn;
+	};
+
+	function goToState(direction){
+		var goTo = changeState(direction);
+		if (goTo != undefined & goTo != null & goTo !='main.proposalApp.'){
+			$state.go(goTo);
+		}
+	}
+
+	$scope.nextStep = function(){
+		goToState('next');
+	};
+	$scope.previousStep = function(){
+		goToState('previous');
+	};
 
 	// function to process the form
 	$scope.processForm = function() {
