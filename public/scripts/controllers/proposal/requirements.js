@@ -13,13 +13,13 @@ angular.module('proposalReviewApp')
 			{'name':'HDF5'},
 			{'name':'ASCII'}
 		];
-    $http.get('/api/requirements')
+    $http.get('/api/requirementtypes')
       .success(function(data) {
         $scope.availableRequirements = data;
         console.log(data);
       })
       .error(function(data) {
-        console.log('Error: Loading Requirements: ' + data);
+        console.log('Error: Loading RequirementTypes: ' + data);
       });
 })
 
