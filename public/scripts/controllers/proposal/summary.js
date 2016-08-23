@@ -8,10 +8,41 @@
 * Controller responsible for the .summary page.
 */
 angular.module('proposalReviewApp')
-.controller('SummaryCtrl', function ($scope) {
+.controller('SummaryCtrl', function ($scope, $http) {
   // default value for the 'New Project' field.
   $scope.record.newproject = 'true';
   $scope.record.projectStartDateMD = new Date();
+
+  // Loading available values from DB
+  //Grants
+  $http.get('/api/grants')
+    .success(function(data) {
+      $scope.availableGrants = data;
+      console.log(data);
+    })
+    .error(function(data) {
+      console.log('Error: Loading Grants: ' + data);
+    });
+
+  //Tasks
+  $http.get('/api/tasks')
+    .success(function(data) {
+      $scope.availableTasks = data;
+      console.log(data);
+    })
+    .error(function(data) {
+      console.log('Error: Loading Tasks: ' + data);
+    });
+    
+  //Tags
+  $http.get('/api/tags')
+    .success(function(data) {
+      $scope.availableTags = data;
+      console.log(data);
+    })
+    .error(function(data) {
+      console.log('Error: Loading Tags: ' + data);
+    });
 })
 
 /**
