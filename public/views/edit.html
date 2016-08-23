@@ -1,0 +1,12 @@
+  <div ng-repeat="table in edit.tables">
+    <label>{{table.name}}</label>
+    <form>
+    <div>
+      Name: <input id="" type="text" ng-model="formData[table.name].name">
+      <br />
+      Desc: <input type="text" ng-model="formData[table.name].desc">
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg" ng-click="createElement(table.name)">Add</button>
+        </form>
+        <hr />
+  </div>

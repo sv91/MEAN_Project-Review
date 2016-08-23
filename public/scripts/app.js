@@ -24,7 +24,7 @@ angular
 
 // Database edit state
 	.state('edit', {
-		url: 'setup',
+		url: '/setup',
 	  templateUrl: 'views/edit.html',
 		controller: 'EditController'
 	})
