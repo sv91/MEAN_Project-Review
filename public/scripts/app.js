@@ -1,128 +1,128 @@
 'use strict';
 
 /**
- * @ngdoc overview
- * @name jsApp
- * @description
- * # jsApp
- *
- * Main module of the application.
- */
+* @ngdoc overview
+* @name jsApp
+* @description
+* # jsApp
+*
+* Main module of the application.
+*/
 angular
 .module('proposalReviewApp', ['ui.router','ui.select','angular.filter','hbpCommon','bbpOidcClient','ui.bootstrap','ngMaterial', 'ngMessages', 'ngStorage'])
 .config(function ($stateProvider, $urlRouterProvider) {
 	// link adresses to views and controllers
 	$stateProvider
 	.state('main', {
-	  templateUrl: 'views/main.html',
+		templateUrl: 'views/main.html',
 		controller: 'MainController'
 	})
 	.state('main.welcome', {
 		url: '/',
-	  templateUrl: 'views/welcome.html'
+		templateUrl: 'views/welcome.html'
 	})
 
-// Database edit state
+	// Database edit state
 	.state('edit', {
 		url: '/setup',
-	  templateUrl: 'views/edit.html',
+		templateUrl: 'views/edit.html',
 		controller: 'EditController'
 	})
 
-// Review App states
-  .state('main.reviewApp', {
-	  templateUrl: 'views/review/form.html',
-    controller:'reviewAppController'
-  })
-  .state('main.reviewApp.review', {
+	// Review App states
+	.state('main.reviewApp', {
+		templateUrl: 'views/review/form.html',
+		controller:'reviewAppController'
+	})
+	.state('main.reviewApp.review', {
 		url: '/review',
 		templateUrl: 'views/review/review.html'
 	})
-  .state('main.reviewApp.reviewing', {
+	.state('main.reviewApp.reviewing', {
 		url: '/review/:param',
 		templateUrl: 'views/review/reviewing.html',
 		controller:'ReviewerCtrl'
 	})
-  .state('main.reviewApp.proposal', {
+	.state('main.reviewApp.proposal', {
 		url: '/review/:param/proposal',
 		templateUrl: 'views/review/proposal.html',
-    controller:'ProposalCtrl'
+		controller:'ProposalCtrl'
 	})
-  .state('main.reviewApp.note', {
+	.state('main.reviewApp.note', {
 		url: '/review/:param/note',
 		templateUrl: 'views/review/note.html'
 	})
-  .state('summary', {
+	.state('summary', {
 		url: '/review/:param/summary',
 		templateUrl: 'views/review/summary.html'
 	})
 
-// Proposal App states
+	// Proposal App states
 	.state('main.proposalApp', {
-			url: '/proposal',
-			templateUrl: 'views/proposal/form.html',
-			controller:'proposalAppController'
-		})
-		.state('main.proposalApp.type', {
-			url: '/type',
-			templateUrl: 'views/proposal/type.html'
-		})
-		.state('main.proposalApp.members', {
-			url: '/members',
-			templateUrl: 'views/proposal/members.html',
-			controller: 'MembersCtrl'
-		})
-		.state('main.proposalApp.summary', {
-			url: '/summary',
-			templateUrl: 'views/proposal/summary.html',
-			controller: 'SummaryCtrl'
-		})
-		.state('main.proposalApp.requirements', {
-			url: '/requirements',
-			templateUrl: 'views/proposal/requirements.html',
-			controller: 'RequirementsCtrl'
-		})
-		.state('main.proposalApp.deliverables', {
-			url: '/deliverables',
-			templateUrl: 'views/proposal/deliverables.html',
-			controller: 'DeliverablesCtrl'
-		})
-		.state('main.proposalApp.review', {
-			url: '/review',
-			templateUrl: 'views/proposal/review.html',
-			controller: 'ReviewCtrl'
-		})
-		.state('main.proposalApp.help', {
-			url: '/help',
-			templateUrl: 'views/proposal/help.html'
-		})
-		.state('main.proposalApp.updates', {
-			url: '/updates',
-			templateUrl: 'views/proposal/updates.html'
-		})
-		.state('main.proposalApp.finalize', {
-			url: '/finalize',
-			templateUrl: 'views/proposal/finalize.html',
-			controller: 'FinalizeCtrl'
-		});
+		url: '/proposal',
+		templateUrl: 'views/proposal/form.html',
+		controller:'proposalAppController'
+	})
+	.state('main.proposalApp.type', {
+		url: '/type',
+		templateUrl: 'views/proposal/type.html'
+	})
+	.state('main.proposalApp.members', {
+		url: '/members',
+		templateUrl: 'views/proposal/members.html',
+		controller: 'MembersCtrl'
+	})
+	.state('main.proposalApp.summary', {
+		url: '/summary',
+		templateUrl: 'views/proposal/summary.html',
+		controller: 'SummaryCtrl'
+	})
+	.state('main.proposalApp.requirements', {
+		url: '/requirements',
+		templateUrl: 'views/proposal/requirements.html',
+		controller: 'RequirementsCtrl'
+	})
+	.state('main.proposalApp.deliverables', {
+		url: '/deliverables',
+		templateUrl: 'views/proposal/deliverables.html',
+		controller: 'DeliverablesCtrl'
+	})
+	.state('main.proposalApp.review', {
+		url: '/review',
+		templateUrl: 'views/proposal/review.html',
+		controller: 'ReviewCtrl'
+	})
+	.state('main.proposalApp.help', {
+		url: '/help',
+		templateUrl: 'views/proposal/help.html'
+	})
+	.state('main.proposalApp.updates', {
+		url: '/updates',
+		templateUrl: 'views/proposal/updates.html'
+	})
+	.state('main.proposalApp.finalize', {
+		url: '/finalize',
+		templateUrl: 'views/proposal/finalize.html',
+		controller: 'FinalizeCtrl'
+	});
 
 	$urlRouterProvider.otherwise('/');
 })
 
 .controller('reviewAppController', function ($scope, $http) {
 	$scope.data= {};
-  $scope.data.select = {};
+	$scope.data.select = {};
 	$scope.formData = {};
 
-  // when landing on the page, get all the projects and show them
-  $http.get('/api/projects')
-    .success(function(data) {
-      $scope.data.projects = data;
-      console.log(data);
-    })
-    .error(function(data) {
-      console.log('Error: ' + data);
-    });
+	// when landing on the page, get all the projects and show them
+	$http.get('/api/projects')
+	.success(function(data) {
+		$scope.data.projects = data;
+		console.log(data);
+	})
+	.error(function(data) {
+		console.log('Error: ' + data);
+	});
 })
 
 .controller('MainController', function($scope) {
@@ -263,5 +263,118 @@ angular
 
 	// function to process the form
 	$scope.processForm = function() {
+		saveProject();
 	};
+
+	// Functions managing the creation of new entries in the DB ====================
+	function findOrCreate(model, value){
+		var id = findId(model, value);
+		if (id == 0){
+			id = createElem(model,value);
+		}
+		return id;
+	};
+
+	function findId(model,values){
+		var toReturn = 0;
+		var toCompare = {};
+		$http.get('/api/'+ model )
+		.success(function(data) {
+			toCompare = data;
+			console.log(data);
+		})
+		.error(function(data) {
+			console.log('Error finding: ' + data);
+		});
+		angular.forEach(toCompare, function(val){
+			var id = 0;
+			var good = true;
+			angular.forEach(val, function(value,key){
+				if(key == '_id'){
+					id = value;
+				} else {
+					good = good & (value == values[key]);
+				}
+			});
+			if(good){
+				toReturn = id;
+			}
+		});
+		return toReturn;
+	};
+
+	function createElem(model, value) {
+		var treatedValues = {};
+		switch(model) {
+			case 'projects':
+			treatedValues = treatProject(value);
+			break;
+			case 'proposals':
+			treatedValues = treatProposal(value);
+			break;
+			case 'persons':
+			treatedValues = treatPersons(value);
+			break;
+			case 'submissions':
+			treatedValues = treatSubmission(value);
+			break;
+			case 'tags':
+			treatedValues = treatTag(value);
+			break;
+			case 'relatedprojects':
+			treatedValues = treatRelatedProject(value);
+			break;
+			case 'shortdeliverables':
+			treatedValues = treatShortDeliverables(value);
+			break;
+			case 'publications':
+			treatedValues = treatPublication(value);
+			break;
+			case 'requirements':
+			treatedValues = treatRequirement(value);
+			break;
+			case 'inputs':
+			treatedValues = treatInput(value);
+			break;
+			case 'outputs':
+			treatedValues = treatOutput(value);
+			break;
+			case 'deliverables':
+			treatedValues = treatDeliverables(value);
+			break;
+			case 'hpcressources':
+			treatedValues = treatHpc(value);
+			break;
+			case 'cloudressources':
+			treatedValues = treatCloud(value);
+			break;
+			case 'hardwares':
+			treatedValues = treatHardware(value);
+			break;
+			case 'humanressources':
+			treatedValues = treatHr(value);
+			break;
+		}
+
+		return createInDB(model,treatedValues);
+	};
+
+	function createInDB(model,value) {
+		var toReturn = 0;
+		$http.post('/api/'+model, value)
+		.success(function(){
+			toReturn = fingId(model,value);
+			console.log(toReturn);
+		})
+		.error(function(data) {
+			console.log('Error Creating: ' + data);
+		});
+		return toReturn;
+	};
+
+	function saveProject(){
+
+	};
+
+
 });
