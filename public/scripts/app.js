@@ -321,32 +321,23 @@ angular
 			case 'tags':
 			treatedValues = treatTag(value);
 			break;
-			case 'relatedprojects':
-			treatedValues = treatRelatedProject(value);
-			break;
-			case 'shortdeliverables':
-			treatedValues = treatShortDeliverables(value);
-			break;
-			case 'publications':
-			treatedValues = treatPublication(value);
-			break;
 			case 'requirements':
 			treatedValues = treatRequirement(value);
 			break;
 			case 'inputs':
-			treatedValues = treatInput(value);
+			treatedValues = treatInputOutput(value);
 			break;
 			case 'outputs':
-			treatedValues = treatOutput(value);
+			treatedValues = treatInputOutput(value);
 			break;
 			case 'deliverables':
 			treatedValues = treatDeliverables(value);
 			break;
 			case 'hpcressources':
-			treatedValues = treatHpc(value);
+			treatedValues = treatHpcCloud(value);
 			break;
 			case 'cloudressources':
-			treatedValues = treatCloud(value);
+			treatedValues = treatHpcCloud(value);
 			break;
 			case 'hardwares':
 			treatedValues = treatHardware(value);
@@ -354,6 +345,8 @@ angular
 			case 'humanressources':
 			treatedValues = treatHr(value);
 			break;
+			default:
+			treatedValues = value;
 		}
 
 		return createInDB(model,treatedValues);
@@ -373,8 +366,208 @@ angular
 	};
 
 	function saveProject(){
-
+		findOrCreate('project',$scope.record);
 	};
 
+	function findOrCreateTable(model,value){
+		var temp = [];
+		angular.forEach(value, function(val){
+			temp.push(findOrCreate(model,val));
+		});
+		return temp;
+	};
+
+	function getIdTable(value){
+		var temp = [];
+		angular.forEach(value, function(val){
+			temp.push(val._id);
+		});
+		return temp;
+	};
+
+	function treatProject(value){
+		var treatedValues = {
+			'proposal'	: findOrCreate('proposals',value),
+			'review'		: ''
+		};
+		return treatedValues;
+	};
+
+	function treatProposal(value){
+		var treatedValues = {
+			'subdate'			: $scope.today,
+			'author'			: findOrCreate('persons',value.pi),
+			'submission'	: findOrCreate('submissions',value)
+		};
+		return treatedValues;
+	};
+
+	function treatSubmission(value){
+		var teams 	= getIdTable(value.teams);
+		var grants	= getIdTable(value.grants);
+		var tasks 	= getIdTable(value.tasks);
+
+		var members 					= findOrCreateTable('persons',value.members);
+		var tags 							= findOrCreateTable('tags',value.tags);
+		var relatedProjects 	= findOrCreateTable('relatedprojects',value.relatedProjects);
+		var shortDeliverable	= findOrCreateTable('shortDeliverable',value.shortDeliverable);
+		var publications 			= findOrCreateTable('publications',value.publications);
+		var requirements 			= findOrCreateTable('requirements',value.requirements);
+		var deliverables 			= findOrCreateTable('deliverables',value.deliverables);
+
+		var treatedValues = {
+			'projectStartDate'   		: value.projectStartDate,
+			'projectEndDate'        : value.projectEndDate,
+			'projectTitle'          : value.projectTitle,
+			'executiveSummary'      : value.executiveSummary,
+			'impactStatement'       : value.impactStatement,
+			'benefitToCommunity'    : value.benefitToCommunity,
+			'scientificSummary'     : value.scientificSummary,
+			'technologicalSummary'  : value.technologicalSummary,
+			'usecase'               : value.usecase,
+			'newproject'            : value.newproject,
+			'projectType'           : value.projectType,
+			'pi'                    : findOrCreate('persons',value.pi),
+			'copi'                  : findOrCreate('persons',value.copi),
+			'members'               : members,
+			'teams'                 : teams,
+			'tags'                  : tags,
+			'relatedProjects'       : relatedProjects,
+			'shortDeliverable'      : shortDeliverable,
+			'publications'          : publications,
+			'grants'                : grants,
+			'tasks'                 : tasks,
+			'requirements'          : requirements,
+			'deliverables' 					: deliverables
+		};
+
+		return treatedValues;
+	};
+
+	function treatPerson(value){
+		var treatedValues = {
+			'id'					: value.id,
+			'displayName'	: value.displayName
+		};
+
+		return treatedValues;
+	};
+
+	function treatTag(value){
+		var treatedValues = {};
+		if(value._id != undefined){
+			treatedValues = value;
+		} else {
+			treatedValues = {
+				'name' = value;
+				'use' = 1;
+			}
+		}
+
+		return treatedValues;
+	};
+
+	function treatRequirement(value){
+		var inputs 	= findOrCreateTable('persons',value.input);
+		var outputs	= findOrCreateTable('persons',value.output);
+
+		var treatedValues = {
+			'title'       : value.title,
+			'type'        : value.type._id,
+			'requirement' : value.requirement,
+			'feature'     : value.feature,
+			'input'       : inputs,
+			'output'      : outputs
+		};
+
+		return treatedValues;
+	};
+
+	function treatInputOutput(value){
+		var treatedValues = {
+			'tag'     : value.tag,
+			'format'  : value.format,
+			'number'  : value.number,
+			'size'    : value.size
+		};
+
+		return treatedValues;
+	};
+
+	function treatDeliverable(value){
+		var softdev 				= getIdTable(value.softdev);
+		var datatransfer 		= getIdTable(value.datatransfer);
+		var virtualization	= getIdTable(value.virtualization);
+		var devenv 					= getIdTable(value.devenv);
+
+		var dependencies	= findOrCreateTable('deliverables',value.dependency);
+		var requirements 	= findOrCreateTable('requirements',value.requirement);
+		var hpc 					= findOrCreateTable('hpcressources',value.hpc);
+		var cloud 				= findOrCreateTable('deliverables',value.cloud);
+		var hardware 			= findOrCreateTable('hardwares',value.hardware);
+		var hr 						= findOrCreateTable('humanressources',value.members);
+
+		var collabs = [];
+		angular.forEach(value.collabs,function(val){
+			collabs.push(val.id);
+		});
+
+		var treatedValues = {
+			'name'            : value.name,
+			'date'            : value.date,
+			'description'     : value.description,
+			'risks'           : value.risks,
+			'dependency'      : dependencies,
+			'requirements'    : requirements,
+			'softdev'         : softdev,
+			'datatransfer'    : datatransfer,
+			'collabs'         : [String],
+			'virtualization'  : virtualization,
+			'devenv'          : devenv,
+			'hpcRessource'    : value.hpcRessource,
+			'cloudRessource'  : value.cloudRessource,
+			'hpc'             : hpc,
+			'cloud'           : cloud,
+			'hardware'        : hardware,
+			'hr'              : hr
+		};
+
+		return treatedValues;
+	};
+
+	function treatHpcCloud(value){
+		var treatedValues = {
+			'type' : value.type._id,
+			'runs' : value.runs,
+			'time' : value.time,
+			'part' : value.part,
+			'arte' : value.arte,
+			'size' : value.size
+		};
+
+		return treatedValues;
+	};
+
+	function treatHardware(value){
+		var treatedValues = {
+			'name'        : value.name,
+			'price'       : value.price,
+			'link'        : value.link,
+			'description' : value.description
+		};
+
+		return treatedValues;
+	};
+
+	function treatHr(value){
+		var treatedValues = {
+			'name'        : value.name,
+			'role'        : value.role._id,
+			'pm'          : value.pm,
+			'description' : value.description
+		};
+
+		return treatedValues;
+	};
 
 });
