@@ -10,6 +10,7 @@ angular.module('proposalReviewApp')
     {'name':'virtualizations','fields':[{'name':'name'},{'name':'desc'}]},
     {'name':'hpctypes','fields':[{'name':'name'},{'name':'desc'}]},
     {'name':'cloudtypes','fields':[{'name':'name'},{'name':'desc'}]},
+    {'name':'devenv','fields':[{'name':'name'},{'name':'desc'}]},
     {'name':'roles','fields':[{'name':'name'}]},
     {'name':'grants','fields':[{'name':'name'}]},
     {'name':'teams','fields':[{'name':'name'},{'name':'shortName'},{'name':'displayName'}]}

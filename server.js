@@ -106,7 +106,8 @@ app.use(methodOverride());
 
   // Tag -----------------------------------------------------------------------
   var Tag = mongoose.model('Tag', {
-    name  : String
+    name  : String,
+    use   : { type: Number, min: 0 }
   });
 
   // Requirement ---------------------------------------------------------------
@@ -612,7 +613,8 @@ app.use(methodOverride());
     // Create new Tag
     app.post('/api/tags', function(req, res){
       Tag.create({
-        name  : req.body.name
+        name  : req.body.name,
+        use   : 1
       }, function(err,tag){
         if (err)
           HandleError(err,res);
