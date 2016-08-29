@@ -16,6 +16,14 @@
       </form>
       <hr />
     </div>
+  <hr/>
+  <hr/>
+  <hr/>
+    <div ng-repeat="table in check.tables">
+      <label>{{table.name}}</label>
+      <pre>{{check[table.name] | json}}</pre>
+        <hr />
+      </div>
   </div>
 
   <div class="rightSide">

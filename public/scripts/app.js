@@ -9,7 +9,7 @@
 * Main module of the application.
 */
 angular
-.module('proposalReviewApp', ['ui.router','ui.select','angular.filter','hbpCommon','bbpOidcClient','ui.bootstrap','ngMaterial', 'ngMessages', 'ngStorage'])
+.module('proposalReviewApp', ['ui.router','ui.select','angular.filter','hbpCommon','bbpOidcClient','ui.bootstrap', 'ngStorage'])
 .config(function ($stateProvider, $urlRouterProvider) {
 	// link adresses to views and controllers
 	$stateProvider
@@ -145,6 +145,7 @@ angular
 		$scope.log=[];
 		$scope.minDate = new Date();
 		$scope.maxDate = new Date();
+		$scope.toCompare = [];
 	}
 
 	// Check if all the required values were filled
@@ -183,7 +184,7 @@ angular
 		if($scope.record.projectStartDate!=undefined ){
 			dateTemp = $scope.record.projectStartDate;
 		}
-		$scope.minDate.setDate(dateTemp.getDate() + numberOfDaysToAdd);
+		$scope.minDate.setDate(dateTemp + numberOfDaysToAdd);
 	});
 
 	// Change the maximum date of the projects depending on the type of projects
@@ -200,7 +201,7 @@ angular
 		if($scope.record.projectStartDate!=undefined ){
 			dateTemp = $scope.record.projectStartDate;
 		};
-		$scope.maxDate.setDate(dateTemp.getDate() + numberOfDaysToAdd);
+		$scope.maxDate.setDate(dateTemp + numberOfDaysToAdd);
 	});
 
 	// Load the Collabs informations
@@ -247,6 +248,7 @@ angular
 		return toReturn;
 	};
 
+// Go to the needed state
 	function goToState(direction){
 		var goTo = changeState(direction);
 		if (goTo != undefined & goTo != null & goTo !='main.proposalApp.'){
@@ -254,9 +256,12 @@ angular
 		}
 	}
 
+// Go to the next state
 	$scope.nextStep = function(){
 		goToState('next');
 	};
+
+// Go to the previous state
 	$scope.previousStep = function(){
 		goToState('previous');
 	};
@@ -266,44 +271,55 @@ angular
 		saveProject();
 	};
 
-	// Functions managing the creation of new entries in the DB ====================
+	// Functions managing the creation of new entries in the DB ==================
 	function findOrCreate(model, value){
-		var id = findId(model, value);
-		if (id == 0){
+		console.log('findOrCreate('+model+','+JSON.stringify(value)+')');
+		var id = null;
+		if (value != undefined){
+		id = findId(model, value);
+		if (id == undefined || id == null){
 			id = createElem(model,value);
 		}
+		}
+		console.log('Created Elem: '+model+' : ' + id);
 		return id;
 	};
 
 	function findId(model,values){
-		var toReturn = 0;
-		var toCompare = {};
-		$http.get('/api/'+ model )
+		console.log('findId('+model+','+JSON.stringify(values)+')');
+		var toReturn = null;
+		$http.get('/api/'+ model)
 		.success(function(data) {
-			toCompare = data;
-			console.log(data);
+			$scope.toCompare[model] = data;
+			console.log('Found '+model+': '+ data);
 		})
 		.error(function(data) {
-			console.log('Error finding: ' + data);
+			console.log('Error finding '+ '/api/'+ model  +': ' + data);
 		});
-		angular.forEach(toCompare, function(val){
+		angular.forEach($scope.toCompare[model], function(val){
 			var id = 0;
 			var good = true;
-			angular.forEach(val, function(value,key){
+			var treatedValues = treatValue(model,val);
+			angular.forEach(treatedValues, function(value,key){
 				if(key == '_id'){
 					id = value;
+				} else if(key == '__v'){
+
 				} else {
-					good = good & (value == values[key]);
+					console.log('Comparing values : ' + key + ':"'+value+'" and "'+values[key]+'"');
+					good = good & (value == findId(key+'s',values[key]));
 				}
 			});
 			if(good){
+			console.log('Good');
 				toReturn = id;
 			}
 		});
 		return toReturn;
 	};
 
-	function createElem(model, value) {
+	function treatValue(model, value) {
+	console.log('Treating values');
 		var treatedValues = {};
 		switch(model) {
 			case 'projects':
@@ -313,7 +329,7 @@ angular
 			treatedValues = treatProposal(value);
 			break;
 			case 'persons':
-			treatedValues = treatPersons(value);
+			treatedValues = treatPerson(value);
 			break;
 			case 'submissions':
 			treatedValues = treatSubmission(value);
@@ -331,7 +347,7 @@ angular
 			treatedValues = treatInputOutput(value);
 			break;
 			case 'deliverables':
-			treatedValues = treatDeliverables(value);
+			treatedValues = treatDeliverable(value);
 			break;
 			case 'hpcressources':
 			treatedValues = treatHpcCloud(value);
@@ -348,16 +364,28 @@ angular
 			default:
 			treatedValues = value;
 		}
+		console.log("treatedValues "+JSON.stringify(treatedValues));
+		return treatedValues;
+	}
 
-		return createInDB(model,treatedValues);
+	function createElem(model, value) {
+		console.log('createElem('+model+','+JSON.stringify(value)+')');
+		var treatedValues = treatValue(model, value);
+		var toReturn = null;
+		if(treatedValues != '' & treatedValues != null  & treatedValues != {} ){
+			toReturn = createInDB(model,treatedValues);
+		}
+		console.log('Created Elem: '+model+' : ' + toReturn);
+		return toReturn;
 	};
 
 	function createInDB(model,value) {
-		var toReturn = 0;
+		console.log('createInDB('+model+','+JSON.stringify(value)+')');
+		var toReturn = null;
 		$http.post('/api/'+model, value)
-		.success(function(){
-			toReturn = fingId(model,value);
-			console.log(toReturn);
+		.success(function(data){
+			console.log('Created Creating: '+model+' : ' + JSON.stringify(data));
+			toReturn = data;
 		})
 		.error(function(data) {
 			console.log('Error Creating: ' + data);
@@ -366,10 +394,12 @@ angular
 	};
 
 	function saveProject(){
-		findOrCreate('project',$scope.record);
+		console.log('saveProject');
+		findOrCreate('projects',$scope.record);
 	};
 
 	function findOrCreateTable(model,value){
+		console.log('findOrCreateTable('+model+','+JSON.stringify(value)+')');
 		var temp = [];
 		angular.forEach(value, function(val){
 			temp.push(findOrCreate(model,val));
@@ -378,6 +408,7 @@ angular
 	};
 
 	function getIdTable(value){
+		console.log('getIdTable('+JSON.stringify(value)+')');
 		var temp = [];
 		angular.forEach(value, function(val){
 			temp.push(val._id);
@@ -386,10 +417,13 @@ angular
 	};
 
 	function treatProject(value){
+		console.log('TreatingProject:' + value);
+		var proposal = findOrCreate('proposals',value);
 		var treatedValues = {
-			'proposal'	: findOrCreate('proposals',value),
-			'review'		: ''
+			'proposal'	: proposal,
+			'review'		: null
 		};
+			console.log('Treated:' + value);
 		return treatedValues;
 	};
 
@@ -410,7 +444,7 @@ angular
 		var members 					= findOrCreateTable('persons',value.members);
 		var tags 							= findOrCreateTable('tags',value.tags);
 		var relatedProjects 	= findOrCreateTable('relatedprojects',value.relatedProjects);
-		var shortDeliverable	= findOrCreateTable('shortDeliverable',value.shortDeliverable);
+		var shortDeliverable	= findOrCreateTable('shortdeliverables',value.shortDeliverable);
 		var publications 			= findOrCreateTable('publications',value.publications);
 		var requirements 			= findOrCreateTable('requirements',value.requirements);
 		var deliverables 			= findOrCreateTable('deliverables',value.deliverables);
@@ -445,10 +479,13 @@ angular
 	};
 
 	function treatPerson(value){
-		var treatedValues = {
-			'id'					: value.id,
-			'displayName'	: value.displayName
-		};
+		var treatedValues = {};
+		if(value != undefined){
+			treatedValues = {
+				'id'					: value.id,
+				'displayName'	: value.displayName
+			};
+		}
 
 		return treatedValues;
 	};
@@ -459,8 +496,8 @@ angular
 			treatedValues = value;
 		} else {
 			treatedValues = {
-				'name' = value;
-				'use' = 1;
+				'name'	: value,
+				'use' 	: 1
 			}
 		}
 
@@ -560,13 +597,16 @@ angular
 	};
 
 	function treatHr(value){
+		console.log("Treating HR: "+JSON.stringify(value));
+
 		var treatedValues = {
 			'name'        : value.name,
-			'role'        : value.role._id,
+			'role'        : value.role,
 			'pm'          : value.pm,
 			'description' : value.description
 		};
 
+		console.log("Treated HR: "+ JSON.stringify(treatedValues));
 		return treatedValues;
 	};
 

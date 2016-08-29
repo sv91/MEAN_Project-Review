@@ -359,7 +359,7 @@
                     </td>
                     <td class="memberRole">
                       <select ng-required="record.projectType >= 2" ng-model="member.role">
-                        <option ng-repeat="role in availableRoles" value="{{role}}">{{role}}</option>
+                        <option ng-repeat="role in availableRoles" value="{{role._id}}">{{role.name}}</option>
                       </select>
                     </td>
                     <td class="memberPm">

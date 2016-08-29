@@ -21,15 +21,15 @@ app.use(methodOverride());
 
   // Project -------------------------------------------------------------------
   var Project = mongoose.model('Project', {
-    proposal  : { type: Schema.Types.ObjectId, ref: 'Proposal' },
-    review    : { type: Schema.Types.ObjectId, ref: 'GeneralReview' }
+    proposal  : { type: Number, ref: 'Proposal' },
+    review    : { type: Number, ref: 'GeneralReview' }
   });
 
   // Proposal ------------------------------------------------------------------
   var Proposal = mongoose.model('Proposal', {
-    author      : { type: Schema.Types.ObjectId, ref: 'Person' },
+    author      : { type: Number, ref: 'Person' },
     subDate     : Date,
-    submission  : { type: Schema.Types.ObjectId, ref: 'Submission' }
+    submission  : { type: Number, ref: 'Submission' }
   });
 
   // Submission ----------------------------------------------------------------
@@ -45,18 +45,18 @@ app.use(methodOverride());
     usecase               : String,
     newproject            : Boolean,
     projectType           : { type: Number, min: 0, max: 2 },
-    pi                    : { type: Schema.Types.ObjectId, ref: 'Person' },
-    copi                  : { type: Schema.Types.ObjectId, ref: 'Person' },
-    members               : [{ type: Schema.Types.ObjectId, ref: 'Person' }],
-    teams                 : [{ type: Schema.Types.ObjectId, ref: 'Team' }],
-    tags                  : [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
-    relatedProjects       : [{ type: Schema.Types.ObjectId, ref: 'RelatedProject' }],
-    shortDeliverable      : [{ type: Schema.Types.ObjectId, ref: 'ShortDeliverable' }],
-    publications          : [{ type: Schema.Types.ObjectId, ref: 'Publication' }],
-    grants                : [{ type: Schema.Types.ObjectId, ref: 'Grant' }],
-    tasks                 : [{ type: Schema.Types.ObjectId, ref: 'Task' }],
-    requirements          : [{ type: Schema.Types.ObjectId, ref: 'Requirement' }],
-    deliverables          : [{ type: Schema.Types.ObjectId, ref: 'Deliverable' }],
+    pi                    : { type: Number, ref: 'Person' },
+    copi                  : { type: Number, ref: 'Person' },
+    members               : [{ type: Number, ref: 'Person' }],
+    teams                 : [{ type: Number, ref: 'Team' }],
+    tags                  : [{ type: Number, ref: 'Tag' }],
+    relatedProjects       : [{ type: Number, ref: 'RelatedProject' }],
+    shortDeliverable      : [{ type: Number, ref: 'ShortDeliverable' }],
+    publications          : [{ type: Number, ref: 'Publication' }],
+    grants                : [{ type: Number, ref: 'Grant' }],
+    tasks                 : [{ type: Number, ref: 'Task' }],
+    requirements          : [{ type: Number, ref: 'Requirement' }],
+    deliverables          : [{ type: Number, ref: 'Deliverable' }],
   });
 
   // Person --------------------------------------------------------------------
@@ -101,7 +101,7 @@ app.use(methodOverride());
   // Task ----------------------------------------------------------------------
   var Task = mongoose.model('Task', {
     name  : String,
-    grant : { type: Schema.Types.ObjectId, ref: 'Grant' }
+    grant : { type: Number, ref: 'Grant' }
   });
 
   // Tag -----------------------------------------------------------------------
@@ -113,11 +113,11 @@ app.use(methodOverride());
   // Requirement ---------------------------------------------------------------
   var Requirement = mongoose.model('Requirement', {
     title       : String,
-    type        : { type: Schema.Types.ObjectId, ref: 'RequirementType' },
+    type        : { type: Number, ref: 'RequirementType' },
     requirement : String,
     feature     : String,
-    input       : [{ type: Schema.Types.ObjectId, ref: 'Input' }],
-    output      : [{ type: Schema.Types.ObjectId, ref: 'Output' }]
+    input       : [{ type: Number, ref: 'Input' }],
+    output      : [{ type: Number, ref: 'Output' }]
   });
 
   // RequirementType -----------------------------------------------------------
@@ -148,19 +148,19 @@ app.use(methodOverride());
     date            : Date,
     description     : String,
     risks           : String,
-    dependency      : [{ type: Schema.Types.ObjectId, ref: 'Deliverable' }],
-    requirements    : [{ type: Schema.Types.ObjectId, ref: 'Requirement' }],
-    softdev         : [{ type: Schema.Types.ObjectId, ref: 'SoftDev' }],
-    datatransfer    : [{ type: Schema.Types.ObjectId, ref: 'DataTransfer' }],
+    dependency      : [{ type: Number, ref: 'Deliverable' }],
+    requirements    : [{ type: Number, ref: 'Requirement' }],
+    softdev         : [{ type: Number, ref: 'SoftDev' }],
+    datatransfer    : [{ type: Number, ref: 'DataTransfer' }],
     collabs         : [String],
-    virtualization  : [{ type: Schema.Types.ObjectId, ref: 'Virtualization' }],
-    devenv          : [{ type: Schema.Types.ObjectId, ref: 'DevEnv' }],
+    virtualization  : [{ type: Number, ref: 'Virtualization' }],
+    devenv          : [{ type: Number, ref: 'DevEnv' }],
     hpcRessource    : Boolean,
     cloudRessource  : Boolean,
-    hpc             : [{ type: Schema.Types.ObjectId, ref:'Hpc'}],
-    cloud           : [{ type: Schema.Types.ObjectId, ref:'Cloud'}],
-    hardware        : [{ type: Schema.Types.ObjectId, ref:'Hardware'}],
-    hr              : [{ type: Schema.Types.ObjectId, ref:'HumanRessource'}]
+    hpc             : [{ type: Number, ref:'Hpc'}],
+    cloud           : [{ type: Number, ref:'Cloud'}],
+    hardware        : [{ type: Number, ref:'Hardware'}],
+    hr              : [{ type: Number, ref:'HumanRessource'}]
   });
 
   // Software Development ------------------------------------------------------
@@ -189,7 +189,7 @@ app.use(methodOverride());
 
   // HPC Ressources ------------------------------------------------------------
   var Hpc = mongoose.model('Hpc', {
-    type : { type: Schema.Types.ObjectId, ref: 'HpcType' },
+    type : { type: Number, ref: 'HpcType' },
     runs : { type: Number, min: 0 },
     time : { type: Number, min: 0 },
     part : { type: Number, min: 0 },
@@ -205,7 +205,7 @@ app.use(methodOverride());
 
   // Cloud Ressources ----------------------------------------------------------
   var Cloud = mongoose.model('Cloud', {
-    type : { type: Schema.Types.ObjectId, ref: 'CloudType' },
+    type : { type: Number, ref: 'CloudType' },
     runs : { type: Number, min: 0 },
     time : { type: Number, min: 0 },
     part : { type: Number, min: 0 },
@@ -243,14 +243,14 @@ app.use(methodOverride());
   // General Review ------------------------------------------------------------
   var GeneralReview = mongoose.model('GeneralReview', {
     grade : Number,
-    reviews : [{ type: Schema.Types.ObjectId, ref: 'Review' }]
+    reviews : [{ type: Number, ref: 'Review' }]
   });
 
   // Review --------------------------------------------------------------------
   var Review = mongoose.model('Review', {
-    reviewer  : { type: Schema.Types.ObjectId, ref: 'Person' },
-    comments  : [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-    notes     : [{ type: Schema.Types.ObjectId, ref: 'Note' }]
+    reviewer  : { type: Number, ref: 'Person' },
+    comments  : [{ type: Number, ref: 'Comment' }],
+    notes     : [{ type: Number, ref: 'Note' }]
   });
 
   // Comment -------------------------------------------------------------------
@@ -310,7 +310,6 @@ app.use(methodOverride());
       }, function(err, tar) {
         if (err)
           HandleError(err,res);
-        findAll(res, target);
       });
     };
 
@@ -333,7 +332,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Project);
+        res.json(project._id);
       });
     });
 
@@ -362,7 +361,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Proposal);
+        res.json(project._id);
       });
     });
 
@@ -411,7 +410,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Submission);
+        res.json(project._id);
       });
     });
 
@@ -439,7 +438,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Person);
+        res.json(project._id);
       });
     });
 
@@ -460,10 +459,10 @@ app.use(methodOverride());
         name        : req.body.name,
         shortName   : req.body.shortName,
         displayName : 'BBP Team: ' + req.body.shortName
-      }, function(err,team){
+      }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Team);
+        res.json(project._id);
       });
     });
 
@@ -493,7 +492,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, RelatedProject);
+        res.json(project._id);
       });
     });
 
@@ -522,7 +521,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, ShortDeliverable);
+        res.json(project._id);
       });
     });
 
@@ -550,7 +549,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Publication);
+        res.json(project._id);
       });
     });
 
@@ -569,10 +568,10 @@ app.use(methodOverride());
     app.post('/api/grants', function(req, res){
       Grant.create({
         name  : req.body.name
-      }, function(err,grant){
+      }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Grant);
+        res.json(project._id);
       });
     });
 
@@ -595,7 +594,7 @@ app.use(methodOverride());
       }, function(err,task){
         if (err)
           HandleError(err,res);
-        findAll(res, Task);
+        res.json(project._id);
       });
     });
 
@@ -618,7 +617,7 @@ app.use(methodOverride());
       }, function(err,tag){
         if (err)
           HandleError(err,res);
-        findAll(res, Tag);
+        res.json(project._id);
       });
     });
 
@@ -650,7 +649,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Requirement);
+        res.json(project._id);
       });
     });
 
@@ -673,7 +672,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, RequirementType);
+        res.json(project._id);
       });
     });
 
@@ -703,7 +702,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Input);
+        res.json(project._id);
       });
     });
 
@@ -733,7 +732,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Output);
+        res.json(project._id);
       });
     });
 
@@ -776,7 +775,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Deliverable);
+        res.json(project._id);
       });
     });
 
@@ -796,10 +795,10 @@ app.use(methodOverride());
       SoftDev.create({
         name  : req.body.name,
         desc  : req.body.desc
-      }, function(err,softdev){
+      }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res,SoftDev);
+        res.json(project._id);
       });
     });
 
@@ -819,10 +818,10 @@ app.use(methodOverride());
       DataTransfer.create({
         name  : req.body.name,
         desc  : req.body.desc
-      }, function(err,datatransfer){
+      }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res,DataTransfer);
+        res.json(project._id);
       });
     });
 
@@ -842,10 +841,10 @@ app.use(methodOverride());
       Virtualization.create({
         name  : req.body.name,
         desc  : req.body.desc
-      }, function(err,virtualization){
+      }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Virtualization);
+        res.json(project._id);
       });
     });
 
@@ -865,10 +864,10 @@ app.use(methodOverride());
       DevEnv.create({
         name  : req.body.name,
         desc  : req.body.desc
-      }, function(err,devenv){
+      }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, DevEnv);
+        res.json(project._id);
       });
     });
 
@@ -900,7 +899,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Hpc);
+        res.json(project._id);
       });
     });
 
@@ -920,10 +919,10 @@ app.use(methodOverride());
       HpcType.create({
         name  : req.body.name,
         desc  : req.body.desc
-      }, function(err,hpctype){
+      }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, HpcType);
+        res.json(project._id);
       });
     });
 
@@ -955,7 +954,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Cloud);
+        res.json(project._id);
       });
     });
 
@@ -975,10 +974,10 @@ app.use(methodOverride());
       CloudType.create({
         name  : req.body.name,
         desc  : req.body.desc
-      }, function(err,cloudtype){
+      }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, CloudType);
+        res.json(project._id);
       });
     });
 
@@ -1008,7 +1007,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Hardware);
+        res.json(project._id);
       });
     });
 
@@ -1038,7 +1037,7 @@ app.use(methodOverride());
       }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, HumanRessource);
+        res.json(project._id);
       });
     });
 
@@ -1057,10 +1056,10 @@ app.use(methodOverride());
     app.post('/api/roles', function(req, res){
       Role.create({
         name  : req.body.name
-      }, function(err,role){
+      }, function(err,project){
         if (err)
           HandleError(err,res);
-        findAll(res, Role);
+        res.json(project._id);
       });
     });
 

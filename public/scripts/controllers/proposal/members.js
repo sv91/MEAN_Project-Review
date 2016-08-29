@@ -27,7 +27,7 @@ angular.module('proposalReviewApp')
 * # selectPi
 * Input form to select an user as the project leader.
 */
-.directive('selectPi', function(hbpIdentityUserDirectory,$window, $timeout) {
+.directive('selectPi', function($window, $timeout) {
   return {
     scope: true,
     template: '<hbp-user-selector hbp-on-select="handleUserSelection(user)"></hbp-user-selector><hbp-usercard hbp-user="record.pi" ></hbp-usercard></pre>',
@@ -79,7 +79,7 @@ angular.module('proposalReviewApp')
 * # selectCopi
 * Input form to select an user as the project co-leader.
 */
-.directive('selectCopi', function(hbpIdentityUserDirectory,$window, $timeout) {
+.directive('selectCopi', function($window, $timeout) {
   return {
     scope: true,
     template: '<hbp-user-selector hbp-on-select="handleUserSelection(user)"></hbp-user-selector><hbp-usercard hbp-user="record.copi" ></hbp-usercard></pre>',
