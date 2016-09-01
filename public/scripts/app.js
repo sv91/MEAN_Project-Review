@@ -604,47 +604,56 @@ function treatSubmission(value){
 }
 
 function treatPerson(value){
-	var deferred = $q.defer();
-	var treatedValues = null;
-	if(value != undefined && value!=null && value!=''){
-		treatedValues = {
-			'id'					: value.id,
-			'displayName'	: value.displayName
-		};
-	}
-	deferred.resolve(treatedValues);
-	return deferred.promise;
-};
+	return new Promise(function (fulfill, reject){
+		var treatedValues = null;
+		if(value != undefined && value!=null && value!=''){
+			treatedValues = {
+				'id'					: value.id,
+				'displayName'	: value.displayName
+			};
+		}
+		fulfill(treatedValues);
+	});
+}
 
 function treatTag(value){
-	var treatedValues = {};
-	if(value._id != undefined){
-		treatedValues = value;
-	} else {
-		treatedValues = {
-			'name'	: value,
-			'use' 	: 1
+	return new Promise(function (fulfill, reject){
+		var treatedValues = {};
+		if(value._id != undefined){
+			treatedValues = value;
+		} else {
+			treatedValues = {
+				'name'	: value,
+				'use' 	: 1
+			}
 		}
-	}
-
-	return treatedValues;
-};
+		fulfill(treatedValues);
+	});
+}
 
 function treatRequirement(value){
-	var inputs 	= findOrCreateTable('persons',value.input);
-	var outputs	= findOrCreateTable('persons',value.output);
-
-	var treatedValues = {
-		'title'       : value.title,
-		'type'        : value.type._id,
-		'requirement' : value.requirement,
-		'feature'     : value.feature,
-		'input'       : inputs,
-		'output'      : outputs
-	};
-
-	return treatedValues;
-};
+	var inputs 	= findOrCreateTable('inputs',value.input);
+	var outputs	= findOrCreateTable('outputs',value.output);
+	findOrCreateTable('persons',value.input)
+	.then(function(res){
+		inputs = res;
+	})
+	.then(findOrCreateTable('tags',value.output)
+	.then(function(res){
+		outputs = res;
+	})
+	.then(function(){
+		var treatedValues = {
+			'title'       : value.title,
+			'type'        : value.type._id,
+			'requirement' : value.requirement,
+			'feature'     : value.feature,
+			'input'       : inputs,
+			'output'      : outputs
+		};
+		fulfill(treatedValues);
+	}));
+	}
 
 function treatInputOutput(value){
 	var treatedValues = {
