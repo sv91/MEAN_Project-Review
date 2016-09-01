@@ -316,10 +316,10 @@ angular
 
 
 
-function findId(model,values){
-	return new Promise(function (fulfill, reject){
-		$http.get('/api/'+ model)
-		.success(function(res){
+	function findId(model,values){
+		return new Promise(function (fulfill, reject){
+			$http.get('/api/'+ model)
+			.success(function(res){
 				var found = false;
 				angular.forEach(res, function(val){
 					var good = true;
@@ -340,411 +340,421 @@ function findId(model,values){
 					reject();
 				}
 			})
-		.error(function() {
-			console.log('Error: FindId: Table not found: '+model);
-			reject();
+			.error(function() {
+				console.log('Error: FindId: Table not found: '+model);
+				reject();
+			});
 		});
-	});
-}
+	}
 
-function treatSelect(model,value) {
-	return new Promise(function (fulfill, reject){
-		switch(model) {
-			case 'projects':
-			treatProject(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'proposals':
-			treatProposal(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'persons':
-			treatPerson(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'submissions':
-			treatSubmission(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'tags':
-			treatTag(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'requirements':
-			treatRequirement(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'inputs':
-			treatInputOutput(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'outputs':
-			treatInputOutput(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'deliverables':
-			treatDeliverable(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'hpcressources':
-			treatHpcCloud(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'cloudressources':
-			treatHpcCloud(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'hardwares':
-			treatHardware(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			case 'humanressources':
-			treatHr(value).then(function(res){
-				fulfill(res);
-			});
-			break;
-			default:
-			treatOther(value).then(function(res){
-				fulfill(res);
-			});
-		}
-	});
-};
+	function treatSelect(model,value) {
+		return new Promise(function (fulfill, reject){
+			switch(model) {
+				case 'projects':
+				treatProject(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'proposals':
+				treatProposal(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'persons':
+				treatPerson(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'submissions':
+				treatSubmission(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'tags':
+				treatTag(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'requirements':
+				treatRequirement(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'inputs':
+				treatInputOutput(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'outputs':
+				treatInputOutput(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'deliverables':
+				treatDeliverable(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'hpcressources':
+				treatHpcCloud(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'cloudressources':
+				treatHpcCloud(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'hardwares':
+				treatHardware(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				case 'humanressources':
+				treatHr(value).then(function(res){
+					fulfill(res);
+				});
+				break;
+				default:
+				treatOther(value).then(function(res){
+					fulfill(res);
+				});
+			}
+		});
+	};
 
-function createElem(model, value) {
-	return new Promise(function (fulfill, reject){
-		if(value != undefined && value != null && value != "" && value != {} ){
+	function createElem(model, value) {
+		return new Promise(function (fulfill, reject){
+			if(value != undefined && value != null && value != "" && value != {} ){
 				createInDB(model,value)
 				.then(function(res){
 					fulfill(res);
 				});
-		} else {
-			console.log("Error: createElem: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
-			reject();
-		}
-	});
-}
-
-function createInDB(model,value) {
-	return new Promise(function (fulfill, reject){
-		if(value != undefined && value != null && value != "" && value != {} ){
-			$http.post('/api/'+model, value)
-			.success(function(res){
-				console.log('Created : '+model+' : ' + JSON.stringify(res));
-				fulfill(res);
-			})
-			.error(function(data) {
-				console.log("Error: createInDB: Element not created.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
+			} else {
+				console.log("Error: createElem: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
 				reject();
-			});
-		} else {
-			console.log("Error: createInDB: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
-			reject();
-		}
-	});
-};
-
-
-function findOrCreateTable(model,value){
-	return new Promise(function (fulfill, reject){
-		if(value != undefined && value != "" && value != null && value != [])
-		{
-			Promise.all(value.map(function(val){
-			return findOrCreate(model, val);
-		})).then(function(res){
-			fulfill(res);
+			}
 		});
-	} else {
-		fulfill([]);
 	}
-	});
-}
 
-function getIdTable(value){
-	var temp = [];
-	angular.forEach(value, function(val){
-		temp.push(val._id);
-	});
-	return temp;
-};
+	function createInDB(model,value) {
+		return new Promise(function (fulfill, reject){
+			if(value != undefined && value != null && value != "" && value != {} ){
+				$http.post('/api/'+model, value)
+				.success(function(res){
+					console.log('Created : '+model+' : ' + JSON.stringify(res));
+					fulfill(res);
+				})
+				.error(function(data) {
+					console.log("Error: createInDB: Element not created.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
+					reject();
+				});
+			} else {
+				console.log("Error: createInDB: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
+				reject();
+			}
+		});
+	};
 
-function treatProject(value){
-	return new Promise(function (fulfill, reject){
-		findOrCreate('proposals',value)
-		.then(function(id){
-			var treatedValues = {
-				'proposal'	: id,
-				'review'		: null
-			};
+
+	function findOrCreateTable(model,value){
+		return new Promise(function (fulfill, reject){
+			if(value != undefined && value != "" && value != null && value != [])
+			{
+				Promise.all(value.map(function(val){
+					return findOrCreate(model, val);
+				})).then(function(res){
+					fulfill(res);
+				});
+			} else {
+				fulfill([]);
+			}
+		});
+	}
+
+	function getIdTable(value){
+		var temp = [];
+		angular.forEach(value, function(val){
+			temp.push(val._id);
+		});
+		return temp;
+	};
+
+	function treatProject(value){
+		return new Promise(function (fulfill, reject){
+			findOrCreate('proposals',value)
+			.then(function(id){
+				var treatedValues = {
+					'proposal'	: id,
+					'review'		: null
+				};
+				fulfill(treatedValues);
+			});
+		});
+	}
+
+	function treatProposal(value){
+		return new Promise(function (fulfill, reject){
+			var persons;
+			var submissions;
+			findOrCreate('persons',value.pi)
+			.then(function(res){
+				persons = res;
+			})
+			.then(findOrCreate('submissions',value)
+			.then(function(res){
+				submissions = res;
+			})
+			.then(function(){
+				var treatedValues = {
+					'subdate'			: $scope.today,
+					'author'			: persons,
+					'submission'	: submissions
+				};
+				fulfill(treatedValues);
+			}));
+		});
+	}
+
+	function treatSubmission(value){
+		return new Promise(function (fulfill, reject){
+			var teams;
+			var grants;
+			var tasks;
+			var members;
+			var tags;
+			var relatedProjects;
+			var shortDeliverable;
+			var publications;
+			var requirements;
+			var deliverables;
+			var pi;
+			var copi;
+
+			findOrCreateTable('persons',value.members)
+			.then(function(res){
+				members = res;
+			})
+			.then(findOrCreateTable('tags',value.tags)
+			.then(function(res){
+				tags = res;
+			}))
+			.then(findOrCreateTable('relatedprojects',value.relatedProjects)
+			.then(function(res){
+				relatedProjects = res;
+			}))
+			.then(findOrCreateTable('shortdeliverables',value.shortDeliverable)
+			.then(function(res){
+				shortDeliverable = res;
+			}))
+			.then(findOrCreateTable('publications',value.publications)
+			.then(function(res){
+				publications = res;
+			}))
+			.then(findOrCreateTable('requirements',value.requirements)
+			.then(function(res){
+				requirements = res;
+			}))
+			.then(findOrCreateTable('deliverables',value.deliverables)
+			.then(function(res){
+				deliverables = res;
+			}))
+			.then(function(){
+				teams 	= getIdTable(value.teams);
+				grants	= getIdTable(value.grants);
+				tasks 	= getIdTable(value.tasks);
+			})
+			.then(findOrCreate('persons',value.pi)
+			.then(function(res){
+				pi = res;
+			}))
+			.then(findOrCreate('persons',value.copi)
+			.then(function(res){
+				copi = res;
+			}))
+			.then(function(){
+				var treatedValues = {
+					'projectStartDate'   		: value.projectStartDate,
+					'projectEndDate'        : value.projectEndDate,
+					'projectTitle'          : value.projectTitle,
+					'executiveSummary'      : value.executiveSummary,
+					'impactStatement'       : value.impactStatement,
+					'benefitToCommunity'    : value.benefitToCommunity,
+					'scientificSummary'     : value.scientificSummary,
+					'technologicalSummary'  : value.technologicalSummary,
+					'usecase'               : value.usecase,
+					'newproject'            : value.newproject,
+					'projectType'           : value.projectType,
+					'pi'                    : pi,
+					'copi'                  : copi,
+					'members'               : members,
+					'teams'                 : teams,
+					'tags'                  : tags,
+					'relatedProjects'       : relatedProjects,
+					'shortDeliverable'      : shortDeliverable,
+					'publications'          : publications,
+					'grants'                : grants,
+					'tasks'                 : tasks,
+					'requirements'          : requirements,
+					'deliverables' 					: deliverables
+				};
+				fulfill(treatedValues);
+			});
+		});
+	}
+
+	function treatPerson(value){
+		return new Promise(function (fulfill, reject){
+			var treatedValues = null;
+			if(value != undefined && value!=null && value!=''){
+				treatedValues = {
+					'id'					: value.id,
+					'displayName'	: value.displayName
+				};
+			}
 			fulfill(treatedValues);
 		});
-	});
-}
+	}
 
-function treatProposal(value){
-	return new Promise(function (fulfill, reject){
-		var persons;
-		var submissions;
-		findOrCreate('persons',value.pi)
+	function treatTag(value){
+		return new Promise(function (fulfill, reject){
+			var treatedValues = {};
+			if(value._id != undefined){
+				treatedValues = value;
+			} else {
+				treatedValues = {
+					'name'	: value,
+					'use' 	: 1
+				}
+			}
+			fulfill(treatedValues);
+		});
+	}
+
+	function treatRequirement(value){
+		var inputs 	= findOrCreateTable('inputs',value.input);
+		var outputs	= findOrCreateTable('outputs',value.output);
+		findOrCreateTable('persons',value.input)
 		.then(function(res){
-			persons = res;
+			inputs = res;
 		})
-		.then(findOrCreate('submissions',value)
+		.then(findOrCreateTable('tags',value.output)
 		.then(function(res){
-			submissions = res;
+			outputs = res;
 		})
 		.then(function(){
 			var treatedValues = {
-				'subdate'			: $scope.today,
-				'author'			: persons,
-				'submission'	: submissions
+				'title'       : value.title,
+				'type'        : value.type._id,
+				'requirement' : value.requirement,
+				'feature'     : value.feature,
+				'input'       : inputs,
+				'output'      : outputs
 			};
 			fulfill(treatedValues);
 		}));
-	});
-}
-
-function treatSubmission(value){
-	return new Promise(function (fulfill, reject){
-		var teams;
-		var grants;
-		var tasks;
-		var members;
-		var tags;
-		var relatedProjects;
-		var shortDeliverable;
-		var publications;
-		var requirements;
-		var deliverables;
-		var pi;
-		var copi;
-
-		findOrCreateTable('persons',value.members)
-		.then(function(res){
-			members = res;
-		})
-		.then(findOrCreateTable('tags',value.tags)
-		.then(function(res){
-			tags = res;
-		}))
-		.then(findOrCreateTable('relatedprojects',value.relatedProjects)
-		.then(function(res){
-			relatedProjects = res;
-		}))
-		.then(findOrCreateTable('shortdeliverables',value.shortDeliverable)
-		.then(function(res){
-			shortDeliverable = res;
-		}))
-		.then(findOrCreateTable('publications',value.publications)
-		.then(function(res){
-			publications = res;
-		}))
-		.then(findOrCreateTable('requirements',value.requirements)
-		.then(function(res){
-			requirements = res;
-		}))
-		.then(findOrCreateTable('deliverables',value.deliverables)
-		.then(function(res){
-			deliverables = res;
-		}))
-		.then(function(){
-			teams 	= getIdTable(value.teams);
-			grants	= getIdTable(value.grants);
-			tasks 	= getIdTable(value.tasks);
-		})
-		.then(findOrCreate('persons',value.pi)
-		.then(function(res){
-			pi = res;
-		}))
-		.then(findOrCreate('persons',value.copi)
-		.then(function(res){
-			copi = res;
-		}))
-		.then(function(){
-			var treatedValues = {
-			'projectStartDate'   		: value.projectStartDate,
-			'projectEndDate'        : value.projectEndDate,
-			'projectTitle'          : value.projectTitle,
-			'executiveSummary'      : value.executiveSummary,
-			'impactStatement'       : value.impactStatement,
-			'benefitToCommunity'    : value.benefitToCommunity,
-			'scientificSummary'     : value.scientificSummary,
-			'technologicalSummary'  : value.technologicalSummary,
-			'usecase'               : value.usecase,
-			'newproject'            : value.newproject,
-			'projectType'           : value.projectType,
-			'pi'                    : pi,
-			'copi'                  : copi,
-			'members'               : members,
-			'teams'                 : teams,
-			'tags'                  : tags,
-			'relatedProjects'       : relatedProjects,
-			'shortDeliverable'      : shortDeliverable,
-			'publications'          : publications,
-			'grants'                : grants,
-			'tasks'                 : tasks,
-			'requirements'          : requirements,
-			'deliverables' 					: deliverables
-			};
-			fulfill(treatedValues);
-		});
-	});
-}
-
-function treatPerson(value){
-	return new Promise(function (fulfill, reject){
-		var treatedValues = null;
-		if(value != undefined && value!=null && value!=''){
-			treatedValues = {
-				'id'					: value.id,
-				'displayName'	: value.displayName
-			};
-		}
-		fulfill(treatedValues);
-	});
-}
-
-function treatTag(value){
-	return new Promise(function (fulfill, reject){
-		var treatedValues = {};
-		if(value._id != undefined){
-			treatedValues = value;
-		} else {
-			treatedValues = {
-				'name'	: value,
-				'use' 	: 1
-			}
-		}
-		fulfill(treatedValues);
-	});
-}
-
-function treatRequirement(value){
-	var inputs 	= findOrCreateTable('inputs',value.input);
-	var outputs	= findOrCreateTable('outputs',value.output);
-	findOrCreateTable('persons',value.input)
-	.then(function(res){
-		inputs = res;
-	})
-	.then(findOrCreateTable('tags',value.output)
-	.then(function(res){
-		outputs = res;
-	})
-	.then(function(){
-		var treatedValues = {
-			'title'       : value.title,
-			'type'        : value.type._id,
-			'requirement' : value.requirement,
-			'feature'     : value.feature,
-			'input'       : inputs,
-			'output'      : outputs
-		};
-		fulfill(treatedValues);
-	}));
 	}
 
-function treatInputOutput(value){
-	var treatedValues = {
-		'tag'     : value.tag,
-		'format'  : value.format,
-		'number'  : value.number,
-		'size'    : value.size
+	function treatInputOutput(value){
+		return new Promise(function (fulfill, reject){
+			var treatedValues = null;
+			if(value != undefined && value!=null && value!=''){
+				treatedValues = {
+					'tag'     : value.tag,
+					'format'  : value.format,
+					'number'  : value.number,
+					'size'    : value.size
+				};
+			}
+			fulfill(treatedValues);
+		});
 	};
 
-	return treatedValues;
-};
+	function treatDeliverable(value){
+		var softdev 				= getIdTable(value.softdev);
+		var datatransfer 		= getIdTable(value.datatransfer);
+		var virtualization	= getIdTable(value.virtualization);
+		var devenv 					= getIdTable(value.devenv);
 
-function treatDeliverable(value){
-	var softdev 				= getIdTable(value.softdev);
-	var datatransfer 		= getIdTable(value.datatransfer);
-	var virtualization	= getIdTable(value.virtualization);
-	var devenv 					= getIdTable(value.devenv);
+		var dependencies	= findOrCreateTable('deliverables',value.dependency);
+		var requirements 	= findOrCreateTable('requirements',value.requirement);
+		var hpc 					= findOrCreateTable('hpcressources',value.hpc);
+		var cloud 				= findOrCreateTable('deliverables',value.cloud);
+		var hardware 			= findOrCreateTable('hardwares',value.hardware);
+		var hr 						= findOrCreateTable('humanressources',value.members);
 
-	var dependencies	= findOrCreateTable('deliverables',value.dependency);
-	var requirements 	= findOrCreateTable('requirements',value.requirement);
-	var hpc 					= findOrCreateTable('hpcressources',value.hpc);
-	var cloud 				= findOrCreateTable('deliverables',value.cloud);
-	var hardware 			= findOrCreateTable('hardwares',value.hardware);
-	var hr 						= findOrCreateTable('humanressources',value.members);
+		var collabs = [];
+		angular.forEach(value.collabs,function(val){
+			collabs.push(val.id);
+		});
 
-	var collabs = [];
-	angular.forEach(value.collabs,function(val){
-		collabs.push(val.id);
-	});
+		var treatedValues = {
+			'name'            : value.name,
+			'date'            : value.date,
+			'description'     : value.description,
+			'risks'           : value.risks,
+			'dependency'      : dependencies,
+			'requirements'    : requirements,
+			'softdev'         : softdev,
+			'datatransfer'    : datatransfer,
+			'collabs'         : [String],
+			'virtualization'  : virtualization,
+			'devenv'          : devenv,
+			'hpcRessource'    : value.hpcRessource,
+			'cloudRessource'  : value.cloudRessource,
+			'hpc'             : hpc,
+			'cloud'           : cloud,
+			'hardware'        : hardware,
+			'hr'              : hr
+		};
 
-	var treatedValues = {
-		'name'            : value.name,
-		'date'            : value.date,
-		'description'     : value.description,
-		'risks'           : value.risks,
-		'dependency'      : dependencies,
-		'requirements'    : requirements,
-		'softdev'         : softdev,
-		'datatransfer'    : datatransfer,
-		'collabs'         : [String],
-		'virtualization'  : virtualization,
-		'devenv'          : devenv,
-		'hpcRessource'    : value.hpcRessource,
-		'cloudRessource'  : value.cloudRessource,
-		'hpc'             : hpc,
-		'cloud'           : cloud,
-		'hardware'        : hardware,
-		'hr'              : hr
+		return treatedValues;
 	};
 
-	return treatedValues;
-};
-
-function treatHpcCloud(value){
-	var treatedValues = {
-		'type' : value.type._id,
-		'runs' : value.runs,
-		'time' : value.time,
-		'part' : value.part,
-		'arte' : value.arte,
-		'size' : value.size
+	function treatHpcCloud(value){
+		return new Promise(function (fulfill, reject){
+			var treatedValues = null;
+			if(value != undefined && value!=null && value!=''){
+				treatedValues = {
+					'type' : value.type._id,
+					'runs' : value.runs,
+					'time' : value.time,
+					'part' : value.part,
+					'arte' : value.arte,
+					'size' : value.size
+				};
+			}
+			fulfill(treatedValues);
+		});
 	};
 
-	return treatedValues;
-};
-
-function treatHardware(value){
-	var treatedValues = {
-		'name'        : value.name,
-		'price'       : value.price,
-		'link'        : value.link,
-		'description' : value.description
+	function treatHardware(value){
+		return new Promise(function (fulfill, reject){
+			var treatedValues = null;
+			if(value != undefined && value!=null && value!=''){
+				treatedValues = {
+					'name'        : value.name,
+					'price'       : value.price,
+					'link'        : value.link,
+					'description' : value.description
+				};
+			}
+			fulfill(treatedValues);
+		});
 	};
 
-	return treatedValues;
-};
-
-function treatHr(value){
-	console.log("Treating HR: "+JSON.stringify(value));
-
-	var treatedValues = {
-		'name'        : value.name,
-		'role'        : value.role,
-		'pm'          : value.pm,
-		'description' : value.description
+	function treatHr(value){
+		return new Promise(function (fulfill, reject){
+			var treatedValues = null;
+			if(value != undefined && value!=null && value!=''){
+				treatedValues = {
+					'name'        : value.name,
+					'role'        : value.role,
+					'pm'          : value.pm,
+					'description' : value.description
+				};
+			}
+			fulfill(treatedValues);
+		});
 	};
-
-	console.log("Treated HR: "+ JSON.stringify(treatedValues));
-	return treatedValues;
-};
-
-
-
 });
