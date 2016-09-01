@@ -671,44 +671,72 @@ angular
 	};
 
 	function treatDeliverable(value){
-		var softdev 				= getIdTable(value.softdev);
-		var datatransfer 		= getIdTable(value.datatransfer);
-		var virtualization	= getIdTable(value.virtualization);
-		var devenv 					= getIdTable(value.devenv);
-
-		var dependencies	= findOrCreateTable('deliverables',value.dependency);
-		var requirements 	= findOrCreateTable('requirements',value.requirement);
-		var hpc 					= findOrCreateTable('hpcressources',value.hpc);
-		var cloud 				= findOrCreateTable('deliverables',value.cloud);
-		var hardware 			= findOrCreateTable('hardwares',value.hardware);
-		var hr 						= findOrCreateTable('humanressources',value.members);
-
+		var softdev;
+		var datatransfer;
+		var virtualization;
+		var devenv;
+		var dependencies;
+		var requirements;
+		var hpc;
+		var cloud;
+		var hardware;
+		var hr;
 		var collabs = [];
-		angular.forEach(value.collabs,function(val){
-			collabs.push(val.id);
+
+		findOrCreateTable('deliverables',value.dependency)
+		.then(function(res){
+			dependencies = res;
+		})
+		.then(findOrCreateTable('requirements',value.requirement)
+		.then(function(res){
+			requirements = res;
+		}))
+		.then(findOrCreateTable('hpcressources',value.hpc)
+		.then(function(res){
+			hpc = res;
+		}))
+		.then(findOrCreateTable('deliverables',value.cloud)
+		.then(function(res){
+			cloud = res;
+		}))
+		.then(findOrCreateTable('hardwares',value.hardware)
+		.then(function(res){
+			hardware = res;
+		}))
+		.then(findOrCreateTable('humanressources',value.members)
+		.then(function(res){
+			hr = res;
+		}))
+		.then(function(){
+			softdev 				= getIdTable(value.softdev);
+			datatransfer 		= getIdTable(value.datatransfer);
+			virtualization	= getIdTable(value.virtualization);
+			devenv 					= getIdTable(value.devenv);
+			angular.forEach(value.collabs,function(val){
+				collabs.push(val.id);
+			});
+		}).then(function(){
+			var treatedValues = {
+				'name'            : value.name,
+				'date'            : value.date,
+				'description'     : value.description,
+				'risks'           : value.risks,
+				'dependency'      : dependencies,
+				'requirements'    : requirements,
+				'softdev'         : softdev,
+				'datatransfer'    : datatransfer,
+				'collabs'         : collabs,
+				'virtualization'  : virtualization,
+				'devenv'          : devenv,
+				'hpcRessource'    : value.hpcRessource,
+				'cloudRessource'  : value.cloudRessource,
+				'hpc'             : hpc,
+				'cloud'           : cloud,
+				'hardware'        : hardware,
+				'hr'              : hr
+			};
+			fulfill(treatedValues);
 		});
-
-		var treatedValues = {
-			'name'            : value.name,
-			'date'            : value.date,
-			'description'     : value.description,
-			'risks'           : value.risks,
-			'dependency'      : dependencies,
-			'requirements'    : requirements,
-			'softdev'         : softdev,
-			'datatransfer'    : datatransfer,
-			'collabs'         : [String],
-			'virtualization'  : virtualization,
-			'devenv'          : devenv,
-			'hpcRessource'    : value.hpcRessource,
-			'cloudRessource'  : value.cloudRessource,
-			'hpc'             : hpc,
-			'cloud'           : cloud,
-			'hardware'        : hardware,
-			'hr'              : hr
-		};
-
-		return treatedValues;
 	};
 
 	function treatHpcCloud(value){
