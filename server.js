@@ -8,7 +8,10 @@ var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 
 // Configuration ===============================================================
-mongoose.connect('mongodb://localhost:27017/proposaldb');
+mongoose.connect('mongodb://localhost:27017/proposaldb',function(){
+    /* Drop the DB */
+    mongoose.connection.db.dropDatabase();
+});
 
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
@@ -21,15 +24,15 @@ app.use(methodOverride());
 
   // Project -------------------------------------------------------------------
   var Project = mongoose.model('Project', {
-    proposal  : { type: Number, ref: 'Proposal' },
-    review    : { type: Number, ref: 'GeneralReview' }
+    proposal  : { type: String, ref: 'Proposal' },
+    review    : { type: String, ref: 'GeneralReview' }
   });
 
   // Proposal ------------------------------------------------------------------
   var Proposal = mongoose.model('Proposal', {
-    author      : { type: Number, ref: 'Person' },
+    author      : { type: String, ref: 'Person' },
     subDate     : Date,
-    submission  : { type: Number, ref: 'Submission' }
+    submission  : { type: String, ref: 'Submission' }
   });
 
   // Submission ----------------------------------------------------------------
@@ -45,18 +48,18 @@ app.use(methodOverride());
     usecase               : String,
     newproject            : Boolean,
     projectType           : { type: Number, min: 0, max: 2 },
-    pi                    : { type: Number, ref: 'Person' },
-    copi                  : { type: Number, ref: 'Person' },
-    members               : [{ type: Number, ref: 'Person' }],
-    teams                 : [{ type: Number, ref: 'Team' }],
-    tags                  : [{ type: Number, ref: 'Tag' }],
-    relatedProjects       : [{ type: Number, ref: 'RelatedProject' }],
-    shortDeliverable      : [{ type: Number, ref: 'ShortDeliverable' }],
-    publications          : [{ type: Number, ref: 'Publication' }],
-    grants                : [{ type: Number, ref: 'Grant' }],
-    tasks                 : [{ type: Number, ref: 'Task' }],
-    requirements          : [{ type: Number, ref: 'Requirement' }],
-    deliverables          : [{ type: Number, ref: 'Deliverable' }],
+    pi                    : { type: String, ref: 'Person' },
+    copi                  : { type: String, ref: 'Person' },
+    members               : [{ type: String, ref: 'Person' }],
+    teams                 : [{ type: String, ref: 'Team' }],
+    tags                  : [{ type: String, ref: 'Tag' }],
+    relatedProjects       : [{ type: String, ref: 'RelatedProject' }],
+    shortDeliverable      : [{ type: String, ref: 'ShortDeliverable' }],
+    publications          : [{ type: String, ref: 'Publication' }],
+    grants                : [{ type: String, ref: 'Grant' }],
+    tasks                 : [{ type: String, ref: 'Task' }],
+    requirements          : [{ type: String, ref: 'Requirement' }],
+    deliverables          : [{ type: String, ref: 'Deliverable' }],
   });
 
   // Person --------------------------------------------------------------------
@@ -101,7 +104,7 @@ app.use(methodOverride());
   // Task ----------------------------------------------------------------------
   var Task = mongoose.model('Task', {
     name  : String,
-    grant : { type: Number, ref: 'Grant' }
+    grant : { type: String, ref: 'Grant' }
   });
 
   // Tag -----------------------------------------------------------------------
@@ -113,11 +116,11 @@ app.use(methodOverride());
   // Requirement ---------------------------------------------------------------
   var Requirement = mongoose.model('Requirement', {
     title       : String,
-    type        : { type: Number, ref: 'RequirementType' },
+    type        : { type: String, ref: 'RequirementType' },
     requirement : String,
     feature     : String,
-    input       : [{ type: Number, ref: 'Input' }],
-    output      : [{ type: Number, ref: 'Output' }]
+    input       : [{ type: String, ref: 'Input' }],
+    output      : [{ type: String, ref: 'Output' }]
   });
 
   // RequirementType -----------------------------------------------------------
@@ -148,13 +151,13 @@ app.use(methodOverride());
     date            : Date,
     description     : String,
     risks           : String,
-    dependency      : [{ type: Number, ref: 'Deliverable' }],
-    requirements    : [{ type: Number, ref: 'Requirement' }],
-    softdev         : [{ type: Number, ref: 'SoftDev' }],
-    datatransfer    : [{ type: Number, ref: 'DataTransfer' }],
+    dependency      : [{ type: String, ref: 'Deliverable' }],
+    requirements    : [{ type: String, ref: 'Requirement' }],
+    softdev         : [{ type: String, ref: 'SoftDev' }],
+    datatransfer    : [{ type: String, ref: 'DataTransfer' }],
     collabs         : [String],
-    virtualization  : [{ type: Number, ref: 'Virtualization' }],
-    devenv          : [{ type: Number, ref: 'DevEnv' }],
+    virtualization  : [{ type: String, ref: 'Virtualization' }],
+    devenv          : [{ type: String, ref: 'DevEnv' }],
     hpcRessource    : Boolean,
     cloudRessource  : Boolean,
     hpc             : [{ type: Number, ref:'Hpc'}],
@@ -189,7 +192,7 @@ app.use(methodOverride());
 
   // HPC Ressources ------------------------------------------------------------
   var Hpc = mongoose.model('Hpc', {
-    type : { type: Number, ref: 'HpcType' },
+    type : { type: String, ref: 'HpcType' },
     runs : { type: Number, min: 0 },
     time : { type: Number, min: 0 },
     part : { type: Number, min: 0 },
@@ -205,7 +208,7 @@ app.use(methodOverride());
 
   // Cloud Ressources ----------------------------------------------------------
   var Cloud = mongoose.model('Cloud', {
-    type : { type: Number, ref: 'CloudType' },
+    type : { type: String, ref: 'CloudType' },
     runs : { type: Number, min: 0 },
     time : { type: Number, min: 0 },
     part : { type: Number, min: 0 },
@@ -243,14 +246,14 @@ app.use(methodOverride());
   // General Review ------------------------------------------------------------
   var GeneralReview = mongoose.model('GeneralReview', {
     grade : Number,
-    reviews : [{ type: Number, ref: 'Review' }]
+    reviews : [{ type: String, ref: 'Review' }]
   });
 
   // Review --------------------------------------------------------------------
   var Review = mongoose.model('Review', {
-    reviewer  : { type: Number, ref: 'Person' },
-    comments  : [{ type: Number, ref: 'Comment' }],
-    notes     : [{ type: Number, ref: 'Note' }]
+    reviewer  : { type: String, ref: 'Person' },
+    comments  : [{ type: String, ref: 'Comment' }],
+    notes     : [{ type: String, ref: 'Note' }]
   });
 
   // Comment -------------------------------------------------------------------

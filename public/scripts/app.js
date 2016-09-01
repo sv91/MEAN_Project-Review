@@ -128,7 +128,7 @@ angular
 .controller('MainController', function($scope) {
 })
 
-.controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage, $http, $state) {
+.controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage, $http, $state, $q) {
 	// we will store all of our form data in this object
 	if($scope.record == undefined | $scope.record == null){
 		console.log('scope');
@@ -145,7 +145,7 @@ angular
 		$scope.log=[];
 		$scope.minDate = new Date();
 		$scope.maxDate = new Date();
-		$scope.toCompare = [];
+		$scope.created = {};
 	}
 
 	// Check if all the required values were filled
@@ -248,7 +248,7 @@ angular
 		return toReturn;
 	};
 
-// Go to the needed state
+	// Go to the needed state
 	function goToState(direction){
 		var goTo = changeState(direction);
 		if (goTo != undefined & goTo != null & goTo !='main.proposalApp.'){
@@ -256,12 +256,12 @@ angular
 		}
 	}
 
-// Go to the next state
+	// Go to the next state
 	$scope.nextStep = function(){
 		goToState('next');
 	};
 
-// Go to the previous state
+	// Go to the previous state
 	$scope.previousStep = function(){
 		goToState('previous');
 	};
@@ -272,184 +272,308 @@ angular
 	};
 
 	// Functions managing the creation of new entries in the DB ==================
-	function findOrCreate(model, value){
-		console.log('findOrCreate('+model+','+JSON.stringify(value)+')');
-		var id = null;
-		if (value != undefined){
-		id = findId(model, value);
-		if (id == undefined || id == null){
-			id = createElem(model,value);
-		}
-		}
-		console.log('Created Elem: '+model+' : ' + id);
-		return id;
-	};
-
-	function findId(model,values){
-		console.log('findId('+model+','+JSON.stringify(values)+')');
-		var toReturn = null;
-		$http.get('/api/'+ model)
-		.success(function(data) {
-			$scope.toCompare[model] = data;
-			console.log('Found '+model+': '+ data);
-		})
-		.error(function(data) {
-			console.log('Error finding '+ '/api/'+ model  +': ' + data);
-		});
-		angular.forEach($scope.toCompare[model], function(val){
-			var id = 0;
-			var good = true;
-			var treatedValues = treatValue(model,val);
-			angular.forEach(treatedValues, function(value,key){
-				if(key == '_id'){
-					id = value;
-				} else if(key == '__v'){
-
-				} else {
-					console.log('Comparing values : ' + key + ':"'+value+'" and "'+values[key]+'"');
-					good = good & (value == findId(key+'s',values[key]));
-				}
-			});
-			if(good){
-			console.log('Good');
-				toReturn = id;
-			}
-		});
-		return toReturn;
-	};
-
-	function treatValue(model, value) {
-	console.log('Treating values');
-		var treatedValues = {};
-		switch(model) {
-			case 'projects':
-			treatedValues = treatProject(value);
-			break;
-			case 'proposals':
-			treatedValues = treatProposal(value);
-			break;
-			case 'persons':
-			treatedValues = treatPerson(value);
-			break;
-			case 'submissions':
-			treatedValues = treatSubmission(value);
-			break;
-			case 'tags':
-			treatedValues = treatTag(value);
-			break;
-			case 'requirements':
-			treatedValues = treatRequirement(value);
-			break;
-			case 'inputs':
-			treatedValues = treatInputOutput(value);
-			break;
-			case 'outputs':
-			treatedValues = treatInputOutput(value);
-			break;
-			case 'deliverables':
-			treatedValues = treatDeliverable(value);
-			break;
-			case 'hpcressources':
-			treatedValues = treatHpcCloud(value);
-			break;
-			case 'cloudressources':
-			treatedValues = treatHpcCloud(value);
-			break;
-			case 'hardwares':
-			treatedValues = treatHardware(value);
-			break;
-			case 'humanressources':
-			treatedValues = treatHr(value);
-			break;
-			default:
-			treatedValues = value;
-		}
-		console.log("treatedValues "+JSON.stringify(treatedValues));
-		return treatedValues;
-	}
-
-	function createElem(model, value) {
-		console.log('createElem('+model+','+JSON.stringify(value)+')');
-		var treatedValues = treatValue(model, value);
-		var toReturn = null;
-		if(treatedValues != '' & treatedValues != null  & treatedValues != {} ){
-			toReturn = createInDB(model,treatedValues);
-		}
-		console.log('Created Elem: '+model+' : ' + toReturn);
-		return toReturn;
-	};
-
-	function createInDB(model,value) {
-		console.log('createInDB('+model+','+JSON.stringify(value)+')');
-		var toReturn = null;
-		$http.post('/api/'+model, value)
-		.success(function(data){
-			console.log('Created Creating: '+model+' : ' + JSON.stringify(data));
-			toReturn = data;
-		})
-		.error(function(data) {
-			console.log('Error Creating: ' + data);
-		});
-		return toReturn;
-	};
-
 	function saveProject(){
 		console.log('saveProject');
-		findOrCreate('projects',$scope.record);
-	};
-
-	function findOrCreateTable(model,value){
-		console.log('findOrCreateTable('+model+','+JSON.stringify(value)+')');
-		var temp = [];
-		angular.forEach(value, function(val){
-			temp.push(findOrCreate(model,val));
+		findOrCreate('projects',$scope.record)
+		.then(function(res){
+			console.log('Project Saved :' + res);
+		}, function(){
+			console.log('Project Not Saved');
 		});
-		return temp;
 	};
 
-	function getIdTable(value){
-		console.log('getIdTable('+JSON.stringify(value)+')');
-		var temp = [];
-		angular.forEach(value, function(val){
-			temp.push(val._id);
+	function findOrCreate(model, value){
+		console.log('IN: findOrCreate: Model: '+model+' Value:'+JSON.stringify(value));
+		return new Promise(function (fulfill, reject){
+			if (value != undefined && value != null && value != '' && value != {}){
+				treatSelect(model,value)
+				.then(function(treated){
+					findId(model, treated)
+					.then(function(res){
+						console.log('ID_FOUND: Model: '+model+' Value:'+JSON.stringify(treated)+' ID:' +res);
+						// If we found an ID, return the ID.
+						fulfill(res);
+					},function(){
+						// If not we create the element.
+						createElem(model, treated)
+						.then(function(res){
+							console.log('ID_CREATE: Model: '+model+' Value:'+JSON.stringify(treated)+' ID:' +res);
+							//Return the ID of the created element if successful.
+							fulfill(res);
+						},function(){
+							// Otherwise reject.
+							console.log("Error: findOrCreate: \nElement not created:\nModel: "+ model+"\nValue: "+ JSON.stringify(treated));
+							reject();
+						});
+					});
+				});
+			} else {
+				// If the value is empty, return null.
+				fulfill(null);
+			}
 		});
-		return temp;
-	};
+	}
 
-	function treatProject(value){
-		console.log('TreatingProject:' + value);
-		var proposal = findOrCreate('proposals',value);
-		var treatedValues = {
-			'proposal'	: proposal,
-			'review'		: null
-		};
-			console.log('Treated:' + value);
-		return treatedValues;
-	};
 
-	function treatProposal(value){
-		var treatedValues = {
-			'subdate'			: $scope.today,
-			'author'			: findOrCreate('persons',value.pi),
-			'submission'	: findOrCreate('submissions',value)
-		};
-		return treatedValues;
-	};
 
-	function treatSubmission(value){
-		var teams 	= getIdTable(value.teams);
-		var grants	= getIdTable(value.grants);
-		var tasks 	= getIdTable(value.tasks);
+function findId(model,values){
+	return new Promise(function (fulfill, reject){
+		$http.get('/api/'+ model)
+		.success(function(res){
+				var found = false;
+				angular.forEach(res, function(val){
+					var good = true;
+					var id;
+					angular.forEach(val,function(value,key){
+						if(key == '_id'){
+							id = value;
+						} else if (key != '__v') {
+							good = good & (value == values[key]);
+						}
+					});
+					if(good){
+						found = true;
+						fulfill(id);
+					}
+				});
+				if(!found){
+					reject();
+				}
+			})
+		.error(function() {
+			console.log('Error: FindId: Table not found: '+model);
+			reject();
+		});
+	});
+}
 
-		var members 					= findOrCreateTable('persons',value.members);
-		var tags 							= findOrCreateTable('tags',value.tags);
-		var relatedProjects 	= findOrCreateTable('relatedprojects',value.relatedProjects);
-		var shortDeliverable	= findOrCreateTable('shortdeliverables',value.shortDeliverable);
-		var publications 			= findOrCreateTable('publications',value.publications);
-		var requirements 			= findOrCreateTable('requirements',value.requirements);
-		var deliverables 			= findOrCreateTable('deliverables',value.deliverables);
+function treatSelect(model,value) {
+	return new Promise(function (fulfill, reject){
+		switch(model) {
+			case 'projects':
+			treatProject(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'proposals':
+			treatProposal(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'persons':
+			treatPerson(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'submissions':
+			treatSubmission(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'tags':
+			treatTag(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'requirements':
+			treatRequirement(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'inputs':
+			treatInputOutput(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'outputs':
+			treatInputOutput(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'deliverables':
+			treatDeliverable(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'hpcressources':
+			treatHpcCloud(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'cloudressources':
+			treatHpcCloud(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'hardwares':
+			treatHardware(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			case 'humanressources':
+			treatHr(value).then(function(res){
+				fulfill(res);
+			});
+			break;
+			default:
+			treatOther(value).then(function(res){
+				fulfill(res);
+			});
+		}
+	});
+};
 
-		var treatedValues = {
+function createElem(model, value) {
+	return new Promise(function (fulfill, reject){
+		if(value != undefined && value != null && value != "" && value != {} ){
+				createInDB(model,value)
+				.then(function(res){
+					fulfill(res);
+				});
+		} else {
+			console.log("Error: createElem: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
+			reject();
+		}
+	});
+}
+
+function createInDB(model,value) {
+	return new Promise(function (fulfill, reject){
+		if(value != undefined && value != null && value != "" && value != {} ){
+			$http.post('/api/'+model, value)
+			.success(function(res){
+				console.log('Created : '+model+' : ' + JSON.stringify(res));
+				fulfill(res);
+			})
+			.error(function(data) {
+				console.log("Error: createInDB: Element not created.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
+				reject();
+			});
+		} else {
+			console.log("Error: createInDB: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
+			reject();
+		}
+	});
+};
+
+
+function findOrCreateTable(model,value){
+	return new Promise(function (fulfill, reject){
+		if(value != undefined && value != "" && value != null && value != [])
+		{
+			Promise.all(value.map(function(val){
+			return findOrCreate(model, val);
+		})).then(function(res){
+			fulfill(res);
+		});
+	} else {
+		fulfill([]);
+	}
+	});
+}
+
+function getIdTable(value){
+	var temp = [];
+	angular.forEach(value, function(val){
+		temp.push(val._id);
+	});
+	return temp;
+};
+
+function treatProject(value){
+	return new Promise(function (fulfill, reject){
+		findOrCreate('proposals',value)
+		.then(function(id){
+			var treatedValues = {
+				'proposal'	: id,
+				'review'		: null
+			};
+			fulfill(treatedValues);
+		});
+	});
+}
+
+function treatProposal(value){
+	return new Promise(function (fulfill, reject){
+		var persons;
+		var submissions;
+		findOrCreate('persons',value.pi)
+		.then(function(res){
+			persons = res;
+		})
+		.then(findOrCreate('submissions',value)
+		.then(function(res){
+			submissions = res;
+		})
+		.then(function(){
+			var treatedValues = {
+				'subdate'			: $scope.today,
+				'author'			: persons,
+				'submission'	: submissions
+			};
+			fulfill(treatedValues);
+		}));
+	});
+}
+
+function treatSubmission(value){
+	return new Promise(function (fulfill, reject){
+		var teams;
+		var grants;
+		var tasks;
+		var members;
+		var tags;
+		var relatedProjects;
+		var shortDeliverable;
+		var publications;
+		var requirements;
+		var deliverables;
+		var pi;
+		var copi;
+
+		findOrCreateTable('persons',value.members)
+		.then(function(res){
+			members = res;
+		})
+		.then(findOrCreateTable('tags',value.tags)
+		.then(function(res){
+			tags = res;
+		}))
+		.then(findOrCreateTable('relatedprojects',value.relatedProjects)
+		.then(function(res){
+			relatedProjects = res;
+		}))
+		.then(findOrCreateTable('shortdeliverables',value.shortDeliverable)
+		.then(function(res){
+			shortDeliverable = res;
+		}))
+		.then(findOrCreateTable('publications',value.publications)
+		.then(function(res){
+			publications = res;
+		}))
+		.then(findOrCreateTable('requirements',value.requirements)
+		.then(function(res){
+			requirements = res;
+		}))
+		.then(findOrCreateTable('deliverables',value.deliverables)
+		.then(function(res){
+			deliverables = res;
+		}))
+		.then(function(){
+			teams 	= getIdTable(value.teams);
+			grants	= getIdTable(value.grants);
+			tasks 	= getIdTable(value.tasks);
+		})
+		.then(findOrCreate('persons',value.pi)
+		.then(function(res){
+			pi = res;
+		}))
+		.then(findOrCreate('persons',value.copi)
+		.then(function(res){
+			copi = res;
+		}))
+		.then(function(){
+			var treatedValues = {
 			'projectStartDate'   		: value.projectStartDate,
 			'projectEndDate'        : value.projectEndDate,
 			'projectTitle'          : value.projectTitle,
@@ -461,8 +585,8 @@ angular
 			'usecase'               : value.usecase,
 			'newproject'            : value.newproject,
 			'projectType'           : value.projectType,
-			'pi'                    : findOrCreate('persons',value.pi),
-			'copi'                  : findOrCreate('persons',value.copi),
+			'pi'                    : pi,
+			'copi'                  : copi,
 			'members'               : members,
 			'teams'                 : teams,
 			'tags'                  : tags,
@@ -473,141 +597,145 @@ angular
 			'tasks'                 : tasks,
 			'requirements'          : requirements,
 			'deliverables' 					: deliverables
-		};
-
-		return treatedValues;
-	};
-
-	function treatPerson(value){
-		var treatedValues = {};
-		if(value != undefined){
-			treatedValues = {
-				'id'					: value.id,
-				'displayName'	: value.displayName
 			};
-		}
-
-		return treatedValues;
-	};
-
-	function treatTag(value){
-		var treatedValues = {};
-		if(value._id != undefined){
-			treatedValues = value;
-		} else {
-			treatedValues = {
-				'name'	: value,
-				'use' 	: 1
-			}
-		}
-
-		return treatedValues;
-	};
-
-	function treatRequirement(value){
-		var inputs 	= findOrCreateTable('persons',value.input);
-		var outputs	= findOrCreateTable('persons',value.output);
-
-		var treatedValues = {
-			'title'       : value.title,
-			'type'        : value.type._id,
-			'requirement' : value.requirement,
-			'feature'     : value.feature,
-			'input'       : inputs,
-			'output'      : outputs
-		};
-
-		return treatedValues;
-	};
-
-	function treatInputOutput(value){
-		var treatedValues = {
-			'tag'     : value.tag,
-			'format'  : value.format,
-			'number'  : value.number,
-			'size'    : value.size
-		};
-
-		return treatedValues;
-	};
-
-	function treatDeliverable(value){
-		var softdev 				= getIdTable(value.softdev);
-		var datatransfer 		= getIdTable(value.datatransfer);
-		var virtualization	= getIdTable(value.virtualization);
-		var devenv 					= getIdTable(value.devenv);
-
-		var dependencies	= findOrCreateTable('deliverables',value.dependency);
-		var requirements 	= findOrCreateTable('requirements',value.requirement);
-		var hpc 					= findOrCreateTable('hpcressources',value.hpc);
-		var cloud 				= findOrCreateTable('deliverables',value.cloud);
-		var hardware 			= findOrCreateTable('hardwares',value.hardware);
-		var hr 						= findOrCreateTable('humanressources',value.members);
-
-		var collabs = [];
-		angular.forEach(value.collabs,function(val){
-			collabs.push(val.id);
+			fulfill(treatedValues);
 		});
+	});
+}
 
-		var treatedValues = {
-			'name'            : value.name,
-			'date'            : value.date,
-			'description'     : value.description,
-			'risks'           : value.risks,
-			'dependency'      : dependencies,
-			'requirements'    : requirements,
-			'softdev'         : softdev,
-			'datatransfer'    : datatransfer,
-			'collabs'         : [String],
-			'virtualization'  : virtualization,
-			'devenv'          : devenv,
-			'hpcRessource'    : value.hpcRessource,
-			'cloudRessource'  : value.cloudRessource,
-			'hpc'             : hpc,
-			'cloud'           : cloud,
-			'hardware'        : hardware,
-			'hr'              : hr
+function treatPerson(value){
+	var deferred = $q.defer();
+	var treatedValues = null;
+	if(value != undefined && value!=null && value!=''){
+		treatedValues = {
+			'id'					: value.id,
+			'displayName'	: value.displayName
 		};
+	}
+	deferred.resolve(treatedValues);
+	return deferred.promise;
+};
 
-		return treatedValues;
+function treatTag(value){
+	var treatedValues = {};
+	if(value._id != undefined){
+		treatedValues = value;
+	} else {
+		treatedValues = {
+			'name'	: value,
+			'use' 	: 1
+		}
+	}
+
+	return treatedValues;
+};
+
+function treatRequirement(value){
+	var inputs 	= findOrCreateTable('persons',value.input);
+	var outputs	= findOrCreateTable('persons',value.output);
+
+	var treatedValues = {
+		'title'       : value.title,
+		'type'        : value.type._id,
+		'requirement' : value.requirement,
+		'feature'     : value.feature,
+		'input'       : inputs,
+		'output'      : outputs
 	};
 
-	function treatHpcCloud(value){
-		var treatedValues = {
-			'type' : value.type._id,
-			'runs' : value.runs,
-			'time' : value.time,
-			'part' : value.part,
-			'arte' : value.arte,
-			'size' : value.size
-		};
+	return treatedValues;
+};
 
-		return treatedValues;
+function treatInputOutput(value){
+	var treatedValues = {
+		'tag'     : value.tag,
+		'format'  : value.format,
+		'number'  : value.number,
+		'size'    : value.size
 	};
 
-	function treatHardware(value){
-		var treatedValues = {
-			'name'        : value.name,
-			'price'       : value.price,
-			'link'        : value.link,
-			'description' : value.description
-		};
+	return treatedValues;
+};
 
-		return treatedValues;
+function treatDeliverable(value){
+	var softdev 				= getIdTable(value.softdev);
+	var datatransfer 		= getIdTable(value.datatransfer);
+	var virtualization	= getIdTable(value.virtualization);
+	var devenv 					= getIdTable(value.devenv);
+
+	var dependencies	= findOrCreateTable('deliverables',value.dependency);
+	var requirements 	= findOrCreateTable('requirements',value.requirement);
+	var hpc 					= findOrCreateTable('hpcressources',value.hpc);
+	var cloud 				= findOrCreateTable('deliverables',value.cloud);
+	var hardware 			= findOrCreateTable('hardwares',value.hardware);
+	var hr 						= findOrCreateTable('humanressources',value.members);
+
+	var collabs = [];
+	angular.forEach(value.collabs,function(val){
+		collabs.push(val.id);
+	});
+
+	var treatedValues = {
+		'name'            : value.name,
+		'date'            : value.date,
+		'description'     : value.description,
+		'risks'           : value.risks,
+		'dependency'      : dependencies,
+		'requirements'    : requirements,
+		'softdev'         : softdev,
+		'datatransfer'    : datatransfer,
+		'collabs'         : [String],
+		'virtualization'  : virtualization,
+		'devenv'          : devenv,
+		'hpcRessource'    : value.hpcRessource,
+		'cloudRessource'  : value.cloudRessource,
+		'hpc'             : hpc,
+		'cloud'           : cloud,
+		'hardware'        : hardware,
+		'hr'              : hr
 	};
 
-	function treatHr(value){
-		console.log("Treating HR: "+JSON.stringify(value));
+	return treatedValues;
+};
 
-		var treatedValues = {
-			'name'        : value.name,
-			'role'        : value.role,
-			'pm'          : value.pm,
-			'description' : value.description
-		};
-
-		console.log("Treated HR: "+ JSON.stringify(treatedValues));
-		return treatedValues;
+function treatHpcCloud(value){
+	var treatedValues = {
+		'type' : value.type._id,
+		'runs' : value.runs,
+		'time' : value.time,
+		'part' : value.part,
+		'arte' : value.arte,
+		'size' : value.size
 	};
+
+	return treatedValues;
+};
+
+function treatHardware(value){
+	var treatedValues = {
+		'name'        : value.name,
+		'price'       : value.price,
+		'link'        : value.link,
+		'description' : value.description
+	};
+
+	return treatedValues;
+};
+
+function treatHr(value){
+	console.log("Treating HR: "+JSON.stringify(value));
+
+	var treatedValues = {
+		'name'        : value.name,
+		'role'        : value.role,
+		'pm'          : value.pm,
+		'description' : value.description
+	};
+
+	console.log("Treated HR: "+ JSON.stringify(treatedValues));
+	return treatedValues;
+};
+
+
 
 });
