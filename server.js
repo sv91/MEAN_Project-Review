@@ -242,7 +242,8 @@ app.use(methodOverride());
 
   // General Review ------------------------------------------------------------
   var GeneralReview = mongoose.model('GeneralReview', {
-    grade : Number,
+    grade   : Number,
+    status  : String,
     reviews : [{ type: String, ref: 'Review' }]
   });
 

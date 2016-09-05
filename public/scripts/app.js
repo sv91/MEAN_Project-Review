@@ -118,11 +118,30 @@ angular
 	$http.get('/api/projects')
 	.success(function(data) {
 		$scope.data.projects = data;
-		console.log(data);
 	})
 	.error(function(data) {
-		console.log('Error: ' + data);
+		console.log('Error: reviewAppController: Projects could not be loaded.');
 	});
+
+
+		// when landing on the page, get all the projects and show them
+		$http.get('/api/proposals')
+		.success(function(data) {
+			$scope.data.proposals = data;
+		})
+		.error(function(data) {
+			console.log('Error: reviewAppController: Proposals could not be loaded.');
+		});
+
+
+			// when landing on the page, get all the projects and show them
+			$http.get('/api/submissions')
+			.success(function(data) {
+				$scope.data.submissions = data;
+			})
+			.error(function(data) {
+				console.log('Error: reviewAppController: Submissions could not be loaded.');
+			});
 })
 
 .controller('MainController', function($scope) {
@@ -676,7 +695,7 @@ angular
 					'output'      : res.output
 				};
 				fulfill(treatedValues);
-			}));
+			});
 		});
 	}
 
@@ -775,7 +794,7 @@ angular
 					'hr'              : res.hr
 				};
 				fulfill(treatedValues);
-			}))))));
+			});
 		});
 	}
 
