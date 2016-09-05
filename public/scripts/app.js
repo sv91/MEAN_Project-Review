@@ -697,69 +697,82 @@ angular
 
 	function treatDeliverable(value){
 		return new Promise(function (fulfill, reject){
-			var softdev;
-			var datatransfer;
-			var virtualization;
-			var devenv;
-			var dependencies;
-			var requirements;
-			var hpc;
-			var cloud;
-			var hardware;
-			var hr;
-			var collabs = [];
-
 			findOrCreateTable('deliverables',value.dependency)
 			.then(function(res){
-				dependencies = res;
+				var results = {};
+				results.dependency = res;
+				return results;
 			})
-			.then(findOrCreateTable('requirements',value.requirement)
 			.then(function(res){
-				requirements = res;
+				return findOrCreateTable('requirements',value.requirement)
+				.then(function(res2){
+					var results = res;
+					results.requirement = res2;
+					return results;
+				})
 			})
-			.then(findOrCreateTable('hpcressources',value.hpc)
 			.then(function(res){
-				hpc = res;
+				return findOrCreateTable('hpcressources',value.hpc)
+				.then(function(res2){
+					var results = res;
+					results.hpc = res2;
+					return results;
+				})
 			})
-			.then(findOrCreateTable('deliverables',value.cloud)
 			.then(function(res){
-				cloud = res;
+				return findOrCreateTable('cloudressources',value.cloud)
+				.then(function(res2){
+					var results = res;
+					results.cloud = res2;
+					return results;
+				})
 			})
-			.then(findOrCreateTable('hardwares',value.hardware)
 			.then(function(res){
-				hardware = res;
+				return findOrCreateTable('hardwares',value.hardware)
+				.then(function(res2){
+					var results = res;
+					results.hardware = res2;
+					return results;
+				})
 			})
-			.then(findOrCreateTable('humanressources',value.members)
 			.then(function(res){
-				hr = res;
+				return findOrCreateTable('humanressources',value.members)
+				.then(function(res2){
+					var results = res;
+					results.hr = res2;
+					return results;
+				})
 			})
-			.then(function(){
-				softdev 				= getIdTable(value.softdev);
-				datatransfer 		= getIdTable(value.datatransfer);
-				virtualization	= getIdTable(value.virtualization);
-				devenv 					= getIdTable(value.devenv);
+			.then(function(res){
+				var results = res;
+				results.softdev 				= getIdTable(value.softdev);
+				results.datatransfer 		= getIdTable(value.datatransfer);
+				results.virtualization	= getIdTable(value.virtualization);
+				results.devenv 					= getIdTable(value.devenv);
+				results.collabs					= [];
 				angular.forEach(value.collabs,function(val){
-					collabs.push(val.id);
+					results.collabs.push(val.id);
 				});
-			}).then(function(){
+				return results;
+			}).then(function(res){
 				var treatedValues = {
 					'name'            : value.name,
 					'date'            : value.date,
 					'description'     : value.description,
 					'risks'           : value.risks,
-					'dependency'      : dependencies,
-					'requirements'    : requirements,
-					'softdev'         : softdev,
-					'datatransfer'    : datatransfer,
-					'collabs'         : collabs,
-					'virtualization'  : virtualization,
-					'devenv'          : devenv,
+					'dependency'      : res.dependency,
+					'requirements'    : res.requirement,
+					'softdev'         : res.softdev,
+					'datatransfer'    : res.datatransfer,
+					'collabs'         : res.collabs,
+					'virtualization'  : res.virtualization,
+					'devenv'          : res.devenv,
 					'hpcRessource'    : value.hpcRessource,
 					'cloudRessource'  : value.cloudRessource,
-					'hpc'             : hpc,
-					'cloud'           : cloud,
-					'hardware'        : hardware,
-					'hr'              : hr
+					'hpc'             : res.hpc,
+					'cloud'           : res.cloud,
+					'hardware'        : res.hardware,
+					'hr'              : res.hr
 				};
 				fulfill(treatedValues);
 			}))))));
