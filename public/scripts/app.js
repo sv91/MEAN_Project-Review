@@ -131,7 +131,6 @@ angular
 .controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage, $http, $state, $q) {
 	// we will store all of our form data in this object
 	if($scope.record == undefined | $scope.record == null){
-		console.log('scope');
 		$scope.record = $sessionStorage;
 		$scope.summ = {};
 		$scope.faq = '';
@@ -283,21 +282,18 @@ angular
 	};
 
 	function findOrCreate(model, value){
-		console.log('IN: findOrCreate: Model: '+model+' Value:'+JSON.stringify(value));
 		return new Promise(function (fulfill, reject){
 			if (value != undefined && value != null && value != '' && value != {}){
 				treatSelect(model,value)
 				.then(function(treated){
 					findId(model, treated)
 					.then(function(res){
-						console.log('ID_FOUND: Model: '+model+' Value:'+JSON.stringify(treated)+' ID:' +res);
 						// If we found an ID, return the ID.
 						fulfill(res);
 					},function(){
 						// If not we create the element.
 						createElem(model, treated)
 						.then(function(res){
-							console.log('ID_CREATE: Model: '+model+' Value:'+JSON.stringify(treated)+' ID:' +res);
 							//Return the ID of the created element if successful.
 							fulfill(res);
 						},function(){
@@ -313,8 +309,6 @@ angular
 			}
 		});
 	}
-
-
 
 	function findId(model,values){
 		return new Promise(function (fulfill, reject){
@@ -533,46 +527,95 @@ angular
 
 			findOrCreateTable('persons',value.members)
 			.then(function(res){
-				members = res;
+				console.log('1 Member definition');
+				var results = {};
+				results.members = res;
+				return results;
 			})
-			.then(findOrCreateTable('tags',value.tags)
 			.then(function(res){
-				tags = res;
-			}))
-			.then(findOrCreateTable('relatedprojects',value.relatedProjects)
-			.then(function(res){
-				relatedProjects = res;
-			}))
-			.then(findOrCreateTable('shortdeliverables',value.shortDeliverable)
-			.then(function(res){
-				shortDeliverable = res;
-			}))
-			.then(findOrCreateTable('publications',value.publications)
-			.then(function(res){
-				publications = res;
-			}))
-			.then(findOrCreateTable('requirements',value.requirements)
-			.then(function(res){
-				requirements = res;
-			}))
-			.then(findOrCreateTable('deliverables',value.deliverables)
-			.then(function(res){
-				deliverables = res;
-			}))
-			.then(function(){
-				teams 	= getIdTable(value.teams);
-				grants	= getIdTable(value.grants);
-				tasks 	= getIdTable(value.tasks);
+				return findOrCreateTable('tags',value.tags)
+				.then(function(res2){
+					console.log('2 Tags definition');
+					var results = res;
+					results.tags = res2;
+					return results;
+				})
 			})
-			.then(findOrCreate('persons',value.pi)
 			.then(function(res){
-				pi = res;
-			}))
-			.then(findOrCreate('persons',value.copi)
+				return findOrCreateTable('relatedprojects',value.relatedProjects)
+				.then(function(res2){
+					console.log('3 RProject definition');
+					var results = res;
+					results.relatedProjects = res2;
+					return results;
+				})
+			})
 			.then(function(res){
-				copi = res;
-			}))
-			.then(function(){
+				return findOrCreateTable('shortdeliverables',value.shortDeliverable)
+				.then(function(res2){
+					console.log('4 SDeli definition');
+					var results = res;
+					console.log("shortD: " + JSON.stringify(res));
+					results.shortDeliverable = res2;
+					return results;
+				})
+			})
+			.then(function(res){
+				return findOrCreateTable('publications',value.publications)
+				.then(function(res2){
+					console.log('5 Publi definition');
+					var results = res;
+					results.publications = res2;
+					return results;
+				})
+			})
+			.then(function(res){
+				return findOrCreateTable('requirements',value.requirements)
+				.then(function(res2){
+					console.log('6 Req definition');
+					var results = res;
+					console.log("req: " + JSON.stringify(res));
+					results.requirements = res2;
+					return results;
+				})
+			})
+			.then(function(res){
+				return findOrCreateTable('deliverables',value.deliverables)
+				.then(function(res2){
+					console.log('7 Deli definition');
+					var results = res;
+					results.deliverables = res2;
+					return results;
+				})
+			})
+			.then(function(res){
+				console.log('8 ID definition');
+				var results = res;
+				results.teams 	= getIdTable(value.teams);
+				results.grants	= getIdTable(value.grants);
+				results.tasks 	= getIdTable(value.tasks);
+				return results;
+			})
+			.then(function(res){
+				return findOrCreate('persons',value.pi)
+				.then(function(res2){
+					console.log('9 PI definition');
+					var results = res;
+					results.pi = res2;
+					return results;
+				})
+			})
+			.then(function(res){
+				return findOrCreate('persons',value.copi)
+				.then(function(res2){
+					console.log('10 co-pi definition');
+					var results = res;
+					results.copi = res2;
+					return results;
+				})
+			})
+			.then(function(res){
+				console.log('11 treatedValue definition');
 				var treatedValues = {
 					'projectStartDate'   		: value.projectStartDate,
 					'projectEndDate'        : value.projectEndDate,
@@ -585,19 +628,20 @@ angular
 					'usecase'               : value.usecase,
 					'newproject'            : value.newproject,
 					'projectType'           : value.projectType,
-					'pi'                    : pi,
-					'copi'                  : copi,
-					'members'               : members,
-					'teams'                 : teams,
-					'tags'                  : tags,
-					'relatedProjects'       : relatedProjects,
-					'shortDeliverable'      : shortDeliverable,
-					'publications'          : publications,
-					'grants'                : grants,
-					'tasks'                 : tasks,
-					'requirements'          : requirements,
-					'deliverables' 					: deliverables
+					'pi'                    : res.pi,
+					'copi'                  : res.copi,
+					'members'               : res.members,
+					'teams'                 : res.teams,
+					'tags'                  : res.tags,
+					'relatedProjects'       : res.relatedProjects,
+					'shortDeliverable'      : res.shortDeliverable,
+					'publications'          : res.publications,
+					'grants'                : res.grants,
+					'tasks'                 : res.tasks,
+					'requirements'          : res.requirements,
+					'deliverables' 					: res.deliverables
 				};
+				console.log(JSON.stringify(treatedValues))
 				fulfill(treatedValues);
 			});
 		});
@@ -632,27 +676,29 @@ angular
 	}
 
 	function treatRequirement(value){
-		var inputs 	= findOrCreateTable('inputs',value.input);
-		var outputs	= findOrCreateTable('outputs',value.output);
-		findOrCreateTable('persons',value.input)
-		.then(function(res){
-			inputs = res;
-		})
-		.then(findOrCreateTable('tags',value.output)
-		.then(function(res){
-			outputs = res;
-		})
-		.then(function(){
-			var treatedValues = {
-				'title'       : value.title,
-				'type'        : value.type._id,
-				'requirement' : value.requirement,
-				'feature'     : value.feature,
-				'input'       : inputs,
-				'output'      : outputs
-			};
-			fulfill(treatedValues);
-		}));
+		return new Promise(function (fulfill, reject){
+			var inputs;
+			var outputs;
+			findOrCreateTable('persons',value.input)
+			.then(function(res){
+				inputs = res;
+			})
+			.then(findOrCreateTable('tags',value.output)
+			.then(function(res){
+				outputs = res;
+			})
+			.then(function(){
+				var treatedValues = {
+					'title'       : value.title,
+					'type'        : value.type._id,
+					'requirement' : value.requirement,
+					'feature'     : value.feature,
+					'input'       : inputs,
+					'output'      : outputs
+				};
+				fulfill(treatedValues);
+			}));
+		});
 	}
 
 	function treatInputOutput(value){
@@ -671,73 +717,75 @@ angular
 	};
 
 	function treatDeliverable(value){
-		var softdev;
-		var datatransfer;
-		var virtualization;
-		var devenv;
-		var dependencies;
-		var requirements;
-		var hpc;
-		var cloud;
-		var hardware;
-		var hr;
-		var collabs = [];
+		return new Promise(function (fulfill, reject){
+			var softdev;
+			var datatransfer;
+			var virtualization;
+			var devenv;
+			var dependencies;
+			var requirements;
+			var hpc;
+			var cloud;
+			var hardware;
+			var hr;
+			var collabs = [];
 
-		findOrCreateTable('deliverables',value.dependency)
-		.then(function(res){
-			dependencies = res;
-		})
-		.then(findOrCreateTable('requirements',value.requirement)
-		.then(function(res){
-			requirements = res;
-		}))
-		.then(findOrCreateTable('hpcressources',value.hpc)
-		.then(function(res){
-			hpc = res;
-		}))
-		.then(findOrCreateTable('deliverables',value.cloud)
-		.then(function(res){
-			cloud = res;
-		}))
-		.then(findOrCreateTable('hardwares',value.hardware)
-		.then(function(res){
-			hardware = res;
-		}))
-		.then(findOrCreateTable('humanressources',value.members)
-		.then(function(res){
-			hr = res;
-		}))
-		.then(function(){
-			softdev 				= getIdTable(value.softdev);
-			datatransfer 		= getIdTable(value.datatransfer);
-			virtualization	= getIdTable(value.virtualization);
-			devenv 					= getIdTable(value.devenv);
-			angular.forEach(value.collabs,function(val){
-				collabs.push(val.id);
-			});
-		}).then(function(){
-			var treatedValues = {
-				'name'            : value.name,
-				'date'            : value.date,
-				'description'     : value.description,
-				'risks'           : value.risks,
-				'dependency'      : dependencies,
-				'requirements'    : requirements,
-				'softdev'         : softdev,
-				'datatransfer'    : datatransfer,
-				'collabs'         : collabs,
-				'virtualization'  : virtualization,
-				'devenv'          : devenv,
-				'hpcRessource'    : value.hpcRessource,
-				'cloudRessource'  : value.cloudRessource,
-				'hpc'             : hpc,
-				'cloud'           : cloud,
-				'hardware'        : hardware,
-				'hr'              : hr
-			};
-			fulfill(treatedValues);
+			findOrCreateTable('deliverables',value.dependency)
+			.then(function(res){
+				dependencies = res;
+			})
+			.then(findOrCreateTable('requirements',value.requirement)
+			.then(function(res){
+				requirements = res;
+			})
+			.then(findOrCreateTable('hpcressources',value.hpc)
+			.then(function(res){
+				hpc = res;
+			})
+			.then(findOrCreateTable('deliverables',value.cloud)
+			.then(function(res){
+				cloud = res;
+			})
+			.then(findOrCreateTable('hardwares',value.hardware)
+			.then(function(res){
+				hardware = res;
+			})
+			.then(findOrCreateTable('humanressources',value.members)
+			.then(function(res){
+				hr = res;
+			})
+			.then(function(){
+				softdev 				= getIdTable(value.softdev);
+				datatransfer 		= getIdTable(value.datatransfer);
+				virtualization	= getIdTable(value.virtualization);
+				devenv 					= getIdTable(value.devenv);
+				angular.forEach(value.collabs,function(val){
+					collabs.push(val.id);
+				});
+			}).then(function(){
+				var treatedValues = {
+					'name'            : value.name,
+					'date'            : value.date,
+					'description'     : value.description,
+					'risks'           : value.risks,
+					'dependency'      : dependencies,
+					'requirements'    : requirements,
+					'softdev'         : softdev,
+					'datatransfer'    : datatransfer,
+					'collabs'         : collabs,
+					'virtualization'  : virtualization,
+					'devenv'          : devenv,
+					'hpcRessource'    : value.hpcRessource,
+					'cloudRessource'  : value.cloudRessource,
+					'hpc'             : hpc,
+					'cloud'           : cloud,
+					'hardware'        : hardware,
+					'hr'              : hr
+				};
+				fulfill(treatedValues);
+			}))))));
 		});
-	};
+	}
 
 	function treatHpcCloud(value){
 		return new Promise(function (fulfill, reject){
@@ -781,6 +829,16 @@ angular
 					'pm'          : value.pm,
 					'description' : value.description
 				};
+			}
+			fulfill(treatedValues);
+		});
+	};
+
+	function treatOther(value){
+		return new Promise(function (fulfill, reject){
+			var treatedValues = null;
+			if(value != undefined && value!=null && value!=''){
+				treatedValues = value
 			}
 			fulfill(treatedValues);
 		});
