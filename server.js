@@ -8,10 +8,7 @@ var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 
 // Configuration ===============================================================
-mongoose.connect('mongodb://localhost:27017/proposaldb',function(){
-    /* Drop the DB */
-    mongoose.connection.db.dropDatabase();
-});
+mongoose.connect('mongodb://localhost:27017/proposaldb');
 
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
