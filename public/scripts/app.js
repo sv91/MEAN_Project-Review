@@ -428,6 +428,11 @@ angular
 					fulfill(res);
 				});
 				break;
+				case 'review':
+				treatReview(value).then(function(res){
+					fulfill(res);
+				});
+				break;
 				default:
 				treatOther(value).then(function(res){
 					fulfill(res);
@@ -493,16 +498,39 @@ angular
 		return temp;
 	};
 
+	function treatReview(value){
+		return new Promise(function (fulfill, reject){
+			var treatedValues = null;
+			if(value != undefined && value!=null && value!=''){
+				treatedValues = {
+					'grade'		: null,
+					'status'	: 'submitted',
+					'reviews'	: []
+				};
+			}
+			fulfill(treatedValues);
+		});
+	}
+
 	function treatProject(value){
 		return new Promise(function (fulfill, reject){
+			var proposal;
+			var review;
 			findOrCreate('proposals',value)
-			.then(function(id){
+			.then(function(res){
+				proposal = res;
+			})
+			.then(findOrCreate('review',value)
+			.then(function(res){
+				review = res;
+			})
+			.then(function(){
 				var treatedValues = {
-					'proposal'	: id,
-					'review'		: null
+					'proposal'	: proposal,
+					'review'		: review
 				};
 				fulfill(treatedValues);
-			});
+			}));
 		});
 	}
 
