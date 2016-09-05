@@ -512,22 +512,10 @@ angular
 
 	function treatSubmission(value){
 		return new Promise(function (fulfill, reject){
-			var teams;
-			var grants;
-			var tasks;
-			var members;
-			var tags;
-			var relatedProjects;
-			var shortDeliverable;
-			var publications;
-			var requirements;
-			var deliverables;
-			var pi;
-			var copi;
-
+			// Promises chain to get the needed information, each step get the new
+			// values and stores them in an object passed to the next step.
 			findOrCreateTable('persons',value.members)
 			.then(function(res){
-				console.log('1 Member definition');
 				var results = {};
 				results.members = res;
 				return results;
@@ -535,7 +523,6 @@ angular
 			.then(function(res){
 				return findOrCreateTable('tags',value.tags)
 				.then(function(res2){
-					console.log('2 Tags definition');
 					var results = res;
 					results.tags = res2;
 					return results;
@@ -544,7 +531,6 @@ angular
 			.then(function(res){
 				return findOrCreateTable('relatedprojects',value.relatedProjects)
 				.then(function(res2){
-					console.log('3 RProject definition');
 					var results = res;
 					results.relatedProjects = res2;
 					return results;
@@ -553,9 +539,7 @@ angular
 			.then(function(res){
 				return findOrCreateTable('shortdeliverables',value.shortDeliverable)
 				.then(function(res2){
-					console.log('4 SDeli definition');
 					var results = res;
-					console.log("shortD: " + JSON.stringify(res));
 					results.shortDeliverable = res2;
 					return results;
 				})
@@ -563,7 +547,6 @@ angular
 			.then(function(res){
 				return findOrCreateTable('publications',value.publications)
 				.then(function(res2){
-					console.log('5 Publi definition');
 					var results = res;
 					results.publications = res2;
 					return results;
@@ -572,9 +555,7 @@ angular
 			.then(function(res){
 				return findOrCreateTable('requirements',value.requirements)
 				.then(function(res2){
-					console.log('6 Req definition');
 					var results = res;
-					console.log("req: " + JSON.stringify(res));
 					results.requirements = res2;
 					return results;
 				})
@@ -582,14 +563,12 @@ angular
 			.then(function(res){
 				return findOrCreateTable('deliverables',value.deliverables)
 				.then(function(res2){
-					console.log('7 Deli definition');
 					var results = res;
 					results.deliverables = res2;
 					return results;
 				})
 			})
 			.then(function(res){
-				console.log('8 ID definition');
 				var results = res;
 				results.teams 	= getIdTable(value.teams);
 				results.grants	= getIdTable(value.grants);
@@ -599,7 +578,6 @@ angular
 			.then(function(res){
 				return findOrCreate('persons',value.pi)
 				.then(function(res2){
-					console.log('9 PI definition');
 					var results = res;
 					results.pi = res2;
 					return results;
@@ -608,14 +586,12 @@ angular
 			.then(function(res){
 				return findOrCreate('persons',value.copi)
 				.then(function(res2){
-					console.log('10 co-pi definition');
 					var results = res;
 					results.copi = res2;
 					return results;
 				})
 			})
 			.then(function(res){
-				console.log('11 treatedValue definition');
 				var treatedValues = {
 					'projectStartDate'   		: value.projectStartDate,
 					'projectEndDate'        : value.projectEndDate,
@@ -641,7 +617,6 @@ angular
 					'requirements'          : res.requirements,
 					'deliverables' 					: res.deliverables
 				};
-				console.log(JSON.stringify(treatedValues))
 				fulfill(treatedValues);
 			});
 		});
@@ -677,24 +652,28 @@ angular
 
 	function treatRequirement(value){
 		return new Promise(function (fulfill, reject){
-			var inputs;
-			var outputs;
-			findOrCreateTable('persons',value.input)
+			findOrCreateTable('inputs',value.input)
 			.then(function(res){
-				inputs = res;
+				var results = {};
+				results.input = res;
+				return results;
 			})
-			.then(findOrCreateTable('tags',value.output)
 			.then(function(res){
-				outputs = res;
+				return findOrCreateTable('outputs',value.output)
+				.then(function(res2){
+					var results = res;
+					results.output = res2;
+					return results;
+				})
 			})
-			.then(function(){
+			.then(function(res){
 				var treatedValues = {
 					'title'       : value.title,
 					'type'        : value.type._id,
 					'requirement' : value.requirement,
 					'feature'     : value.feature,
-					'input'       : inputs,
-					'output'      : outputs
+					'input'       : res.input,
+					'output'      : res.output
 				};
 				fulfill(treatedValues);
 			}));
