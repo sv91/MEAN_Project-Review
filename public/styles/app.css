@@ -549,26 +549,38 @@ md-datepicker{
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.typePicture0{
-  background: url("../images/bronze.png");
+.typePicture{
   background-repeat:no-repeat;
   background-size: 100% 100%;
   width:80px;
   height:80px;
+  position    : relative;
+}
+
+.typePicture0{
+  background-image: url("../images/bronze.png");
 }
 
 .typePicture1{
   background-image: url("../images/silver.png");
-  background-repeat:no-repeat;
-  background-size: 100% 100%;
-  width:80px;
-  height:80px;
 }
 
 .typePicture2{
   background-image: url("../images/gold.png");
-  background-repeat:no-repeat;
-  background-size: 100% 100%;
-  width:80px;
-  height:80px;
+}
+
+.statusPicture{
+  position      : absolute;
+  bottom        : 0;
+  right         : 0;
+  width         : 30px;
+  height        : 30px;
+  font-size     : 30px;
+  background-color: rgba(255,255,255,0.8);
+  border-radius : 50%;
+  border        : solid 1px rgba(0,0,0,0.5);
+}
+
+.statusPicture_submitted{
+  color : rgba(0,255,255,0.5);
 }

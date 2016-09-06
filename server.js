@@ -1066,10 +1066,32 @@ app.use(methodOverride());
 
     // Delete the specified element
     app.delete('/api/roles/:target_id/delete', function(req,res) {
-      delteOne(res, Role);
+      delteOne(res, GeneralReview);
     });
 
     // General Review ..........................................................
+    // Get all
+    app.get('/api/generalreviews', function(req, res){
+      findAll(res, GeneralReview);
+    });
+
+    // Create new Role
+    app.post('/api/generalreviews', function(req, res){
+      GeneralReview.create({
+        grade   : req.body.grade,
+        status  : req.body.status,
+        reviews : req.body.reviews
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        res.json(project._id);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/generalreviews/:target_id/delete', function(req,res) {
+      delteOne(res, GeneralReview);
+    });
 
     // Review ..................................................................
 

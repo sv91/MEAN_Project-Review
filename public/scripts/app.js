@@ -9,7 +9,7 @@
 * Main module of the application.
 */
 angular
-.module('proposalReviewApp', ['ui.router','ui.select','angular.filter','hbpCommon','bbpOidcClient','ui.bootstrap', 'ngStorage'])
+.module('proposalReviewApp', ['ui.router','ui.select','angular.filter','hbpCommon','bbpOidcClient','ui.bootstrap', 'ngStorage', 'ngMaterial'])
 .config(function ($stateProvider, $urlRouterProvider) {
 	// link adresses to views and controllers
 	$stateProvider
@@ -124,24 +124,33 @@ angular
 	});
 
 
-		// when landing on the page, get all the projects and show them
-		$http.get('/api/proposals')
-		.success(function(data) {
-			$scope.data.proposals = data;
-		})
-		.error(function(data) {
-			console.log('Error: reviewAppController: Proposals could not be loaded.');
-		});
+	// when landing on the page, get all the projects and show them
+	$http.get('/api/proposals')
+	.success(function(data) {
+		$scope.data.proposals = data;
+	})
+	.error(function(data) {
+		console.log('Error: reviewAppController: Proposals could not be loaded.');
+	});
 
 
-			// when landing on the page, get all the projects and show them
-			$http.get('/api/submissions')
-			.success(function(data) {
-				$scope.data.submissions = data;
-			})
-			.error(function(data) {
-				console.log('Error: reviewAppController: Submissions could not be loaded.');
-			});
+	// when landing on the page, get all the projects and show them
+	$http.get('/api/submissions')
+	.success(function(data) {
+		$scope.data.submissions = data;
+	})
+	.error(function(data) {
+		console.log('Error: reviewAppController: Submissions could not be loaded.');
+	});
+
+	// when landing on the page, get all the projects and show them
+	$http.get('/api/generalreviews')
+	.success(function(data) {
+		$scope.data.generalReviews = data;
+	})
+	.error(function(data) {
+		console.log('Error: reviewAppController: General Reviews could not be loaded.');
+	});
 })
 
 .controller('MainController', function($scope) {
@@ -428,8 +437,8 @@ angular
 					fulfill(res);
 				});
 				break;
-				case 'review':
-				treatReview(value).then(function(res){
+				case 'generalreviews':
+				treatReview().then(function(res){
 					fulfill(res);
 				});
 				break;
@@ -498,62 +507,67 @@ angular
 		return temp;
 	};
 
-	function treatReview(value){
+	function treatReview(){
 		return new Promise(function (fulfill, reject){
-			var treatedValues = null;
-			if(value != undefined && value!=null && value!=''){
-				treatedValues = {
-					'grade'		: null,
-					'status'	: 'submitted',
-					'reviews'	: []
-				};
-			}
+			var treatedValues = {
+				'grade'		: null,
+				'status'	: 'submitted',
+				'reviews'	: []
+			};
 			fulfill(treatedValues);
 		});
 	}
 
 	function treatProject(value){
 		return new Promise(function (fulfill, reject){
-			var proposal;
-			var review;
 			findOrCreate('proposals',value)
 			.then(function(res){
-				proposal = res;
+				var results = {};
+				results.proposal = res;
+				return results;
 			})
-			.then(findOrCreate('review',value)
 			.then(function(res){
-				review = res;
+				return findOrCreate('generalreviews',value)
+				.then(function(res2){
+					var results = res;
+					results.review = res2;
+					return results;
+				})
 			})
-			.then(function(){
+			.then(function(res){
 				var treatedValues = {
-					'proposal'	: proposal,
-					'review'		: review
+					'proposal'	: res.proposal,
+					'review'		: res.review
 				};
 				fulfill(treatedValues);
-			}));
+			});
 		});
 	}
 
 	function treatProposal(value){
 		return new Promise(function (fulfill, reject){
-			var persons;
-			var submissions;
 			findOrCreate('persons',value.pi)
 			.then(function(res){
-				persons = res;
+				var results = {};
+				results.persons = res;
+				return results;
 			})
-			.then(findOrCreate('submissions',value)
 			.then(function(res){
-				submissions = res;
+				return findOrCreate('submissions',value)
+				.then(function(res2){
+					var results = res;
+					results.submissions = res2;
+					return results;
+				})
 			})
-			.then(function(){
+			.then(function(res){
 				var treatedValues = {
 					'subdate'			: $scope.today,
-					'author'			: persons,
-					'submission'	: submissions
+					'author'			: res.persons,
+					'submission'	: res.submissions
 				};
 				fulfill(treatedValues);
-			}));
+			});
 		});
 	}
 

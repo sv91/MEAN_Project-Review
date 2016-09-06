@@ -1,23 +1,30 @@
-<div ng-repeat="proposal in data.proposals">
-  <div id="{{proposal._id}}" class="listElement evenElement{{$even}}" onclick="goTo(this.id);">
-    <div ng-repeat="sub in data.submissions | filter:{_id : proposal.submission}">
-    <div class="typeSquare">
-      <p class="typePicture{{sub.projectType}}" alt={{sub.projectType}}>
-      </p>
+<div ng-repeat="project in data.projects">
+  <div class="listElement evenElement{{$even}}" >
+  <div ng-repeat="proposal in data.proposals | filter: {_id : project.proposal}">
+    <div id="{{proposal._id}}" onclick="goTo(this.id);">
+      <div ng-repeat="sub in data.submissions | filter: {_id : proposal.submission}">
+        <div ng-repeat="rev in data.generalReviews | filter:{_id : project.review}">
+          <div class="typeSquare" >
+            <div class="typePicture typePicture{{sub.projectType}}" alt={{sub.projectType}}>
+                <span class="glyphicon glyphicon-question-sign statusPicture statusPicture_{{rev.status}}"></span>
+            </div>
+          </div>
+          <b>{{sub.projectTitle}}</b><hr class="smallHr" />
+          <i ng-repeat="p in data.persons | filter:{_id : proposal.author}">{{p.name}}</i><br />
+          {{sub.projectStartDate}} - {{sub.projectEndDate}}<br/>
+          <div style="text-align:right;"><u>Submitted:</u> {{proposal.subDate}}</div>
+        </div>
+      </div>
     </div>
-    <b>{{sub.projectTitle}}</b><hr class="smallHr" />
-    <i ng-repeat="p in data.persons | filter:{_id : proposal.author}">{{p.name}}</i><br />
-    {{sub.projectStartDate}} - {{sub.projectEndDate}}<br/>
-    <div style="text-align:right;"><u>Submitted:</u> {{proposal.subDate}}</div>
   </div>
 </div>
   <hr />
 </div>
- <!-- For tests
-      <pre>
-        {{ proposals | json }}
-      </pre>
-      -->
+<!-- For tests
+<pre>
+{{ data | json }}
+</pre>
+-->
 <script>
 function goTo(address, $window){
   console.log('go to ', address);
