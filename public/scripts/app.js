@@ -123,7 +123,6 @@ angular
 		console.log('Error: reviewAppController: Projects could not be loaded.');
 	});
 
-
 	// when landing on the page, get all the projects and show them
 	$http.get('/api/proposals')
 	.success(function(data) {
@@ -132,7 +131,6 @@ angular
 	.error(function(data) {
 		console.log('Error: reviewAppController: Proposals could not be loaded.');
 	});
-
 
 	// when landing on the page, get all the projects and show them
 	$http.get('/api/submissions')
@@ -151,6 +149,15 @@ angular
 	.error(function(data) {
 		console.log('Error: reviewAppController: General Reviews could not be loaded.');
 	});
+
+	// when landing on the page, get all the projects and show them
+	$http.get('/api/persons')
+	.success(function(data) {
+		$scope.data.persons = data;
+	})
+	.error(function(data) {
+		console.log('Error: reviewAppController: Persons could not be loaded.');
+	});
 })
 
 .controller('MainController', function($scope) {
@@ -166,10 +173,8 @@ angular
 		$scope.today = new Date();
 
 		$scope.membersAndLead = [];
-		$scope.log = [];
 
 		$scope.good = false;
-		$scope.log=[];
 		$scope.minDate = new Date();
 		$scope.maxDate = new Date();
 		$scope.created = {};
@@ -209,9 +214,9 @@ angular
 		}
 		var dateTemp = new Date();
 		if($scope.record.projectStartDate!=undefined ){
-			dateTemp = $scope.record.projectStartDate;
+			dateTemp = new Date($scope.record.projectStartDate);
 		}
-		$scope.minDate.setDate(dateTemp + numberOfDaysToAdd);
+		$scope.minDate.setDate(dateTemp.getDate() + numberOfDaysToAdd);
 	});
 
 	// Change the maximum date of the projects depending on the type of projects
@@ -226,9 +231,9 @@ angular
 		}
 		var dateTemp = new Date();
 		if($scope.record.projectStartDate!=undefined ){
-			dateTemp = $scope.record.projectStartDate;
+			dateTemp = new Date($scope.record.projectStartDate);
 		};
-		$scope.maxDate.setDate(dateTemp + numberOfDaysToAdd);
+		$scope.maxDate.setDate(dateTemp.getDate() + numberOfDaysToAdd);
 	});
 
 	// State order
@@ -553,7 +558,7 @@ angular
 			})
 			.then(function(res){
 				var treatedValues = {
-					'subdate'			: $scope.today,
+					'subdate'			: new Date(),
 					'author'			: res.persons,
 					'submission'	: res.submissions
 				};
@@ -676,6 +681,7 @@ angular
 
 	function treatPerson(value){
 		return new Promise(function (fulfill, reject){
+			console.log('Treating :'+ JSON.stringify(value));
 			var treatedValues = null;
 			if(value != undefined && value!=null && value!=''){
 				treatedValues = {

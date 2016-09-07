@@ -15,9 +15,12 @@
             </div>
           </div>
           <b>{{sub.projectTitle}}</b><hr class="smallHr" />
-          <i ng-repeat="p in data.persons | filter:{_id : proposal.author}">{{p.name}}</i><br />
+          <i ng-repeat="p in data.persons | filter:{_id : proposal.author}">{{p.displayName}}</i><br />
           {{sub.projectStartDate | date: "mediumDate"}} - {{sub.projectEndDate | date: "mediumDate"}}<br/>
-          <div style="text-align:right;"><u>Submitted:</u> {{proposal.subDate | date: "mediumDate"}}</div>
+          <div ng-show="rev.status == 'submitted'" style="text-align:right;"><u>Submitted:</u> {{proposal.subDate | date: "mediumDate"}}</div>
+          <div ng-show="rev.status == 'reviewing'" style="text-align:right;"><u>Last review:</u> {{proposal.subDate | date: "mediumDate"}}</div>
+          <div ng-show="rev.status == 'accepted'" style="text-align:right;"><u>Accepted:</u> {{proposal.subDate | date: "mediumDate"}}</div>
+          <div ng-show="rev.status == 'rejected'" style="text-align:right;"><u>Rejected:</u> {{proposal.subDate | date: "mediumDate"}}</div>
         </div>
       </div>
     </div>
