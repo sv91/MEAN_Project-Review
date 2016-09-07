@@ -558,7 +558,7 @@ angular
 			})
 			.then(function(res){
 				var treatedValues = {
-					'subdate'			: new Date(),
+					'subDate'			: new Date(),
 					'author'			: res.persons,
 					'submission'	: res.submissions
 				};
