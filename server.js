@@ -251,7 +251,7 @@ app.use(methodOverride());
   var Review = mongoose.model('Review', {
     reviewer  : { type: String, ref: 'Person' },
     comments  : [{ type: String, ref: 'Comment' }],
-    notes     : [{ type: String, ref: 'Note' }]
+    notes     : { type: String, ref: 'Note' }
   });
 
   // Comment -------------------------------------------------------------------
@@ -263,9 +263,23 @@ app.use(methodOverride());
 
   // Note -------------------------------------------------------------------
   var Note = mongoose.model('Note', {
-    timestamp : Date,
-    field     : String,
-    value     : String
+    timestamp       : Date,
+    bbpobjective    : Boolean,
+    contracted      : Boolean,
+    impact          : Number,
+    criticality     : Number,
+    clear           : Number,
+    meaningful      : Number,
+    achievable      : Number,
+    reqclear        : Number,
+    skill           : Number,
+    trackrecord     : Number,
+    funded          : Boolean,
+    human           : Boolean,
+    computing       : Boolean,
+    risks           : Number,
+    recommandation  : Number,
+    comment         : String
   });
 
 // Routes ======================================================================
@@ -1094,10 +1108,105 @@ app.use(methodOverride());
     });
 
     // Review ..................................................................
+    // Get all
+    app.get('/api/reviews', function(req, res){
+      findAll(res, Review);
+    });
+
+    // Get one
+    app.get('/api/reviews/:target_id', function(req, res){
+      findOne(req,res, Review);
+    });
+
+    // Create new Cloud Ressource
+    app.post('/api/reviews', function(req, res){
+      Review.create({
+        reviewer  : req.body.reviewer,
+        comments  : req.body.comments,
+        notes     : req.body.notes
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        res.json(project._id);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/reviews/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Review);
+    });
 
     // Comment .................................................................
+    // Get all
+    app.get('/api/comments', function(req, res){
+      findAll(res, Comment);
+    });
+
+    // Get one
+    app.get('/api/comments/:target_id', function(req, res){
+      findOne(req,res, Comment);
+    });
+
+    // Create new Cloud Ressource
+    app.post('/api/comments', function(req, res){
+      Comment.create({
+        timestamp : new Date(),
+        field     : req.body.field,
+        value     : req.body.value
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        res.json(project._id);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/comments/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Comment);
+    });
 
     // Note ....................................................................
+    // Get all
+    app.get('/api/notes', function(req, res){
+      findAll(res, Note);
+    });
+
+    // Get one
+    app.get('/api/notes/:target_id', function(req, res){
+      findOne(req,res, Note);
+    });
+
+    // Create new Cloud Ressource
+    app.post('/api/notes', function(req, res){
+      Note.create({
+        timestamp       : new Date(),
+        bbpobjective    : req.body.bbpobjective,
+        contracted      : req.body.contracted,
+        impact          : req.body.impact,
+        criticality     : req.body.criticality,
+        clear           : req.body.clear,
+        meaningful      : req.body.meaningful,
+        achievable      : req.body.achievable,
+        reqclear        : req.body.reqclear,
+        skill           : req.body.skill,
+        trackrecord     : req.body.trackrecord,
+        funded          : req.body.funded,
+        human           : req.body.human,
+        computing       : req.body.computing,
+        risks           : req.body.risks,
+        recommandation  : req.body.recommandation,
+        comment         : req.body.comment
+      }, function(err,project){
+        if (err)
+          HandleError(err,res);
+        res.json(project._id);
+      });
+    });
+
+    // Delete the specified element
+    app.delete('/api/notes/:target_id/delete', function(req,res) {
+      deleteOne(req,res,Note);
+    });
 
   // Application ---------------------------------------------------------------
   app.get('*', function(req, res) {
