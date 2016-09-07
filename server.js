@@ -157,10 +157,10 @@ app.use(methodOverride());
     devenv          : [{ type: String, ref: 'DevEnv' }],
     hpcRessource    : Boolean,
     cloudRessource  : Boolean,
-    hpc             : [{ type: Number, ref:'Hpc'}],
-    cloud           : [{ type: Number, ref:'Cloud'}],
-    hardware        : [{ type: Number, ref:'Hardware'}],
-    hr              : [{ type: Number, ref:'HumanRessource'}]
+    hpc             : [{ type: String, ref:'Hpc'}],
+    cloud           : [{ type: String, ref:'Cloud'}],
+    hardware        : [{ type: String, ref:'Hardware'}],
+    hr              : [{ type: String, ref:'HumanRessource'}]
   });
 
   // Software Development ------------------------------------------------------
@@ -230,7 +230,7 @@ app.use(methodOverride());
   // Human Ressources ----------------------------------------------------------
   var HumanRessource = mongoose.model('HumanRessource', {
     name        : String,
-    role        : { type : Schema.Types.ObjectId, ref : 'Role' },
+    role        : { type : String, ref : 'Role' },
     pm          : { type : Number, min : 0 },
     description : String
   });

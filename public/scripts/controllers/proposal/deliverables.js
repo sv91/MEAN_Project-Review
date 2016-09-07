@@ -8,7 +8,7 @@
 * Controller responsible for the .deliverables page.
 */
 angular.module('proposalReviewApp')
-.controller('DeliverablesCtrl', function ($scope, $http) {
+.controller('DeliverablesCtrl', function ($scope, $http, hbpCollabStore) {
     $http.get('/api/softdevs')
       .success(function(data) {
         $scope.availableSoftDev = data;
@@ -104,6 +104,16 @@ angular.module('proposalReviewApp')
       addPerson(people);
     });
   }
+
+  // Load the Collabs informations
+  function loadCollabs() {
+    hbpCollabStore.list().then(function(rs) {return rs.toArray();})
+    .then(function(arr){
+      $scope.availableCollab = arr;
+    })
+  }
+  loadCollabs();
+
 
 })
 

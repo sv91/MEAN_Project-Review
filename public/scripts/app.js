@@ -231,15 +231,6 @@ angular
 		$scope.maxDate.setDate(dateTemp + numberOfDaysToAdd);
 	});
 
-	// Load the Collabs informations
-	function loadCollabs() {
-		hbpCollabStore.list().then(function(rs) {return rs.toArray();})
-		.then(function(arr){
-			$scope.availableCollab = arr;
-		})
-	}
-	loadCollabs();
-
 	// State order
 	var stateTransition = [
 		{'current':'type', 					'previous':'', 							'previousOpt':'', 						'next' : 'members', 			'nextOpt':''},

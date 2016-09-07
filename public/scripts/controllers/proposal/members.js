@@ -27,7 +27,7 @@ angular.module('proposalReviewApp')
 * # selectPi
 * Input form to select an user as the project leader.
 */
-.directive('selectPi', function($window, $timeout) {
+.directive('selectPi', function(hbpIdentityUserDirectory, $window, $timeout) {
   return {
     scope: true,
     template: '<hbp-user-selector hbp-on-select="handleUserSelection(user)"></hbp-user-selector><hbp-usercard hbp-user="record.pi" ></hbp-usercard></pre>',
