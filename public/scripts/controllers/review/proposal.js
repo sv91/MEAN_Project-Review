@@ -58,12 +58,29 @@ angular.module('proposalReviewApp')
 
 function getAllChildById(list,child,type){
   return new Promise(function (fulfill, reject){
-    if(list != undefined && list != "" && list != null && list != [] && list != {} )
+    if(list != undefined && list != "" && list != null && list != [] && list != {} && list.constructor === Array)
     {
       return Promise.all(list.map(function(val){
         getAllByID(val[child],type).then(function(res){
           val[child] = res;
         });
+      })).then(function(res){
+        fulfill(res);
+      });
+    } else {
+      fulfill([]);
+    }
+  });
+}
+
+
+
+function getAllGrandChildById(list,child,grand,type){
+  return new Promise(function (fulfill, reject){
+    if(list != undefined && list != "" && list != null && list != [] && list != {} && list.constructor === Array)
+    {
+      return Promise.all(list.map(function(val){
+        getAllChildByID(val[child],grand,type);
       })).then(function(res){
         fulfill(res);
       });
@@ -114,6 +131,34 @@ getAllByID($scope.data.select.proposal.teams,'teams')
   return getAllChildById($scope.data.select.proposal.requirements,'output','outputs');
 }).then(function(res){
   return getAllChildById($scope.data.select.proposal.requirements,'type','requirementtypes');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.tasks,'grant','grants');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.deliverables,'dependency','deliverables');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.deliverables,'requirements','requirements');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.deliverables,'softdev','softdevs');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.deliverables,'datatransfer','datatransfers');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.deliverables,'virtualization','virtualizations');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.deliverables,'devenv','devenvs');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.deliverables,'hpc','hpcressources');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.deliverables,'cloud','cloudressources');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.deliverables,'hardware','hardwares');
+}).then(function(res){
+  return getAllChildById($scope.data.select.proposal.deliverables,'hr','humanressources');
+}).then(function(res){
+  return getAllGrandChildById($scope.data.select.proposal.deliverables,'hpc','type','hpctypes');
+}).then(function(res){
+  return getAllGrandChildById($scope.data.select.proposal.deliverables,'cloud','type','cloudtypes');
+}).then(function(res){
+  return getAllGrandChildById($scope.data.select.proposal.deliverables,'hr','role','roles');
 })
 
 });
