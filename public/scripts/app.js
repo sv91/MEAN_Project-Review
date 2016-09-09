@@ -109,10 +109,12 @@ angular
 	$urlRouterProvider.otherwise('/');
 })
 
-.controller('reviewAppController', function ($scope, $http) {
-	$scope.data= {};
-	$scope.data.select = {};
-	$scope.formData = {};
+.controller('reviewAppController', function ($scope, $http, $sessionStorage) {
+	if ($scope.data == undefined){
+		$scope.data= $sessionStorage;
+		$scope.data.select = {};
+		$scope.formData = {};
+	}
 
 	// when landing on the page, get all the projects and show them
 	$http.get('/api/projects')
@@ -508,7 +510,8 @@ angular
 			var treatedValues = {
 				'grade'		: null,
 				'status'	: 'submitted',
-				'reviews'	: []
+				'comments'	: [],
+				'notes'	: [],
 			};
 			fulfill(treatedValues);
 		});

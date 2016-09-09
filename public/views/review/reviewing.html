@@ -1,9 +1,7 @@
 <div id="proposal">
   <label>Comments</label>
   <ul>
-    <li>Comment 1: Blablabla</li>
-      <li>Comment 2: Blablabla</li>
-        <li>Comment 3: Blablabla</li>
+    <li ng-repeat="comm in data.select.comments | orderBy:timestamp | limitTo:5">{{comm.value}}</li>
   </ul>
   <div class="rightAligned">
     <div class="btn btn-default" onclick="goTo(this);">See more comments</div>
@@ -13,9 +11,8 @@
 <div id="note">
   <label>Notes</label>
   <ul>
-    <li>Note 1: Blablabla</li>
-      <li>Note 2: Blablabla</li>
-        <li>Note 3: Blablabla</li>
+    <li ng-repeat="comm in data.select.notes | orderBy:timestamp | limitTo:1">
+    </li>
   </ul>
   <div class="rightAligned">
   <div class="btn btn-default" onclick="goTo(this);">See more notes</div></div>
@@ -25,11 +22,11 @@
   <label>Summary</label>
   <ul>
     <li>Z reviews </li>
-    <li>X comments</li>
-      <li>Y notes</li>
+    <li>{{data.select.comments.length}} comments</li>
+      <li>{{data.select.notes.length}} notes</li>
   </ul>
   <br />
-  <div class="centeredText">Grade A<div>
+  <div class="centeredText">Grade {{data.select.review.grade}}<div>
     <br />
 
 </div>

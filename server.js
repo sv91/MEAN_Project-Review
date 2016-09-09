@@ -244,18 +244,13 @@ app.use(methodOverride());
   var GeneralReview = mongoose.model('GeneralReview', {
     grade   : Number,
     status  : String,
-    reviews : [{ type: String, ref: 'Review' }]
-  });
-
-  // Review --------------------------------------------------------------------
-  var Review = mongoose.model('Review', {
-    reviewer  : { type: String, ref: 'Person' },
     comments  : [{ type: String, ref: 'Comment' }],
-    notes     : { type: String, ref: 'Note' }
+    notes     : [{ type: String, ref: 'Note' }]
   });
 
   // Comment -------------------------------------------------------------------
   var Comment = mongoose.model('Comment', {
+    reviewer  : { type: String, ref: 'Person' },
     timestamp : Date,
     field     : String,
     value     : String
@@ -263,6 +258,7 @@ app.use(methodOverride());
 
   // Note -------------------------------------------------------------------
   var Note = mongoose.model('Note', {
+    reviewer  : { type: String, ref: 'Person' },
     timestamp       : Date,
     bbpobjective    : Boolean,
     contracted      : Boolean,
@@ -319,9 +315,9 @@ app.use(methodOverride());
     // deleteOne
     // Delete an element from a model by getting the id through route params.
     //    target : Model wher the element should be deleted.
-    function deleteOne(req,res,target){
+    function deleteOne(tId,res,target){
       target.remove({
-        _id : req.params.target_id
+        _id : tId
       }, function(err, tar) {
         if (err)
           HandleError(err,res);
@@ -677,6 +673,11 @@ app.use(methodOverride());
     // Get all
     app.get('/api/requirementtypes', function(req, res){
       findAll(res, RequirementType);
+    });
+
+    // Get one
+    app.get('/api/requirementtypes/:target_id', function(req, res){
+      findOne(req,res, RequirementType);
     });
 
     // Create new Requirement

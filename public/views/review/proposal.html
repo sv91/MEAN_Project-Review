@@ -17,7 +17,7 @@
       <div class="form-group" onclick="updateBubble(this);">
         <label>Project Title</label>
         <div>
-          <input type="text" readonly value="{{data.select.projectTitle}}">
+          <input type="text" readonly value="{{data.select.proposal.projectTitle}}">
         </div>
       </div>
 
@@ -25,7 +25,7 @@
         <td class="inTwo">
           <div class="form-group" onclick="updateBubble(this);">
             <label>Project Start Date</label><br />
-            <input type="date" readonly value="{{data.select.projectStartDate | date:'yyyy-MM-dd'}}">
+            <input type="date" readonly value="{{data.select.proposal.projectStartDate | date:'yyyy-MM-dd'}}">
           </div>
         </td>
         <td class="inTwoEmptySeparator">
@@ -33,7 +33,7 @@
         <td class="inTwo">
           <div class="form-group" onclick="updateBubble(this);">
             <label>Project End Date</label><br />
-            <input type="date" readonly value="{{data.select.projectEndDate | date:'yyyy-MM-dd'}}">
+            <input type="date" readonly value="{{data.select.proposal.projectEndDate | date:'yyyy-MM-dd'}}">
           </div>
         </td>
       </table>
@@ -43,19 +43,19 @@
           <div class="form-group" onclick="updateBubble(this);">
             <label>Previous Project Title</label>
             <div>
-              <input type="text" readonly value="{{data.select.previousProject.title}}">
+              <input type="text" readonly value="{{data.select.proposal.previousProject.title}}">
             </div>
           </div><!-- project Title -->
           <div class="form-group" onclick="updateBubble(this);">
             <label>Previous Project ID</label>
             <div>
-              <input type="text" readonly value="{{data.select.previousProject.id}}">
+              <input type="text" readonly value="{{data.select.proposal.previousProject.id}}">
             </div>
           </div><!-- project Title -->
           <div class="form-group" onclick="updateBubble(this);">
             <label>Previous Project Principal Investigator</label>
             <div>
-              <input type="text" readonly value="{{data.select.previousProject.pi}}">
+              <input type="text" readonly value="{{data.select.proposal.previousProject.pi}}">
             </div>
           </div>
         </div>
@@ -88,35 +88,35 @@
       <div class="form-group" onclick="updateBubble(this);">
         <label>Executive Summary</label>
         <div>
-          <textarea readonly>{{data.select.executiveSummary}}</textarea>
+          <textarea readonly>{{data.select.proposal.executiveSummary}}</textarea>
         </div>
       </div>
 
       <div class="form-group" onclick="updateBubble(this);">
         <label>Impact Statement</label>
         <div>
-          <textarea readonly>{{data.select.impactStatement}}</textarea>
+          <textarea readonly>{{data.select.proposal.impactStatement}}</textarea>
         </div>
       </div>
 
       <div class="form-group" onclick="updateBubble(this);">
         <label>Benefit to Community</label>
         <div>
-          <textarea readonly>{{data.select.benefitToCommunity}}</textarea>
+          <textarea readonly>{{data.select.proposal.benefitToCommunity}}</textarea>
         </div>
       </div>
 
       <div class="form-group" onclick="updateBubble(this);">
         <label>Scientific Summary</label>
         <div>
-          <textarea readonly>{{data.select.scientificSummary}}</textarea>
+          <textarea readonly>{{data.select.proposal.scientificSummary}}</textarea>
         </div>
       </div>
 
       <div class="form-group" onclick="updateBubble(this);">
         <label>Technological Summary</label>
         <div>
-          <textarea readonly>{{data.select.technologicalSummary}}</textarea>
+          <textarea readonly>{{data.select.proposal.technologicalSummary}}</textarea>
         </div>
       </div>
 
@@ -147,10 +147,10 @@
         <div class="form-group" onclick="updateBubble(this);">
           <textarea readonly>{{data.select.usecase}}</textarea>
         </div>
-        <div class="form-group" onclick="updateBubble(this);" ng-show="data.select.requirements.length">
+        <div class="form-group" onclick="updateBubble(this);" ng-show="data.select.proposal.requirements.length">
           <label>Requirements</label>
           <ul>
-            <li ng-repeat="req in data.select.requirements" ng-show="req.title"><b>[{{req.type.name}}] <i>{{req.title}}</i></b> <br />
+            <li ng-repeat="req in data.select.proposal.requirements"><b>[{{req.type.name}}] <i>{{req.title}}</i></b> <br />
               <u>Definition:</u> {{req.requirement}}<br />
               <span ng-show="data.select.projectType >= 1"><u>Feature of interest:</u> {{req.feature}}<br /></span>
               <div class="form-group" onclick="updateBubble(this);" ng-show="req.input.length">
