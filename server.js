@@ -806,6 +806,11 @@ app.use(methodOverride());
       findAll(res,SoftDev);
     });
 
+    // Get one
+    app.get('/api/softdevs/:target_id', function(req, res){
+      findOne(req,res, SoftDev);
+    });
+
     // Create new SoftDev
     app.post('/api/softdevs', function(req, res){
       SoftDev.create({
@@ -827,6 +832,11 @@ app.use(methodOverride());
     // Get all
     app.get('/api/datatransfers', function(req, res){
       findAll(res,DataTransfer);
+    });
+
+    // Get one
+    app.get('/api/datatransfers/:target_id', function(req, res){
+      findOne(req,res, DataTransfer);
     });
 
     // Create new DataTransfer
@@ -852,6 +862,11 @@ app.use(methodOverride());
       findAll(res, Virtualization);
     });
 
+    // Get one
+    app.get('/api/virtualizations/:target_id', function(req, res){
+      findOne(req,res, Virtualization);
+    });
+
     // Create new Virtualization
     app.post('/api/virtualizations', function(req, res){
       Virtualization.create({
@@ -873,6 +888,11 @@ app.use(methodOverride());
     // Get all
     app.get('/api/devenvs', function(req, res){
       findAll(res, DevEnv);
+    });
+
+    // Get one
+    app.get('/api/devenvs/:target_id', function(req, res){
+      findOne(req,res, DevEnv);
     });
 
     // Create new DevEnv
@@ -930,6 +950,11 @@ app.use(methodOverride());
       findAll(res, HpcType);
     });
 
+    // Get one
+    app.get('/api/hpctypes/:target_id', function(req, res){
+      findOne(req,res, HpcType);
+    });
+
     // Create new HpcType
     app.post('/api/hpctypes', function(req, res){
       HpcType.create({
@@ -983,6 +1008,11 @@ app.use(methodOverride());
     // Get all
     app.get('/api/cloudtypes', function(req, res){
       findAll(res, CloudType);
+    });
+
+    // Get one
+    app.get('/api/cloudtypes/:target_id', function(req, res){
+      findOne(req,res, CloudType);
     });
 
     // Create new CloudType
@@ -1066,6 +1096,11 @@ app.use(methodOverride());
     // Get all
     app.get('/api/roles', function(req, res){
       findAll(res, Role);
+    });
+
+    // Get one
+    app.get('/api/roles/:target_id', function(req, res){
+      findOne(req,res, Role);
     });
 
     // Create new Role
