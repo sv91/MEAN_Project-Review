@@ -113,9 +113,9 @@ angular
 	var sharedService = {};
 
 		// Functions managing the creation of new entries in the DB ==================
-		sharedService.saveProject = function(){
+		sharedService.saveProject = function(val){
 			console.log('saveProject');
-			sharedService.findOrCreate('projects',$scope.record)
+			sharedService.findOrCreate('projects',val)
 			.then(function(res){
 				console.log('Project Saved :' + res);
 			}, function(){
@@ -361,7 +361,7 @@ angular
 
 		sharedService.treatProposal = function(value){
 			return new Promise(function (fulfill, reject){
-				sharedService.findOrCreate('persons',$scope.activeUser)
+				sharedService.findOrCreate('persons',value.activeUser)
 				.then(function(res){
 					var results = {};
 					results.persons = res;
@@ -378,7 +378,7 @@ angular
 				.then(function(res){
 					var treatedValues = {
 						'subDate'			: new Date(),
-						'author'			: activeUser,
+						'author'			: results.person,
 						'submission'	: res.submissions
 					};
 					fulfill(treatedValues);
@@ -770,20 +770,19 @@ angular
 		console.log('Error: reviewAppController: Persons could not be loaded.');
 	});
 
-	$scope.saveComment = function(field) {
-		console.log("Saving: " + field);
-		sharedService.findOrCreate('persons',$scope.activeUser)
+	$scope.saveComment = function(val,update) {
+		console.log("Saving: " + val.field);
+		sharedService.findOrCreate('persons',val.user)
 		.then(function(res){
 		var sub = {
 			'reviewer' 	: res,
 			'timestamp'	: new Date,
-			'field' 		: field,
-			'values'		: $scope.toSubmit
+			'field' 		: val.field,
+			'values'		: val.toSubmit
 		}
 		$http.post('/api/comments', sub)
 			.success(function(data){
-				$scope.toSubmit = {};
-				$http.post('/api/reviews/'+$scope.data.select.review._id+'/comments',data)
+				$http.post('/api/reviews/'+val.rev_id+'/comments',data)
 					.success(function(){
 						console.log("Review successfully updated.");
 					})
@@ -792,7 +791,7 @@ angular
 					});
 					$http.get('/api/generalreviews')
 					.success(function(data) {
-						$scope.data.generalReviews = data;
+						update = data;
 						refreshComments();
 					})
 					.error(function(data) {
@@ -892,6 +891,7 @@ angular
 		$scope.maxDate = new Date();
 		$scope.created = {};
 	}
+	$scope.record.activeUser=$scope.activeUser;
 
 	// Check if all the required values were filled
 	$scope.$watch('record', function(attrs) {
@@ -1004,6 +1004,6 @@ angular
 
 	// function to process the form
 	$scope.processForm = function() {
-		sharedService.saveProject();
+		sharedService.saveProject($scope.record);
 	};
 });
