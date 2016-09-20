@@ -109,7 +109,7 @@ angular
 	$urlRouterProvider.otherwise('/');
 })
 
-.factory('sharedService', function($rootScope, $http){
+.factory('sharedService', function($rootScope, $http, $scope){
 	var sharedService = {};
 
 		// Functions managing the creation of new entries in the DB ==================
