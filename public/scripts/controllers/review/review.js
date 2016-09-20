@@ -27,15 +27,27 @@ angular.module('proposalReviewApp')
     return toReturn;
   }
 
+  $scope.refreshReviews = function(){
+    $scope.data.select.review = findByID($scope.data.generalReviews, $scope.data.select.project.review);
+  }
+
+  $scope.refreshComments = function(){
+    refreshReviews();
+    $scope.data.select.comments = findAllByID($scope.data.comments, $scope.data.select.project.review.comments);
+  }
+
+  $scope.refreshNotes = function(){
+    refreshReviews();
+    $scope.data.select.notes = findAllByID($scope.data.notes, $scope.data.select.project.review.notes);
+  }
+
   $scope.data.params = $stateParams;
   $scope.data.select.loaded = false;
   if($scope.data.select.projectId != $scope.data.params[Object.keys($scope.data.params)[0]]){
     $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
     $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
-    $scope.data.select.review = findByID($scope.data.generalReviews, $scope.data.select.project.review);
-    $scope.data.select.notes = findAllByID($scope.data.notes, $scope.data.select.project.review.notes);
-    $scope.data.select.comments = findAllByID($scope.data.comments, $scope.data.select.project.review.comments);
-
+    refreshNotes();
+    refreshComments();
     $scope.data.select.loaded = true;
   } else {
     $scope.data.select.loaded = true;

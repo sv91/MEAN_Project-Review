@@ -1167,6 +1167,24 @@ app.use(methodOverride());
       });
     });
 
+    app.post('/api/reviews/:target_id/comments', function(req, res){
+      Review.findOne({
+        _id : req.params.target_id
+      },function(err, tar){
+        if(err)
+          HandleError(err,res);
+        Review.findOneAndUpdate({
+          _id : req.params.target_id
+        },{
+            comments : tar.comments.push(req.body)
+        },function(err, tar){
+          if(err)
+            HandleError(err,res);
+          res.json(tar);
+          });
+      });
+    });
+
     // Delete the specified element
     app.delete('/api/reviews/:target_id/delete', function(req,res) {
       deleteOne(req,res,Review);
@@ -1212,7 +1230,7 @@ app.use(methodOverride());
       findOne(req,res, Note);
     });
 
-    // Create new Cloud Ressource
+    // Create new Note
     app.post('/api/notes', function(req, res){
       Note.create({
         timestamp       : new Date(),

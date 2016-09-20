@@ -7,18 +7,31 @@
 </div>
 
 <div class="rightSide">
-  <div id="bubble" class="bubble">
+  <div id="bubble" class="bubble" ng-show="bubble.show">
+    <div ng-show="bubble.text != ''">
+      {{bubble.text}}
+    </div>
+    <div ng-show="bubble.text == ''">
+      <label>Comment {{bubble.title}}:</label><br />
+      <ul>
+        <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer:{id: !activeUser.id}}'>{{com.value}}</li>
+        <li>
+          <form ng-submit="saveComment(bubble.field)">
+            Your comment:<br />
+            <textarea class='form-control' ng-model='toSubmit'>{{ data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer:{id: activeUser.id} } }}</textarea>
+            <button type="submit" class="btn btn-primary btn-lg">Save comment</button>
+          </form>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 <pre>
-{{data.select | json}}
+  {{data.select | json}}
 </pre>
-<script>
-resetBubble();
-</script>
 
- <!-- For tests
-      <pre>
-        {{ data | json }}
-      </pre>
-      -->
+  <!-- For tests
+  <pre>
+  {{ data | json }}
+</pre>
+-->

@@ -109,7 +109,616 @@ angular
 	$urlRouterProvider.otherwise('/');
 })
 
-.controller('reviewAppController', function ($scope, $http, $sessionStorage) {
+.factory('sharedService', function($rootScope, $http){
+	var sharedService = {};
+
+		// Functions managing the creation of new entries in the DB ==================
+		sharedService.saveProject = function(){
+			console.log('saveProject');
+			sharedService.findOrCreate('projects',$scope.record)
+			.then(function(res){
+				console.log('Project Saved :' + res);
+			}, function(){
+				console.log('Project Not Saved');
+			});
+		};
+
+		sharedService.findOrCreate = function(model, value){
+			return new Promise(function (fulfill, reject){
+				if (value != undefined && value != null && value != '' && value != {}){
+					sharedService.treatSelect(model,value)
+					.then(function(treated){
+						sharedService.findId(model, treated)
+						.then(function(res){
+							// If we found an ID, return the ID.
+							fulfill(res);
+						},function(){
+							// If not we create the element.
+							sharedService.createElem(model, treated)
+							.then(function(res){
+								//Return the ID of the created element if successful.
+								fulfill(res);
+							},function(){
+								// Otherwise reject.
+								console.log("Error: findOrCreate: \nElement not created:\nModel: "+ model+"\nValue: "+ JSON.stringify(treated));
+								reject();
+							});
+						});
+					});
+				} else {
+					// If the value is empty, return null.
+					fulfill(null);
+				}
+			});
+		}
+
+		sharedService.findId = function(model,values){
+			return new Promise(function (fulfill, reject){
+				$http.get('/api/'+ model)
+				.success(function(res){
+					var found = false;
+					angular.forEach(res, function(val){
+						var good = true;
+						var id;
+						angular.forEach(val,function(value,key){
+							if(key == '_id'){
+								id = value;
+							} else if (key != '__v') {
+								good = good & (value == values[key]);
+							}
+						});
+						if(good){
+							found = true;
+							fulfill(id);
+						}
+					});
+					if(!found){
+						reject();
+					}
+				})
+				.error(function() {
+					console.log('Error: FindId: Table not found: '+model);
+					reject();
+				});
+			});
+		}
+
+		sharedService.treatSelect = function(model,value) {
+			return new Promise(function (fulfill, reject){
+				switch(model) {
+					case 'projects':
+					sharedService.treatProject(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'proposals':
+					sharedService.treatProposal(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'persons':
+					sharedService.treatPerson(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'submissions':
+					sharedService.treatSubmission(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'tags':
+					sharedService.treatTag(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'requirements':
+					sharedService.treatRequirement(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'inputs':
+					sharedService.treatInputOutput(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'outputs':
+					sharedService.treatInputOutput(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'deliverables':
+					sharedService.treatDeliverable(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'hpcressources':
+					sharedService.treatHpcCloud(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'cloudressources':
+					sharedService.treatHpcCloud(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'hardwares':
+					sharedService.treatHardware(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'humanressources':
+					sharedService.treatHr(value).then(function(res){
+						fulfill(res);
+					});
+					break;
+					case 'generalreviews':
+					sharedService.treatReview().then(function(res){
+						fulfill(res);
+					});
+					break;
+					default:
+					sharedService.treatOther(value).then(function(res){
+						fulfill(res);
+					});
+				}
+			});
+		};
+
+		sharedService.createElem = function(model, value) {
+			return new Promise(function (fulfill, reject){
+				if(value != undefined && value != null && value != "" && value != {} ){
+					sharedService.createInDB(model,value)
+					.then(function(res){
+						fulfill(res);
+					});
+				} else {
+					console.log("Error: createElem: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
+					reject();
+				}
+			});
+		}
+
+		sharedService.createInDB = function(model,value) {
+			return new Promise(function (fulfill, reject){
+				if(value != undefined && value != null && value != "" && value != {} ){
+					$http.post('/api/'+model, value)
+					.success(function(res){
+						console.log('Created : '+model+' : ' + JSON.stringify(res));
+						fulfill(res);
+					})
+					.error(function(data) {
+						console.log("Error: createInDB: Element not created.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
+						reject();
+					});
+				} else {
+					console.log("Error: createInDB: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
+					reject();
+				}
+			});
+		};
+
+
+		sharedService.findOrCreateTable = function(model,value){
+			return new Promise(function (fulfill, reject){
+				if(value != undefined && value != "" && value != null && value != [])
+				{
+					Promise.all(value.map(function(val){
+						return sharedService.findOrCreate(model, val);
+					})).then(function(res){
+						fulfill(res);
+					});
+				} else {
+					fulfill([]);
+				}
+			});
+		}
+
+		sharedService.getIdTable = function(value){
+			var temp = [];
+			angular.forEach(value, function(val){
+				temp.push(val._id);
+			});
+			return temp;
+		};
+
+		sharedService.treatReview = function(){
+			return new Promise(function (fulfill, reject){
+				var treatedValues = {
+					'grade'		: null,
+					'status'	: 'submitted',
+					'comments'	: [],
+					'notes'	: [],
+				};
+				fulfill(treatedValues);
+			});
+		}
+
+		sharedService.treatProject = function(value){
+			return new Promise(function (fulfill, reject){
+				sharedService.findOrCreate('proposals',value)
+				.then(function(res){
+					var results = {};
+					results.proposal = res;
+					return results;
+				})
+				.then(function(res){
+					return sharedService.findOrCreate('generalreviews',value)
+					.then(function(res2){
+						var results = res;
+						results.review = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					var treatedValues = {
+						'proposal'	: res.proposal,
+						'review'		: res.review
+					};
+					fulfill(treatedValues);
+				});
+			});
+		}
+
+		sharedService.treatProposal = function(value){
+			return new Promise(function (fulfill, reject){
+				sharedService.findOrCreate('persons',$scope.activeUser)
+				.then(function(res){
+					var results = {};
+					results.persons = res;
+					return results;
+				})
+				.then(function(res){
+					return sharedService.findOrCreate('submissions',value)
+					.then(function(res2){
+						var results = res;
+						results.submissions = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					var treatedValues = {
+						'subDate'			: new Date(),
+						'author'			: activeUser,
+						'submission'	: res.submissions
+					};
+					fulfill(treatedValues);
+				});
+			});
+		}
+
+		sharedService.treatSubmission = function(value){
+			return new Promise(function (fulfill, reject){
+				// Promises chain to get the needed information, each step get the new
+				// values and stores them in an object passed to the next step.
+				sharedService.findOrCreateTable('persons',value.members)
+				.then(function(res){
+					var results = {};
+					results.members = res;
+					return results;
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('tags',value.tags)
+					.then(function(res2){
+						var results = res;
+						results.tags = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('relatedprojects',value.relatedProjects)
+					.then(function(res2){
+						var results = res;
+						results.relatedProjects = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('shortdeliverables',value.shortDeliverable)
+					.then(function(res2){
+						var results = res;
+						results.shortDeliverable = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('publications',value.publications)
+					.then(function(res2){
+						var results = res;
+						results.publications = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('requirements',value.requirements)
+					.then(function(res2){
+						var results = res;
+						results.requirements = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('deliverables',value.deliverables)
+					.then(function(res2){
+						var results = res;
+						results.deliverables = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					var results = res;
+					results.teams 	= sharedService.getIdTable(value.teams);
+					results.grants	= sharedService.getIdTable(value.grants);
+					results.tasks 	= sharedService.getIdTable(value.tasks);
+					return results;
+				})
+				.then(function(res){
+					return sharedService.findOrCreate('persons',value.pi)
+					.then(function(res2){
+						var results = res;
+						results.pi = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					return sharedService.findOrCreate('persons',value.copi)
+					.then(function(res2){
+						var results = res;
+						results.copi = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					var treatedValues = {
+						'projectStartDate'   		: value.projectStartDate,
+						'projectEndDate'        : value.projectEndDate,
+						'projectTitle'          : value.projectTitle,
+						'executiveSummary'      : value.executiveSummary,
+						'impactStatement'       : value.impactStatement,
+						'benefitToCommunity'    : value.benefitToCommunity,
+						'scientificSummary'     : value.scientificSummary,
+						'technologicalSummary'  : value.technologicalSummary,
+						'usecase'               : value.usecase,
+						'newproject'            : value.newproject,
+						'projectType'           : value.projectType,
+						'pi'                    : res.pi,
+						'copi'                  : res.copi,
+						'members'               : res.members,
+						'teams'                 : res.teams,
+						'tags'                  : res.tags,
+						'relatedProjects'       : res.relatedProjects,
+						'shortDeliverable'      : res.shortDeliverable,
+						'publications'          : res.publications,
+						'grants'                : res.grants,
+						'tasks'                 : res.tasks,
+						'requirements'          : res.requirements,
+						'deliverables' 					: res.deliverables
+					};
+					fulfill(treatedValues);
+				});
+			});
+		}
+
+		sharedService.treatPerson = function(value){
+			return new Promise(function (fulfill, reject){
+				console.log('Treating :'+ JSON.stringify(value));
+				var treatedValues = null;
+				if(value != undefined && value!=null && value!=''){
+					treatedValues = {
+						'id'					: value.id,
+						'displayName'	: value.displayName
+					};
+				}
+				fulfill(treatedValues);
+			});
+		}
+
+		sharedService.treatTag = function(value){
+			return new Promise(function (fulfill, reject){
+				var treatedValues = {};
+				if(value._id != undefined){
+					treatedValues = value;
+				} else {
+					treatedValues = {
+						'name'	: value,
+						'use' 	: 1
+					}
+				}
+				fulfill(treatedValues);
+			});
+		}
+
+		sharedService.treatRequirement = function(value){
+			return new Promise(function (fulfill, reject){
+				sharedService.findOrCreateTable('inputs',value.input)
+				.then(function(res){
+					var results = {};
+					results.input = res;
+					return results;
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('outputs',value.output)
+					.then(function(res2){
+						var results = res;
+						results.output = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					var treatedValues = {
+						'title'       : value.title,
+						'type'        : value.type._id,
+						'requirement' : value.requirement,
+						'feature'     : value.feature,
+						'input'       : res.input,
+						'output'      : res.output
+					};
+					fulfill(treatedValues);
+				});
+			});
+		}
+
+		sharedService.treatInputOutput = function(value){
+			return new Promise(function (fulfill, reject){
+				var treatedValues = null;
+				if(value != undefined && value!=null && value!=''){
+					treatedValues = {
+						'tag'     : value.tag,
+						'format'  : value.format,
+						'number'  : value.number,
+						'size'    : value.size
+					};
+				}
+				fulfill(treatedValues);
+			});
+		};
+
+		sharedService.treatDeliverable = function(value){
+			return new Promise(function (fulfill, reject){
+				sharedService.findOrCreateTable('deliverables',value.dependency)
+				.then(function(res){
+					var results = {};
+					results.dependency = res;
+					return results;
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('requirements',value.requirement)
+					.then(function(res2){
+						var results = res;
+						results.requirement = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('hpcressources',value.hpc)
+					.then(function(res2){
+						var results = res;
+						results.hpc = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('cloudressources',value.cloud)
+					.then(function(res2){
+						var results = res;
+						results.cloud = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('hardwares',value.hardware)
+					.then(function(res2){
+						var results = res;
+						results.hardware = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					return sharedService.findOrCreateTable('humanressources',value.members)
+					.then(function(res2){
+						var results = res;
+						results.hr = res2;
+						return results;
+					})
+				})
+				.then(function(res){
+					var results = res;
+					results.softdev 				= sharedService.getIdTable(value.softdev);
+					results.datatransfer 		= sharedService.getIdTable(value.datatransfer);
+					results.virtualization	= sharedService.getIdTable(value.virtualization);
+					results.devenv 					= sharedService.getIdTable(value.devenv);
+					results.collabs					= [];
+					angular.forEach(value.collabs,function(val){
+						results.collabs.push(val.id);
+					});
+					return results;
+				}).then(function(res){
+					var treatedValues = {
+						'name'            : value.name,
+						'date'            : value.date,
+						'description'     : value.description,
+						'risks'           : value.risks,
+						'dependency'      : res.dependency,
+						'requirements'    : res.requirement,
+						'softdev'         : res.softdev,
+						'datatransfer'    : res.datatransfer,
+						'collabs'         : res.collabs,
+						'virtualization'  : res.virtualization,
+						'devenv'          : res.devenv,
+						'hpcRessource'    : value.hpcRessource,
+						'cloudRessource'  : value.cloudRessource,
+						'hpc'             : res.hpc,
+						'cloud'           : res.cloud,
+						'hardware'        : res.hardware,
+						'hr'              : res.hr
+					};
+					fulfill(treatedValues);
+				});
+			});
+		}
+
+		sharedService.treatHpcCloud = function(value){
+			return new Promise(function (fulfill, reject){
+				var treatedValues = null;
+				if(value != undefined && value!=null && value!=''){
+					treatedValues = {
+						'type' : value.type._id,
+						'runs' : value.runs,
+						'time' : value.time,
+						'part' : value.part,
+						'arte' : value.arte,
+						'size' : value.size
+					};
+				}
+				fulfill(treatedValues);
+			});
+		};
+
+		sharedService.treatHardware = function(value){
+			return new Promise(function (fulfill, reject){
+				var treatedValues = null;
+				if(value != undefined && value!=null && value!=''){
+					treatedValues = {
+						'name'        : value.name,
+						'price'       : value.price,
+						'link'        : value.link,
+						'description' : value.description
+					};
+				}
+				fulfill(treatedValues);
+			});
+		};
+
+		sharedService.treatHr = function(value){
+			return new Promise(function (fulfill, reject){
+				var treatedValues = null;
+				if(value != undefined && value!=null && value!=''){
+					treatedValues = {
+						'name'        : value.name,
+						'role'        : value.role,
+						'pm'          : value.pm,
+						'description' : value.description
+					};
+				}
+				fulfill(treatedValues);
+			});
+		};
+
+		sharedService.treatOther = function(value){
+			return new Promise(function (fulfill, reject){
+				var treatedValues = null;
+				if(value != undefined && value!=null && value!=''){
+					treatedValues = value
+				}
+				fulfill(treatedValues);
+			});
+		};
+
+	return sharedService;
+})
+
+
+
+.controller('reviewAppController', function ($scope, $http, $sessionStorage, sharedService) {
 	if ($scope.data == undefined){
 		$scope.data= $sessionStorage;
 		$scope.data.select = {};
@@ -160,12 +769,114 @@ angular
 	.error(function(data) {
 		console.log('Error: reviewAppController: Persons could not be loaded.');
 	});
+
+	$scope.saveComment = function(field) {
+		console.log("Saving: " + field);
+		sharedService.findOrCreate('persons',$scope.activeUser)
+		.then(function(res){
+		var sub = {
+			'reviewer' 	: res,
+			'timestamp'	: new Date,
+			'field' 		: field,
+			'values'		: $scope.toSubmit
+		}
+		$http.post('/api/comments', sub)
+			.success(function(data){
+				$scope.toSubmit = {};
+				$http.post('/api/reviews/'+$scope.data.select.review._id+'/comments',data)
+					.success(function(){
+						console.log("Review successfully updated.");
+					})
+					.error(function(data) {
+						console.log('Error: Review Update ' + data);
+					});
+					$http.get('/api/generalreviews')
+					.success(function(data) {
+						$scope.data.generalReviews = data;
+						refreshComments();
+					})
+					.error(function(data) {
+						console.log('Error: reviewAppController: General Reviews could not be loaded.');
+					});
+				console.log("End submitting comment");
+			})
+			.error(function(data) {
+				console.log('Error: ' + data);
+			});
+		});
+	};
 })
 
-.controller('MainController', function($scope) {
+.controller('MainController', function($scope, $http) {
+	$scope.bubble = {
+		'show'	: false,
+		'title' : '',
+		'text' 	: '',
+		'field'	: ''
+	};
+	$scope.activeUser;
+	$http.get('https://services.humanbrainproject.eu/idm/v1/api/user/me')
+	.success(function(data) {
+		$scope.activeUser = data;
+	})
+	.error(function(data) {
+		console.log('Error: GetActiveUser: Information could not be retrieved.');
+	});
+
+	/**
+	* @ngdoc function
+	* @name updateBubble
+	* @description
+	* # updateBubble
+	* Update the shown information in the bubble and its position.
+	* Used by the Proposal part.
+	* @param {Object} refDev  The reference element for the position of the bubble.
+	* @param {String} html    The html code that will be in the bubble.
+	*/
+	$scope.updateBubble = function($event, html){
+		$scope.bubble.show = true;
+		var refDiv = $event.currentTarget;
+		console.dir(refDiv);
+		var txt = html;
+		if(html == undefined){
+			$scope.bubble.text = '';
+			$scope.bubble.field = refDiv.id;
+			var label = refDiv.childNodes[1];
+			if(label != null && label != undefined && label.tagName == "LABEL"){
+				$scope.bubble.title = "on "+label.textContent;
+			}
+		} else {
+			$scope.bubble.text = txt;
+		}
+		var containerRect = document.getElementById("form-views").getBoundingClientRect();
+		var divRect = refDiv.getBoundingClientRect();
+		var offset = divRect.top - containerRect.top;
+
+		var div = document.getElementById('bubble');
+		if(div.style.display=="none"){
+			div.style.display="";
+		}
+		div.style.marginTop = offset + 'px';
+	};
+
+	/**
+	* @ngdoc function
+	* @name resetBubble
+	* @description
+	* # resetBubble
+	* Hide the bubble.
+	*/
+	$scope.resetBubble = function(){
+		$scope.bubble = {
+			'show'	: false,
+			'title' : '',
+			'text' 	: '',
+			'field'	: ''
+		};
+	};
 })
 
-.controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage, $http, $state, $q) {
+.controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage, $http, $state, sharedService) {
 	// we will store all of our form data in this object
 	if($scope.record == undefined | $scope.record == null){
 		$scope.record = $sessionStorage;
@@ -293,607 +1004,6 @@ angular
 
 	// function to process the form
 	$scope.processForm = function() {
-		saveProject();
-	};
-
-	// Functions managing the creation of new entries in the DB ==================
-	function saveProject(){
-		console.log('saveProject');
-		findOrCreate('projects',$scope.record)
-		.then(function(res){
-			console.log('Project Saved :' + res);
-		}, function(){
-			console.log('Project Not Saved');
-		});
-	};
-
-	function findOrCreate(model, value){
-		return new Promise(function (fulfill, reject){
-			if (value != undefined && value != null && value != '' && value != {}){
-				treatSelect(model,value)
-				.then(function(treated){
-					findId(model, treated)
-					.then(function(res){
-						// If we found an ID, return the ID.
-						fulfill(res);
-					},function(){
-						// If not we create the element.
-						createElem(model, treated)
-						.then(function(res){
-							//Return the ID of the created element if successful.
-							fulfill(res);
-						},function(){
-							// Otherwise reject.
-							console.log("Error: findOrCreate: \nElement not created:\nModel: "+ model+"\nValue: "+ JSON.stringify(treated));
-							reject();
-						});
-					});
-				});
-			} else {
-				// If the value is empty, return null.
-				fulfill(null);
-			}
-		});
-	}
-
-	function findId(model,values){
-		return new Promise(function (fulfill, reject){
-			$http.get('/api/'+ model)
-			.success(function(res){
-				var found = false;
-				angular.forEach(res, function(val){
-					var good = true;
-					var id;
-					angular.forEach(val,function(value,key){
-						if(key == '_id'){
-							id = value;
-						} else if (key != '__v') {
-							good = good & (value == values[key]);
-						}
-					});
-					if(good){
-						found = true;
-						fulfill(id);
-					}
-				});
-				if(!found){
-					reject();
-				}
-			})
-			.error(function() {
-				console.log('Error: FindId: Table not found: '+model);
-				reject();
-			});
-		});
-	}
-
-	function treatSelect(model,value) {
-		return new Promise(function (fulfill, reject){
-			switch(model) {
-				case 'projects':
-				treatProject(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'proposals':
-				treatProposal(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'persons':
-				treatPerson(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'submissions':
-				treatSubmission(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'tags':
-				treatTag(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'requirements':
-				treatRequirement(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'inputs':
-				treatInputOutput(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'outputs':
-				treatInputOutput(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'deliverables':
-				treatDeliverable(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'hpcressources':
-				treatHpcCloud(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'cloudressources':
-				treatHpcCloud(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'hardwares':
-				treatHardware(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'humanressources':
-				treatHr(value).then(function(res){
-					fulfill(res);
-				});
-				break;
-				case 'generalreviews':
-				treatReview().then(function(res){
-					fulfill(res);
-				});
-				break;
-				default:
-				treatOther(value).then(function(res){
-					fulfill(res);
-				});
-			}
-		});
-	};
-
-	function createElem(model, value) {
-		return new Promise(function (fulfill, reject){
-			if(value != undefined && value != null && value != "" && value != {} ){
-				createInDB(model,value)
-				.then(function(res){
-					fulfill(res);
-				});
-			} else {
-				console.log("Error: createElem: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
-				reject();
-			}
-		});
-	}
-
-	function createInDB(model,value) {
-		return new Promise(function (fulfill, reject){
-			if(value != undefined && value != null && value != "" && value != {} ){
-				$http.post('/api/'+model, value)
-				.success(function(res){
-					console.log('Created : '+model+' : ' + JSON.stringify(res));
-					fulfill(res);
-				})
-				.error(function(data) {
-					console.log("Error: createInDB: Element not created.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
-					reject();
-				});
-			} else {
-				console.log("Error: createInDB: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
-				reject();
-			}
-		});
-	};
-
-
-	function findOrCreateTable(model,value){
-		return new Promise(function (fulfill, reject){
-			if(value != undefined && value != "" && value != null && value != [])
-			{
-				Promise.all(value.map(function(val){
-					return findOrCreate(model, val);
-				})).then(function(res){
-					fulfill(res);
-				});
-			} else {
-				fulfill([]);
-			}
-		});
-	}
-
-	function getIdTable(value){
-		var temp = [];
-		angular.forEach(value, function(val){
-			temp.push(val._id);
-		});
-		return temp;
-	};
-
-	function treatReview(){
-		return new Promise(function (fulfill, reject){
-			var treatedValues = {
-				'grade'		: null,
-				'status'	: 'submitted',
-				'comments'	: [],
-				'notes'	: [],
-			};
-			fulfill(treatedValues);
-		});
-	}
-
-	function treatProject(value){
-		return new Promise(function (fulfill, reject){
-			findOrCreate('proposals',value)
-			.then(function(res){
-				var results = {};
-				results.proposal = res;
-				return results;
-			})
-			.then(function(res){
-				return findOrCreate('generalreviews',value)
-				.then(function(res2){
-					var results = res;
-					results.review = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				var treatedValues = {
-					'proposal'	: res.proposal,
-					'review'		: res.review
-				};
-				fulfill(treatedValues);
-			});
-		});
-	}
-
-	function treatProposal(value){
-		return new Promise(function (fulfill, reject){
-			findOrCreate('persons',value.pi)
-			.then(function(res){
-				var results = {};
-				results.persons = res;
-				return results;
-			})
-			.then(function(res){
-				return findOrCreate('submissions',value)
-				.then(function(res2){
-					var results = res;
-					results.submissions = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				var treatedValues = {
-					'subDate'			: new Date(),
-					'author'			: res.persons,
-					'submission'	: res.submissions
-				};
-				fulfill(treatedValues);
-			});
-		});
-	}
-
-	function treatSubmission(value){
-		return new Promise(function (fulfill, reject){
-			// Promises chain to get the needed information, each step get the new
-			// values and stores them in an object passed to the next step.
-			findOrCreateTable('persons',value.members)
-			.then(function(res){
-				var results = {};
-				results.members = res;
-				return results;
-			})
-			.then(function(res){
-				return findOrCreateTable('tags',value.tags)
-				.then(function(res2){
-					var results = res;
-					results.tags = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				return findOrCreateTable('relatedprojects',value.relatedProjects)
-				.then(function(res2){
-					var results = res;
-					results.relatedProjects = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				return findOrCreateTable('shortdeliverables',value.shortDeliverable)
-				.then(function(res2){
-					var results = res;
-					results.shortDeliverable = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				return findOrCreateTable('publications',value.publications)
-				.then(function(res2){
-					var results = res;
-					results.publications = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				return findOrCreateTable('requirements',value.requirements)
-				.then(function(res2){
-					var results = res;
-					results.requirements = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				return findOrCreateTable('deliverables',value.deliverables)
-				.then(function(res2){
-					var results = res;
-					results.deliverables = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				var results = res;
-				results.teams 	= getIdTable(value.teams);
-				results.grants	= getIdTable(value.grants);
-				results.tasks 	= getIdTable(value.tasks);
-				return results;
-			})
-			.then(function(res){
-				return findOrCreate('persons',value.pi)
-				.then(function(res2){
-					var results = res;
-					results.pi = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				return findOrCreate('persons',value.copi)
-				.then(function(res2){
-					var results = res;
-					results.copi = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				var treatedValues = {
-					'projectStartDate'   		: value.projectStartDate,
-					'projectEndDate'        : value.projectEndDate,
-					'projectTitle'          : value.projectTitle,
-					'executiveSummary'      : value.executiveSummary,
-					'impactStatement'       : value.impactStatement,
-					'benefitToCommunity'    : value.benefitToCommunity,
-					'scientificSummary'     : value.scientificSummary,
-					'technologicalSummary'  : value.technologicalSummary,
-					'usecase'               : value.usecase,
-					'newproject'            : value.newproject,
-					'projectType'           : value.projectType,
-					'pi'                    : res.pi,
-					'copi'                  : res.copi,
-					'members'               : res.members,
-					'teams'                 : res.teams,
-					'tags'                  : res.tags,
-					'relatedProjects'       : res.relatedProjects,
-					'shortDeliverable'      : res.shortDeliverable,
-					'publications'          : res.publications,
-					'grants'                : res.grants,
-					'tasks'                 : res.tasks,
-					'requirements'          : res.requirements,
-					'deliverables' 					: res.deliverables
-				};
-				fulfill(treatedValues);
-			});
-		});
-	}
-
-	function treatPerson(value){
-		return new Promise(function (fulfill, reject){
-			console.log('Treating :'+ JSON.stringify(value));
-			var treatedValues = null;
-			if(value != undefined && value!=null && value!=''){
-				treatedValues = {
-					'id'					: value.id,
-					'displayName'	: value.displayName
-				};
-			}
-			fulfill(treatedValues);
-		});
-	}
-
-	function treatTag(value){
-		return new Promise(function (fulfill, reject){
-			var treatedValues = {};
-			if(value._id != undefined){
-				treatedValues = value;
-			} else {
-				treatedValues = {
-					'name'	: value,
-					'use' 	: 1
-				}
-			}
-			fulfill(treatedValues);
-		});
-	}
-
-	function treatRequirement(value){
-		return new Promise(function (fulfill, reject){
-			findOrCreateTable('inputs',value.input)
-			.then(function(res){
-				var results = {};
-				results.input = res;
-				return results;
-			})
-			.then(function(res){
-				return findOrCreateTable('outputs',value.output)
-				.then(function(res2){
-					var results = res;
-					results.output = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				var treatedValues = {
-					'title'       : value.title,
-					'type'        : value.type._id,
-					'requirement' : value.requirement,
-					'feature'     : value.feature,
-					'input'       : res.input,
-					'output'      : res.output
-				};
-				fulfill(treatedValues);
-			});
-		});
-	}
-
-	function treatInputOutput(value){
-		return new Promise(function (fulfill, reject){
-			var treatedValues = null;
-			if(value != undefined && value!=null && value!=''){
-				treatedValues = {
-					'tag'     : value.tag,
-					'format'  : value.format,
-					'number'  : value.number,
-					'size'    : value.size
-				};
-			}
-			fulfill(treatedValues);
-		});
-	};
-
-	function treatDeliverable(value){
-		return new Promise(function (fulfill, reject){
-			findOrCreateTable('deliverables',value.dependency)
-			.then(function(res){
-				var results = {};
-				results.dependency = res;
-				return results;
-			})
-			.then(function(res){
-				return findOrCreateTable('requirements',value.requirement)
-				.then(function(res2){
-					var results = res;
-					results.requirement = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				return findOrCreateTable('hpcressources',value.hpc)
-				.then(function(res2){
-					var results = res;
-					results.hpc = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				return findOrCreateTable('cloudressources',value.cloud)
-				.then(function(res2){
-					var results = res;
-					results.cloud = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				return findOrCreateTable('hardwares',value.hardware)
-				.then(function(res2){
-					var results = res;
-					results.hardware = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				return findOrCreateTable('humanressources',value.members)
-				.then(function(res2){
-					var results = res;
-					results.hr = res2;
-					return results;
-				})
-			})
-			.then(function(res){
-				var results = res;
-				results.softdev 				= getIdTable(value.softdev);
-				results.datatransfer 		= getIdTable(value.datatransfer);
-				results.virtualization	= getIdTable(value.virtualization);
-				results.devenv 					= getIdTable(value.devenv);
-				results.collabs					= [];
-				angular.forEach(value.collabs,function(val){
-					results.collabs.push(val.id);
-				});
-				return results;
-			}).then(function(res){
-				var treatedValues = {
-					'name'            : value.name,
-					'date'            : value.date,
-					'description'     : value.description,
-					'risks'           : value.risks,
-					'dependency'      : res.dependency,
-					'requirements'    : res.requirement,
-					'softdev'         : res.softdev,
-					'datatransfer'    : res.datatransfer,
-					'collabs'         : res.collabs,
-					'virtualization'  : res.virtualization,
-					'devenv'          : res.devenv,
-					'hpcRessource'    : value.hpcRessource,
-					'cloudRessource'  : value.cloudRessource,
-					'hpc'             : res.hpc,
-					'cloud'           : res.cloud,
-					'hardware'        : res.hardware,
-					'hr'              : res.hr
-				};
-				fulfill(treatedValues);
-			});
-		});
-	}
-
-	function treatHpcCloud(value){
-		return new Promise(function (fulfill, reject){
-			var treatedValues = null;
-			if(value != undefined && value!=null && value!=''){
-				treatedValues = {
-					'type' : value.type._id,
-					'runs' : value.runs,
-					'time' : value.time,
-					'part' : value.part,
-					'arte' : value.arte,
-					'size' : value.size
-				};
-			}
-			fulfill(treatedValues);
-		});
-	};
-
-	function treatHardware(value){
-		return new Promise(function (fulfill, reject){
-			var treatedValues = null;
-			if(value != undefined && value!=null && value!=''){
-				treatedValues = {
-					'name'        : value.name,
-					'price'       : value.price,
-					'link'        : value.link,
-					'description' : value.description
-				};
-			}
-			fulfill(treatedValues);
-		});
-	};
-
-	function treatHr(value){
-		return new Promise(function (fulfill, reject){
-			var treatedValues = null;
-			if(value != undefined && value!=null && value!=''){
-				treatedValues = {
-					'name'        : value.name,
-					'role'        : value.role,
-					'pm'          : value.pm,
-					'description' : value.description
-				};
-			}
-			fulfill(treatedValues);
-		});
-	};
-
-	function treatOther(value){
-		return new Promise(function (fulfill, reject){
-			var treatedValues = null;
-			if(value != undefined && value!=null && value!=''){
-				treatedValues = value
-			}
-			fulfill(treatedValues);
-		});
+		sharedService.saveProject();
 	};
 });
