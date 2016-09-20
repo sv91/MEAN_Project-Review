@@ -378,7 +378,7 @@ angular
 				.then(function(res){
 					var treatedValues = {
 						'subDate'			: new Date(),
-						'author'			: results.person,
+						'author'			: res.person,
 						'submission'	: res.submissions
 					};
 					fulfill(treatedValues);
