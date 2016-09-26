@@ -3,7 +3,7 @@
   <div ng-repeat="proposal in data.proposals | filter: {_id : project.proposal}">
     <div id="{{project._id}}" onclick="goTo(this.id);">
       <div ng-repeat="sub in data.submissions | filter: {_id : proposal.submission}">
-        <div ng-repeat="rev in data.generalReviews | filter:{_id : project.review}">
+        <div ng-repeat="rev in data.reviews | filter:{_id : project.review}">
           <div class="typeSquare" >
             <div class="typePicture typePicture{{sub.projectType}}" alt={{sub.projectType}}>
               <div class="statusPicture">

@@ -1,7 +1,7 @@
 <div id="proposal">
   <label>Comments</label>
   <ul>
-    <li ng-repeat="comm in data.select.comments | orderBy:timestamp | limitTo:5">{{comm.value}}</li>
+    <li ng-repeat="comm in data.select.comments | orderBy:'-timestamp' | limitTo:5">{{comm.value}}</li>
   </ul>
   <div class="rightAligned">
     <div class="btn btn-default" onclick="goTo(this);">See more comments</div>

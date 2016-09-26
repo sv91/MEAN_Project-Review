@@ -22,7 +22,8 @@ angular.module('proposalReviewApp')
     {'name':'proposals'},
     {'name':'submissions'},
     {'name':'persons'},
-    {'name':'requirements'}
+    {'name':'requirements'},
+    {'name':'reviews'}
   ];
 
   $scope.formData = [];

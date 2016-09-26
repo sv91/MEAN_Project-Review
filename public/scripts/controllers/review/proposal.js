@@ -91,19 +91,63 @@ function getAllGrandChildById(list,child,grand,type){
 }
 
 $scope.data.params = $stateParams;
-if($scope.data.select.projectId != $scope.data.params[Object.keys($scope.data.params)[0]]){
-  $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
-  $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
-  $scope.data.select.review = findByID($scope.data.generalReviews, $scope.data.select.project.review);
-  $scope.data.select.notes = findAllByID($scope.data.notes, $scope.data.select.project.review.notes);
-  $scope.data.select.comments = findAllByID($scope.data.comments, $scope.data.select.project.review.comments);    $scope.data.select.loaded = true;
-} else {
-  $scope.data.select.loaded = true;
+
+function loadInfo(){
+  return new Promise(function(fulfill, reject){
+    if($scope.data.select.projectId != $scope.data.params[Object.keys($scope.data.params)[0]]){
+      $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
+      $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
+    }
+    $scope.data.select.proposal = findByID($scope.data.submissions, findByID($scope.data.proposals, $scope.data.select.project.proposal).submission);
+    $scope.data.select.proposal.pi = findByID($scope.data.persons, $scope.data.select.proposal.pi);
+    $scope.data.select.proposal.copi = findByID($scope.data.persons, $scope.data.select.proposal.copi);
+    $scope.data.select.proposal.members = findAllByID($scope.data.persons, $scope.data.select.proposal.members);
+    fulfill($scope.data.select.project.review);
+  });
 }
-$scope.data.select.proposal = findByID($scope.data.submissions, findByID($scope.data.proposals, $scope.data.select.project.proposal).submission);
-$scope.data.select.proposal.pi = findByID($scope.data.persons, $scope.data.select.proposal.pi);
-$scope.data.select.proposal.copi = findByID($scope.data.persons, $scope.data.select.proposal.copi);
-$scope.data.select.proposal.members = findAllByID($scope.data.persons, $scope.data.select.proposal.members);
+
+
+loadInfo()
+.then(function(res){
+  return $http.get('/api/reviews/'+ res)
+  .success(function(data) {
+    $scope.data.select.review = data;
+    return data._id;
+  })
+  .error(function(data) {
+    console.log('Error: Review/Proposal.JS: Reviews could not be loaded.');
+  });
+})
+.then(function(res){
+  $http.get('/api/comments/')
+  .success(function(data) {
+    $scope.data.select.comments = [];
+    angular.forEach(data,function(val){
+      if($scope.data.select.review.comments.indexOf(val._id)>-1){
+        $scope.data.select.comments.push(val);
+      }
+    });
+  })
+  .error(function(data) {
+    console.log('Error: Review/Proposal.JS: Comments could not be loaded.');
+  });
+  return res;
+})
+.then(function(res){
+  $http.get('/api/notes/')
+  .success(function(data) {
+    $scope.data.select.notes = [];
+    angular.forEach(data,function(val){
+      if($scope.data.select.review.notes.indexOf(val._id)>-1){
+        $scope.data.select.notes.push(val);
+      }
+    });
+  })
+  .error(function(data) {
+    console.log('Error: Review/Proposal.JS: Notes could not be loaded.');
+  });
+  return res;
+});
 
 getAllByID($scope.data.select.proposal.teams,'teams')
 .then(function(res){
@@ -159,6 +203,8 @@ getAllByID($scope.data.select.proposal.teams,'teams')
   return getAllGrandChildById($scope.data.select.proposal.deliverables,'cloud','type','cloudtypes');
 }).then(function(res){
   return getAllGrandChildById($scope.data.select.proposal.deliverables,'hr','role','roles');
-})
+});
+
+  $scope.data.select.loaded = true;
 
 });

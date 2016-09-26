@@ -50,7 +50,8 @@ angular
 	})
 	.state('main.reviewApp.note', {
 		url: '/review/:param/note',
-		templateUrl: 'views/review/note.html'
+		templateUrl: 'views/review/note.html',
+		controller:'NoteCtrl'
 	})
 	.state('summary', {
 		url: '/review/:param/summary',
@@ -251,7 +252,7 @@ angular
 						fulfill(res);
 					});
 					break;
-					case 'generalreviews':
+					case 'reviews':
 					sharedService.treatReview().then(function(res){
 						fulfill(res);
 					});
@@ -342,7 +343,7 @@ angular
 					return results;
 				})
 				.then(function(res){
-					return sharedService.findOrCreate('generalreviews',value)
+					return sharedService.findOrCreate('reviews',value)
 					.then(function(res2){
 						var results = res;
 						results.review = res2;
@@ -754,12 +755,12 @@ angular
 	});
 
 	// when landing on the page, get all the projects and show them
-	$http.get('/api/generalreviews')
+	$http.get('/api/reviews')
 	.success(function(data) {
-		$scope.data.generalReviews = data;
+		$scope.data.reviews = data;
 	})
 	.error(function(data) {
-		console.log('Error: reviewAppController: General Reviews could not be loaded.');
+		console.log('Error: reviewAppController: Reviews could not be loaded.');
 	});
 
 	// when landing on the page, get all the projects and show them
@@ -771,32 +772,25 @@ angular
 		console.log('Error: reviewAppController: Persons could not be loaded.');
 	});
 
-	$scope.saveComment = function(val,update) {
-		console.log("Saving: " + val.field);
-		sharedService.findOrCreate('persons',val.user)
+	$scope.saveComment = function() {
+		console.log("Saving: " + $scope.bubble.field);
+		sharedService.findOrCreate('persons',$scope.activeUser)
 		.then(function(res){
 		var sub = {
 			'reviewer' 	: res,
-			'timestamp'	: new Date,
-			'field' 		: val.field,
-			'values'		: val.toSubmit
+			'field' 		: $scope.bubble.field,
+			'value'			: $scope.toSubmit
 		}
 		$http.post('/api/comments', sub)
 			.success(function(data){
-				$http.post('/api/reviews/'+val.rev_id+'/comments',data)
+				var comments = $scope.data.select.review.comments;
+				comments.push(data);
+				$http.post('/api/reviews/'+$scope.data.select.review._id+'/comments',comments)
 					.success(function(){
 						console.log("Review successfully updated.");
 					})
 					.error(function(data) {
 						console.log('Error: Review Update ' + data);
-					});
-					$http.get('/api/generalreviews')
-					.success(function(data) {
-						update = data;
-						refreshComments();
-					})
-					.error(function(data) {
-						console.log('Error: reviewAppController: General Reviews could not be loaded.');
 					});
 				console.log("End submitting comment");
 			})

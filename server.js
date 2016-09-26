@@ -22,7 +22,7 @@ app.use(methodOverride());
   // Project -------------------------------------------------------------------
   var Project = mongoose.model('Project', {
     proposal  : { type: String, ref: 'Proposal' },
-    review    : { type: String, ref: 'GeneralReview' }
+    review    : { type: String, ref: 'Review' }
   });
 
   // Proposal ------------------------------------------------------------------
@@ -241,7 +241,7 @@ app.use(methodOverride());
   });
 
   // General Review ------------------------------------------------------------
-  var GeneralReview = mongoose.model('GeneralReview', {
+  var Review = mongoose.model('Review', {
     grade   : Number,
     status  : String,
     comments  : [{ type: String, ref: 'Comment' }],
@@ -1116,31 +1116,7 @@ app.use(methodOverride());
 
     // Delete the specified element
     app.delete('/api/roles/:target_id/delete', function(req,res) {
-      delteOne(res, GeneralReview);
-    });
-
-    // General Review ..........................................................
-    // Get all
-    app.get('/api/generalreviews', function(req, res){
-      findAll(res, GeneralReview);
-    });
-
-    // Create new Role
-    app.post('/api/generalreviews', function(req, res){
-      GeneralReview.create({
-        grade   : req.body.grade,
-        status  : req.body.status,
-        reviews : req.body.reviews
-      }, function(err,project){
-        if (err)
-          HandleError(err,res);
-        res.json(project._id);
-      });
-    });
-
-    // Delete the specified element
-    app.delete('/api/generalreviews/:target_id/delete', function(req,res) {
-      delteOne(res, GeneralReview);
+      delteOne(res, Role);
     });
 
     // Review ..................................................................
@@ -1157,7 +1133,6 @@ app.use(methodOverride());
     // Create new Cloud Ressource
     app.post('/api/reviews', function(req, res){
       Review.create({
-        reviewer  : req.body.reviewer,
         comments  : req.body.comments,
         notes     : req.body.notes
       }, function(err,project){
@@ -1168,22 +1143,16 @@ app.use(methodOverride());
     });
 
     app.post('/api/reviews/:target_id/comments', function(req, res){
-      Review.findOne({
-        _id : req.params.target_id
-      },function(err, tar){
-        if(err)
-          HandleError(err,res);
         Review.findOneAndUpdate({
           _id : req.params.target_id
         },{
-            comments : tar.comments.push(req.body)
+            comments : req.body
         },function(err, tar){
           if(err)
             HandleError(err,res);
           res.json(tar);
           });
       });
-    });
 
     // Delete the specified element
     app.delete('/api/reviews/:target_id/delete', function(req,res) {
@@ -1204,6 +1173,7 @@ app.use(methodOverride());
     // Create new Cloud Ressource
     app.post('/api/comments', function(req, res){
       Comment.create({
+        reviewer  : req.body.reviewer,
         timestamp : new Date(),
         field     : req.body.field,
         value     : req.body.value
@@ -1233,6 +1203,7 @@ app.use(methodOverride());
     // Create new Note
     app.post('/api/notes', function(req, res){
       Note.create({
+        reviewer        : req.body.reviewer,
         timestamp       : new Date(),
         bbpobjective    : req.body.bbpobjective,
         contracted      : req.body.contracted,
