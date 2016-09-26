@@ -2,13 +2,13 @@
   <div ng-repeat="svPair in record.publications">
     <div>
       <!--<pre>{{ngModel|json}}</pre>-->
-      <div onclick="updateBubble(this,'Name of the publication.')">
+      <div ng-click="updateBubble($event,'Name of the publication.')">
         Name
         <input type="text"
         placeholder="Publication name"
         ng-required="record.projectType >= 2" ng-model="svPair.name">
       </div>
-      <div onclick="updateBubble(this,'Link to the publication, if exists.<br />Format: <i>\'http:\\\\the.address.com\'</i>')">
+      <div ng-click="updateBubble($event,'Link to the publication, if exists.<br />Format: <i>\'http:\\\\the.address.com\'</i>')">
         Link
         <input type="URL" class="form-control"
         placeholder="Link to publication"

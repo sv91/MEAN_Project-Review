@@ -12,7 +12,7 @@
     </table>
     <div>
       <!--<pre>{{ngModel|json}}</pre>-->
-      <div ng-show="record.projectType >= 1" onclick="updateBubble(this,'The name of the deliverable.')">
+      <div ng-show="record.projectType >= 1" ng-click="updateBubble($event,'The name of the deliverable.')">
         <label>Name</label>
         <input type="text"
         class="form-control"
@@ -21,7 +21,7 @@
         ng-required="record.projectType >= 2" ng-model="svPair.name">
       </div>
       <br />
-      <div ng-show="record.projectType >= 1" onclick="updateBubble(this,'Delivery date.<br />Should be between the project start date and end date.')">
+      <div ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Delivery date.<br />Should be between the project start date and end date.')">
         <label>Date</label>
         <md-datepicker ng-required="record.projectType >= 2" ng-model="svPair.date"
           md-placeholder="Enter date"
@@ -30,26 +30,26 @@
         </md-datepicker>
       </div>
       <br />
-      <div ng-show="record.projectType >= 1" onclick="updateBubble(this,'A short description.')">
+      <div ng-show="record.projectType >= 1" ng-click="updateBubble($event,'A short description.')">
         <label>Description</label>
         <textarea class="form-control" ng-required="record.projectType >= 2" ng-model="svPair.description" placeholder="A short description" required>
         </textarea>
       </div>
       <br />
-      <div ng-show="record.projectType >= 2" onclick="updateBubble(this,'Some risks.')">
+      <div ng-show="record.projectType >= 2" ng-click="updateBubble($event,'Some risks.')">
         <label>Risks</label>
         <textarea class="form-control" ng-required="record.projectType >= 2" ng-model="svPair.risks" placeholder="Risks of the deliverable" required>
         </textarea>
       </div>
       <br />
-      <div ng-show="record.projectType >= 1" onclick="updateBubble(this,'Dependencies of the deliverable to other deliverables.')">
+      <div ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Dependencies of the deliverable to other deliverables.')">
         <label>Deliverable Dependencies</label>
         <ui-select multiple ng-required="record.projectType >= 2" ng-model="svPair.dependency" theme="bootstrap" sortable="true">
           <ui-select-match placeholder="Select the dependencies to any other deliverable">{{$item.name}}</ui-select-match>
           <ui-select-choices repeat="dependency in record.deliverables | filter:$select.search | dependencyFilter : svPair.name">{{dependency.name}}</ui-select-choices>
         </ui-select>
       </div>
-      <div ng-show="record.projectType >= 1" onclick="updateBubble(this,'Dependencies of the deliverable to previously defined requirements.')">
+      <div ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Dependencies of the deliverable to previously defined requirements.')">
         <label>Requirement Dependencies</label>
         <ui-select multiple ng-required="record.projectType >= 2" ng-model="svPair.requirements" heme="bootstrap" sortable="true">
           <ui-select-match placeholder="Select the dependencies to any requirement">{{$item.title}}</ui-select-match>
@@ -64,7 +64,7 @@
           <div class="p10">
             <table width="100%">
               <tr>
-                <td class="inTwo" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Select the needed tools.')">
+                <td class="inTwo" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Select the needed tools.')">
                   Software development
                   <ui-select multiple ng-required="record.projectType >= 2" ng-model="svPair.softdev" theme="bootstrap" sortable="true">
                     <ui-select-match placeholder="Select the desired Sofware development tools">{{$item.name}}</ui-select-match>
@@ -83,7 +83,7 @@
               </tr>
             </table>
             <div ng-show="record.projectType >= 1" >HBP Collab
-              <ui-select onclick="updateBubble(this,'Select related Collab.')" multiple ng-required="record.projectType >= 2" ng-model="svPair.collabs" theme="bootstrap" sortable="true">
+              <ui-select ng-click="updateBubble($event,'Select related Collab.')" multiple ng-required="record.projectType >= 2" ng-model="svPair.collabs" theme="bootstrap" sortable="true">
                 <ui-select-match placeholder="Select the HBP Collabs related to the deliverable">{{$item.title}}</ui-select-match>
                 <ui-select-choices repeat="collab in availableCollab | filter:$select.search">{{collab.title}}</ui-select-choices>
               </ui-select>
@@ -95,7 +95,7 @@
           <div class="p10">
             <table width="100%">
               <tr>
-                <td class="inTwo" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Select the needed tools.')">
+                <td class="inTwo" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Select the needed tools.')">
                   Virtualization
                   <ui-select multiple ng-required="record.projectType >= 2" ng-model="svPair.virtualization" theme="bootstrap" sortable="true">
                     <ui-select-match placeholder="Select the desired Virtualization tools">{{$item.name}}</ui-select-match>
@@ -104,7 +104,7 @@
                 </td>
                 <td class="inTwoEmptySeparator">
                 </td>
-                <td class="inTwo" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Select the needed tools.')">
+                <td class="inTwo" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Select the needed tools.')">
                   Development environment
                   <ui-select multiple ng-required="record.projectType >= 2" ng-model="svPair.devenv" theme="bootstrap" sortable="true">
                     <ui-select-match placeholder="Select the desired Development environment">{{$item.name}}</ui-select-match>
@@ -160,7 +160,7 @@
                 <div ng-show="h.open">
                   <!--<pre>{{ngModel|json}}</pre>-->
                   System Architecture
-                  <ui-select ng-show="record.projectType >= 1" onclick="updateBubble(this,'System Architecture.')" ng-required="record.projectType >= 2" ng-model="h.type" theme="bootstrap" sortable="true">
+                  <ui-select ng-show="record.projectType >= 1" ng-click="updateBubble($event,'System Architecture.')" ng-required="record.projectType >= 2" ng-model="h.type" theme="bootstrap" sortable="true">
                     <ui-select-match placeholder="Select the desired System Architecture">{{$select.selected.name}}</ui-select-match>
                     <ui-select-choices repeat="soft in availableArchitecture | filter:$select.search">
                       {{soft.name}} <i>{{soft.desc}}</i>
@@ -173,11 +173,11 @@
                         HPC Computing
                         <div class="p10 form-group">
                           Total number of runs
-                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.runs" min="0"  ng-show="record.projectType >= 1" onclick="updateBubble(this,'Number of runs.')">
+                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.runs" min="0"  ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Number of runs.')">
                           Average partition size (Number of processors)
-                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.part" min="0" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Average partition size (Number of processors).')">
+                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.part" min="0" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Average partition size (Number of processors).')">
                           Time to solution (In hours)
-                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.time" min="0" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Time to solution (In hours).')">
+                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.time" min="0" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Time to solution (In hours).')">
                         </div>
                       </td>
                       <td class="inTwoEmptySeparator">
@@ -186,9 +186,9 @@
                         HPC Storage
                         <div class="p10 form-group">
                           Number of artefacts
-                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.arte" min="0" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Number of artefacts.')">
+                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.arte" min="0" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Number of artefacts.')">
                           Average size of artefacts (in GB)
-                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.size" min="0" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Average size of artefacts (in GB).')">
+                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.size" min="0" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Average size of artefacts (in GB).')">
                         </div>
                       </td>
                     </tr>
@@ -224,7 +224,7 @@
                 <div ng-show="h.open">
                   <!--<pre>{{ngModel|json}}</pre>-->
                   Provider
-                  <ui-select ng-show="record.projectType >= 1" onclick="updateBubble(this,'Provider.')" ng-required="record.projectType >= 2" ng-model="h.type" theme="bootstrap" sortable="true">
+                  <ui-select ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Provider.')" ng-required="record.projectType >= 2" ng-model="h.type" theme="bootstrap" sortable="true">
                     <ui-select-match placeholder="Select the desired Provider">{{$select.selected.name}}</ui-select-match>
                     <ui-select-choices repeat="soft in availableArchitectureCloud | filter:$select.search">
                       {{soft.name}} <i>{{soft.desc}}</i>
@@ -237,11 +237,11 @@
                         Cloud Computing
                         <div class="p10 form-group">
                           Total number of runs
-                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.runs" min="0"  ng-show="record.projectType >= 1" onclick="updateBubble(this,'Number of runs.')">
+                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.runs" min="0"  ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Number of runs.')">
                           Average partition size (Number of processors)
-                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.part" min="0" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Average partition size (Number of processors).')">
+                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.part" min="0" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Average partition size (Number of processors).')">
                           Time to solution (In hours)
-                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.time" min="0" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Time to solution (In hours).')">
+                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.time" min="0" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Time to solution (In hours).')">
                         </div>
                       </td>
                       <td class="inTwoEmptySeparator">
@@ -250,9 +250,9 @@
                         Cloud Storage
                         <div class="p10 form-group">
                           Number of artefacts
-                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.arte" min="0" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Number of artefacts.')">
+                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.arte" min="0" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Number of artefacts.')">
                           Average size of artefacts (in GB)
-                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.size" min="0" ng-show="record.projectType >= 1" onclick="updateBubble(this,'Average size of artefacts (in GB).')">
+                          <input type="number" ng-required="record.projectType >= 2" ng-model="h.size" min="0" ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Average size of artefacts (in GB).')">
                         </div>
                       </td>
                     </tr>

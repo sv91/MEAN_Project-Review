@@ -1,6 +1,6 @@
 <div class="container form middlePart">
   <!-- principal Investigator -->
-  <div class="form-group" onclick="updateBubble(this,'Select the leader of this project.')" ng-show="record.projectType >= 0">
+  <div class="form-group" ng-click="updateBubble($event,'Select the leader of this project.')" ng-show="record.projectType >= 0">
     <label>Project Leader</label>
     <div style="width:720px">
       <select-pi></select-pi>
@@ -8,7 +8,7 @@
   </div>
 
   <!-- Co-principal Investigator -->
-  <div class="form-group" onclick="updateBubble(this,'Select the co-leader of this project if there is one.')" ng-show="record.projectType >= 1">
+  <div class="form-group" ng-click="updateBubble($event,'Select the co-leader of this project if there is one.')" ng-show="record.projectType >= 1">
     <label>Project Co-Leader</label>
     <div style="width:720px">
       <select-copi></select-copi>
@@ -16,7 +16,7 @@
   </div>
 
   <!-- Members -->
-  <div class="form-group" onclick="updateBubble(this,'Select all the Human Brain Project members working on this project (Do not add the leader and co-leader).')" ng-show="record.projectType >= 1">
+  <div class="form-group" ng-click="updateBubble($event,'Select all the Human Brain Project members working on this project (Do not add the leader and co-leader).')" ng-show="record.projectType >= 1">
     <label>Human Brain Project Members</label>
     <div style="width:720px">
       <multi-user-select></multi-user-select>
@@ -24,7 +24,7 @@
   </div>
 
     <!-- Members with limit -->
-    <div class="form-group" onclick="updateBubble(this,'Select all the members working on this project (Do not add the leader).')" ng-show="record.projectType == 0">
+    <div class="form-group" ng-click="updateBubble($event,'Select all the members working on this project (Do not add the leader).')" ng-show="record.projectType == 0">
       <label>Members (max. 2)</label>
       <div style="width:720px">
         <two-user-select></two-user-select>
@@ -32,7 +32,7 @@
     </div>
 
   <!-- Teams -->
-  <div class="form-group" onclick="updateBubble(this,'Select the Blue Brain teams you will need.')" ng-show="record.projectType >= 1">
+  <div class="form-group" ng-click="updateBubble($event,'Select the Blue Brain teams you will need.')" ng-show="record.projectType >= 1">
     <label>Blue Brain Project Teams</label>
     <div style="width:720px">
       <ui-select multiple ng-model="record.teams" theme="bootstrap" sortable="true">

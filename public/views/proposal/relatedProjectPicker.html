@@ -15,7 +15,7 @@
     </div>
     <div ng-show="svPair.open">
       <!--<pre>{{ngModel|json}}</pre>-->
-      <div onclick="updateBubble(this,'The name of a related project.')">
+      <div ng-click="updateBubble($event,'The name of a related project.')">
         Project name
         <input type="text" class=""
         name="dataset_title"
@@ -30,7 +30,7 @@
       <!-- Table to put the dates at the same position -->
       <table width="100%">
         <tr>
-          <td class="inTwo" onclick="updateBubble(this,'The start date.')">
+          <td class="inTwo" ng-click="updateBubble($event,'The start date.')">
             Start Date
             <md-datepicker ng-required="record.projectType >= 2" ng-model="svPair.startDate"
               md-placeholder="Enter date">
@@ -38,7 +38,7 @@
           </td>
           <td class="inTwoEmptySeparator">
           </td>
-          <td class="inTwo" onclick="updateBubble(this,'The end date.<br />Can not precede the start date.')">
+          <td class="inTwo" ng-click="updateBubble($event,'The end date.<br />Can not precede the start date.')">
           End Date
           <md-datepicker ng-required="record.projectType >= 2" ng-model="svPair.endDate"
             md-placeholder="Enter date"
@@ -46,7 +46,7 @@
           </td>
         </tr>
       </table>
-      <div onclick="updateBubble(this,'A short description.')">
+      <div ng-click="updateBubble($event,'A short description.')">
         Synergies with this project (Max. 200 characters)
         <textarea class="form-control" maxlength="200" placeholder="A short description" ng-required="record.projectType >= 2" ng-model="svPair.description"></textarea>
       </div>

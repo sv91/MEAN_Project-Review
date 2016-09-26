@@ -830,13 +830,16 @@ angular
 	* # updateBubble
 	* Update the shown information in the bubble and its position.
 	* Used by the Proposal part.
-	* @param {Object} refDev  The reference element for the position of the bubble.
 	* @param {String} html    The html code that will be in the bubble.
 	*/
 	$scope.updateBubble = function($event, html){
-		$scope.bubble.show = true;
+		$scope.bubble = {
+			'show'	: true,
+			'title' : '',
+			'text' 	: '',
+			'field'	: ''
+		};
 		var refDiv = $event.currentTarget;
-		console.dir(refDiv);
 		var txt = html;
 		if(html == undefined){
 			$scope.bubble.text = '';
@@ -844,6 +847,8 @@ angular
 			var label = refDiv.childNodes[1];
 			if(label != null && label != undefined && label.tagName == "LABEL"){
 				$scope.bubble.title = "on "+label.textContent;
+			} else {
+					$scope.bubble.title = "";
 			}
 		} else {
 			$scope.bubble.text = txt;

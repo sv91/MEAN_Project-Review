@@ -27,16 +27,16 @@ angular.module('proposalReviewApp')
     return toReturn;
   }
 
-  $scope.refreshReviews = function(){
+  function refreshReviews(){
     $scope.data.select.review = findByID($scope.data.generalReviews, $scope.data.select.project.review);
   }
 
-  $scope.refreshComments = function(){
+  function refreshComments(){
     refreshReviews();
     $scope.data.select.comments = findAllByID($scope.data.comments, $scope.data.select.project.review.comments);
   }
 
-  $scope.refreshNotes = function(){
+  function refreshNotes(){
     refreshReviews();
     $scope.data.select.notes = findAllByID($scope.data.notes, $scope.data.select.project.review.notes);
   }
