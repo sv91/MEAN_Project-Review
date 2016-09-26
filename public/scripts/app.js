@@ -724,6 +724,7 @@ angular
 		$scope.data.select = {};
 		$scope.formData = {};
 	}
+	$scope.data.select = {};
 
 	// when landing on the page, get all the projects and show them
 	$http.get('/api/projects')
