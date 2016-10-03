@@ -1136,7 +1136,8 @@ app.use(methodOverride());
     app.post('/api/reviews', function(req, res){
       Review.create({
         comments  : req.body.comments,
-        notes     : req.body.notes
+        notes     : req.body.notes,
+        status    : 'submitted'
       }, function(err,project){
         if (err)
           HandleError(err,res);
@@ -1153,8 +1154,32 @@ app.use(methodOverride());
           if(err)
             HandleError(err,res);
           res.json(tar);
-          });
+        });
       });
+
+    app.post('/api/reviews/:target_id/notes', function(req, res){
+        Review.findOneAndUpdate({
+          _id : req.params.target_id
+        },{
+            notes : req.body
+        },function(err, tar){
+          if(err)
+            HandleError(err,res);
+          res.json(tar);
+        });
+      });
+
+    app.post('/api/reviews/:target_id/status', function(req, res){
+        Review.findOneAndUpdate({
+          _id : req.params.target_id
+        },{
+          status : req.body
+        },function(err, tar){
+          if(err)
+            HandleError(err,res);
+          res.json(tar);
+        });
+    });
 
     // Delete the specified element
     app.delete('/api/reviews/:target_id/delete', function(req,res) {

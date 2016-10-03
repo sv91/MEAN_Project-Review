@@ -11,13 +11,20 @@ angular.module('proposalReviewApp')
 .controller('NoteCtrl', function ($scope, $stateParams, $http) {
   $scope.data.params = $stateParams;
   $scope.data.select.editedNote = {};
-
+  
+  function findByID(list,obj){
+    var toReturn;
+    angular.forEach(list, function(val){
+      if(val._id == obj){
+        toReturn = val;
+      }
+    });
+    return toReturn;
+  }
   function loadInfo(){
     return new Promise(function(fulfill, reject){
-      if($scope.data.select.projectId != $scope.data.params[Object.keys($scope.data.params)[0]]){
-        $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
-        $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
-      }
+      $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
+      $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
       fulfill($scope.data.select.project.review);
     });
   }
