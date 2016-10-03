@@ -3,13 +3,13 @@
     Review
   </label><br />
 
-  <input id="whole" type="checkbox" class="plusMinus" ng-model="whole">
+  <input id="whole" type="checkbox" class="plusMinus" ng-model="whole" checked>
   <label for="whole" class="css-label"><span class="glyphicon glyphicon-plus"></span>
     <span class="glyphicon glyphicon-minus"></span> Whole Project
   </label>
   <div ng-show="whole" class="p10">
 
-    <input id="s" type="checkbox" class="plusMinus" ng-model="s">
+    <input id="s" type="checkbox" class="plusMinus" ng-model="s" checked>
     <label for="s" class="css-label"><span class="glyphicon glyphicon-plus"></span>
       <span class="glyphicon glyphicon-minus"></span> Summary
     </label>
@@ -137,7 +137,7 @@
     </div>
     <hr />
 
-    <input id="r" type="checkbox" class="plusMinus" ng-model="r">
+    <input id="r" type="checkbox" class="plusMinus" ng-model="r" checked>
     <label for="r" class="css-label"><span class="glyphicon glyphicon-plus"></span>
       <span class="glyphicon glyphicon-minus"></span> Requirements
     </label>
@@ -182,7 +182,7 @@
     <hr />
 
     <div ng-show="data.select.proposal.projectType >= 1" >
-      <input id="comp" type="checkbox" class="plusMinus" ng-model="comp">
+      <input id="comp" type="checkbox" class="plusMinus" ng-model="comp" checked>
       <label for="comp" class="css-label"><span class="glyphicon glyphicon-plus"></span>
         <span class="glyphicon glyphicon-minus"></span> Computing, Storage and Services resources
       </label>
@@ -364,7 +364,7 @@
     </div>
 
     <div ng-show="data.select.proposal.projectType >= 1" >
-      <input id="hr" type="checkbox" class="plusMinus" ng-model="hr">
+      <input id="hr" type="checkbox" class="plusMinus" ng-model="hr" checked>
       <label for="hr" class="css-label"><span class="glyphicon glyphicon-plus"></span>
         <span class="glyphicon glyphicon-minus"></span> Human resources
       </label>

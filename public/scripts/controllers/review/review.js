@@ -24,10 +24,8 @@ angular.module('proposalReviewApp')
 
   function loadInfo(){
     return new Promise(function(fulfill, reject){
-    if($scope.data.select.projectId != $scope.data.params[Object.keys($scope.data.params)[0]]){
-      $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
-      $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
-    }
+    $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
+    $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
     fulfill($scope.data.select.project.review);
   });
   }

@@ -2,6 +2,12 @@
 
 angular.module('proposalReviewApp')
 .controller('ProposalCtrl', function ($scope, $stateParams, $http) {
+  $scope.whole  = true;
+  $scope.s      = true;
+  $scope.r      = true;
+  $scope.comp   = true;
+  $scope.hr     = true;
+
   function findByID(list,obj){
     var toReturn;
     angular.forEach(list, function(val){
@@ -94,10 +100,8 @@ $scope.data.params = $stateParams;
 
 function loadInfo(){
   return new Promise(function(fulfill, reject){
-    if($scope.data.select.projectId != $scope.data.params[Object.keys($scope.data.params)[0]]){
-      $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
-      $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
-    }
+    $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
+    $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
     $scope.data.select.proposal = findByID($scope.data.submissions, findByID($scope.data.proposals, $scope.data.select.project.proposal).submission);
     $scope.data.select.proposal.pi = findByID($scope.data.persons, $scope.data.select.proposal.pi);
     $scope.data.select.proposal.copi = findByID($scope.data.persons, $scope.data.select.proposal.copi);
@@ -130,21 +134,6 @@ loadInfo()
   })
   .error(function(data) {
     console.log('Error: Review/Proposal.JS: Comments could not be loaded.');
-  });
-  return res;
-})
-.then(function(res){
-  $http.get('/api/notes/')
-  .success(function(data) {
-    $scope.data.select.notes = [];
-    angular.forEach(data,function(val){
-      if($scope.data.select.review.notes.indexOf(val._id)>-1){
-        $scope.data.select.notes.push(val);
-      }
-    });
-  })
-  .error(function(data) {
-    console.log('Error: Review/Proposal.JS: Notes could not be loaded.');
   });
   return res;
 });

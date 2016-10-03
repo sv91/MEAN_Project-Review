@@ -11,8 +11,8 @@
 <div id="note">
   <label>Notes</label>
   <ul>
-    <li ng-repeat="comm in data.select.notes | orderBy:timestamp | limitTo:1">
-    </li>
+    <div ng-repeat="comm in data.select.notes | orderBy:'-timestamp' | limitTo:1">
+    </div>
   </ul>
   <div class="rightAligned">
   <div class="btn btn-default" onclick="goTo(this);">See more notes</div></div>

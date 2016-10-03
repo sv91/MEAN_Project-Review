@@ -1,12 +1,13 @@
 <div class="form-group">
+  <form ng-submit="saveNote()">
 <label>Strategic evaluation</label><br />
 <table>
   <td class="inTwo">
   Is the project part of BBP objectives:
   </td>
   <td class="inTwo">
-  <input type="radio" name="bbpObjective" value="1" ng-model="review.bbpObjective" style="margin:10px">Yes
-  <input type="radio" name="bbpObjective" value="0" ng-model="review.bbpObjective" style="margin:10px">No
+  <input type="radio" name="bbpObjective" value="1" ng-model="data.select.editedNote.bbpobjective" style="margin:10px">Yes
+  <input type="radio" name="bbpObjective" value="0" ng-model="data.select.editedNote.bbpobjective" style="margin:10px">No
   </td>
 </table>
 <table>
@@ -14,8 +15,8 @@
     Is the project part of other contracted projects:
     </td>
     <td class="inTwo">
-  <input type="radio" name="contractedProject" value="1" ng-model="review.contractedProject" style="margin:10px">Yes
-  <input type="radio" name="contractedProject" value="0" ng-model="review.contractedProject" style="margin:10px">No
+  <input type="radio" name="contractedProject" value="1" ng-model="data.select.editedNote.contracted" style="margin:10px">Yes
+  <input type="radio" name="contractedProject" value="0" ng-model="data.select.editedNote.contracted" style="margin:10px">No
   </td>
 </table>
 <table>
@@ -23,10 +24,10 @@
     Evaluate the possible level of impact of the project:
     </td>
     <td class="inTwo">
-<input type="radio" name="impact" value="0" ng-model="review.impact" style="margin:10px">Low
-<input type="radio" name="impact" value="1" ng-model="review.impact" style="margin:10px">Medium
-<input type="radio" name="impact" value="2" ng-model="review.impact" style="margin:10px">High
-<input type="radio" name="impact" value="3" ng-model="review.impact" style="margin:10px">Very High
+<input type="radio" name="impact" value="0" ng-model="data.select.editedNote.impact" style="margin:10px">Low
+<input type="radio" name="impact" value="1" ng-model="data.select.editedNote.impact" style="margin:10px">Medium
+<input type="radio" name="impact" value="2" ng-model="data.select.editedNote.impact" style="margin:10px">High
+<input type="radio" name="impact" value="3" ng-model="data.select.editedNote.impact" style="margin:10px">Very High
 </td>
 </table>
 <table>
@@ -34,10 +35,10 @@
     Level of criticality of the project for BBP:
     </td>
     <td class="inTwo">
-<input type="radio" name="criticality" value="0" ng-model="review.criticality" style="margin:10px">Low
-<input type="radio" name="criticality" value="1" ng-model="review.criticality" style="margin:10px">Medium
-<input type="radio" name="criticality" value="2" ng-model="review.criticality" style="margin:10px">High
-<input type="radio" name="criticality" value="3" ng-model="review.criticality" style="margin:10px">Very High
+<input type="radio" name="criticality" value="0" ng-model="data.select.editedNote.criticality" style="margin:10px">Low
+<input type="radio" name="criticality" value="1" ng-model="data.select.editedNote.criticality" style="margin:10px">Medium
+<input type="radio" name="criticality" value="2" ng-model="data.select.editedNote.criticality" style="margin:10px">High
+<input type="radio" name="criticality" value="3" ng-model="data.select.editedNote.criticality" style="margin:10px">Very High
 </td>
 </table>
 </div>
@@ -52,9 +53,9 @@
 Is the goal of the project clearly defined ?
 </td>
 <td class="inTwo">
-<input type="radio" name="goal" value="1" ng-model="review.goal" style="margin:10px">1
-<input type="radio" name="goal" value="2" ng-model="review.goal" style="margin:10px">2
-<input type="radio" name="goal" value="3" ng-model="review.goal" style="margin:10px">3
+<input type="radio" name="goal" value="1" ng-model="data.select.editedNote.clear" style="margin:10px">1
+<input type="radio" name="goal" value="2" ng-model="data.select.editedNote.clear" style="margin:10px">2
+<input type="radio" name="goal" value="3" ng-model="data.select.editedNote.clear" style="margin:10px">3
 </td>
 </table>
 <table>
@@ -62,9 +63,9 @@ Is the goal of the project clearly defined ?
 Are the milestones and deliverables meaningful ?
 </td>
 <td class="inTwo">
-<input type="radio" name="meaningful" value="1" ng-model="review.meaningful" style="margin:10px">1
-<input type="radio" name="meaningful" value="2" ng-model="review.meaningful" style="margin:10px">2
-<input type="radio" name="meaningful" value="3" ng-model="review.meaningful" style="margin:10px">3
+<input type="radio" name="meaningful" value="1" ng-model="data.select.editedNote.meaningful" style="margin:10px">1
+<input type="radio" name="meaningful" value="2" ng-model="data.select.editedNote.meaningful" style="margin:10px">2
+<input type="radio" name="meaningful" value="3" ng-model="data.select.editedNote.meaningful" style="margin:10px">3
 </td>
 </table>
 <table>
@@ -72,9 +73,9 @@ Are the milestones and deliverables meaningful ?
 Are the milestones and deliverables achievable ?
 </td>
 <td class="inTwo">
-<input type="radio" name="achievable" value="1" ng-model="review.achievable" style="margin:10px">1
-<input type="radio" name="achievable" value="2" ng-model="review.achievable" style="margin:10px">2
-<input type="radio" name="achievable" value="3" ng-model="review.achievable" style="margin:10px">3
+<input type="radio" name="achievable" value="1" ng-model="data.select.editedNote.achievable" style="margin:10px">1
+<input type="radio" name="achievable" value="2" ng-model="data.select.editedNote.achievable" style="margin:10px">2
+<input type="radio" name="achievable" value="3" ng-model="data.select.editedNote.achievable" style="margin:10px">3
 </td>
 </table>
 <table>
@@ -82,9 +83,9 @@ Are the milestones and deliverables achievable ?
 Are the requirements clearly defined ?
 </td>
 <td class="inTwo">
-<input type="radio" name="requirements" value="1" ng-model="review.requirements" style="margin:10px">1
-<input type="radio" name="requirements" value="2" ng-model="review.requirements" style="margin:10px">2
-<input type="radio" name="requirements" value="3" ng-model="review.requirements" style="margin:10px">3
+<input type="radio" name="requirements" value="1" ng-model="data.select.editedNote.reqclear" style="margin:10px">1
+<input type="radio" name="requirements" value="2" ng-model="data.select.editedNote.reqclear" style="margin:10px">2
+<input type="radio" name="requirements" value="3" ng-model="data.select.editedNote.reqclear" style="margin:10px">3
 </td>
 </table>
 </div>
@@ -96,8 +97,8 @@ Are the requirements clearly defined ?
 Is the project already funded by an existing or upcoming grant
 </td>
 <td class="inTwo">
-<input type="radio" name="grant" value="1" ng-model="review.grant" style="margin:10px">Yes
-<input type="radio" name="grant" value="0" ng-model="review.grant" style="margin:10px">No
+<input type="radio" name="grant" value="1" ng-model="data.select.editedNote.funded" style="margin:10px">Yes
+<input type="radio" name="grant" value="0" ng-model="data.select.editedNote.funded" style="margin:10px">No
 </td>
 </table>
 <table>
@@ -105,35 +106,35 @@ Is the project already funded by an existing or upcoming grant
 Is the level of human resource appropriate
 </td>
 <td class="inTwo">
-<input type="radio" name="hr" value="1" ng-model="review.hr" style="margin:10px">Yes
-<input type="radio" name="hr" value="0" ng-model="review.hr" style="margin:10px">No
+<input type="radio" name="hr" value="1" ng-model="data.select.editedNote.human" style="margin:10px">Yes
+<input type="radio" name="hr" value="0" ng-model="data.select.editedNote.human" style="margin:10px">No
 </td>
 </table>
 <div ng-show="review.hr == 0">
 If No, explain why (200 words max)<br />
-<textarea class='form-control' ng-model="review.badhr" maxlength="2000"></textarea><br />
+<textarea class='form-control' ng-model="data.select.editedNote.humanpr" maxlength="2000"></textarea><br />
 </div>
 <table>
 <td class="inTwo">
 Is the level of computing resource appropriate
 </td>
 <td class="inTwo">
-<input type="radio" name="computing" value="1" ng-model="review.computing" style="margin:10px">Yes
-<input type="radio" name="computing" value="0" ng-model="review.computing" style="margin:10px">No
+<input type="radio" name="computing" value="1" ng-model="data.select.editedNote.computing" style="margin:10px">Yes
+<input type="radio" name="computing" value="0" ng-model="data.select.editedNote.computing" style="margin:10px">No
 </td>
 </table>
 <div ng-show="review.computing == 0">
 If No, explain why (200 words max)<br />
-<textarea class='form-control' ng-model="review.badcomputing" maxlength="2000"></textarea><br />
+<textarea class='form-control' ng-model="data.select.editedNote.computingpr" maxlength="2000"></textarea><br />
 </div>
 <table>
 <td class="inTwo">
 Does the team have enough skill set to deliver the defined milestones:
 </td>
 <td class="inTwo">
-<input type="radio" name="skill" value="1" ng-model="review.skill" style="margin:10px">1
-<input type="radio" name="skill" value="2" ng-model="review.skill" style="margin:10px">2
-<input type="radio" name="skill" value="3" ng-model="review.skill" style="margin:10px">3
+<input type="radio" name="skill" value="1" ng-model="data.select.editedNote.skill" style="margin:10px">1
+<input type="radio" name="skill" value="2" ng-model="data.select.editedNote.skill" style="margin:10px">2
+<input type="radio" name="skill" value="3" ng-model="data.select.editedNote.skill" style="margin:10px">3
 </td>
 </table>
 TODO If not, please suggest additional members or team (ici tu rajoutes les champs pour pouvoir rajouter des gens/equipes comme pour la partie "membres")
@@ -142,10 +143,10 @@ TODO If not, please suggest additional members or team (ici tu rajoutes les cham
 Evaluate track record of the PI/Co-PIs for project management
 </td>
   <td class="inTwo">
-<input type="radio" name="trackRecord" value="0" ng-model="review.trackRecord" style="margin:10px">Low
-<input type="radio" name="trackRecord" value="1" ng-model="review.trackRecord" style="margin:10px">Medium
-<input type="radio" name="trackRecord" value="2" ng-model="review.trackRecord" style="margin:10px">High
-<input type="radio" name="trackRecord" value="3" ng-model="review.trackRecord" style="margin:10px">Very High
+<input type="radio" name="trackRecord" value="0" ng-model="data.select.editedNote.trackrecord" style="margin:10px">Low
+<input type="radio" name="trackRecord" value="1" ng-model="data.select.editedNote.trackrecord" style="margin:10px">Medium
+<input type="radio" name="trackRecord" value="2" ng-model="data.select.editedNote.trackrecord" style="margin:10px">High
+<input type="radio" name="trackRecord" value="3" ng-model="data.select.editedNote.trackrecord" style="margin:10px">Very High
 </td>
 </table>
 </div><br />
@@ -157,7 +158,7 @@ Evaluate track record of the PI/Co-PIs for project management
 Total
 </td>
 <td class="inTwo">
-  <input type="number" ng-model="review.total">
+  <input type="number" ng-model="data.select.editedNote.total">
 </td>
 </table>
 <table>
@@ -165,10 +166,10 @@ Total
 Evaluate level of risks of the project execution:
 </td>
   <td class="inTwo">
-<input type="radio" name="risks" value="0" ng-model="review.risks" style="margin:10px">Low
-<input type="radio" name="risks" value="1" ng-model="review.risks" style="margin:10px">Medium
-<input type="radio" name="risks" value="2" ng-model="review.risks" style="margin:10px">High
-<input type="radio" name="risks" value="3" ng-model="review.risks" style="margin:10px">Very High
+<input type="radio" name="data.select.editedNote.risks" value="0" ng-model="data.select.editedNote.risks" style="margin:10px">Low
+<input type="radio" name="data.select.editedNote.risks" value="1" ng-model="data.select.editedNote.risks" style="margin:10px">Medium
+<input type="radio" name="data.select.editedNote.risks" value="2" ng-model="data.select.editedNote.risks" style="margin:10px">High
+<input type="radio" name="data.select.editedNote.risks" value="3" ng-model="data.select.editedNote.risks" style="margin:10px">Very High
 </td>
 </table>
 <table>
@@ -176,13 +177,16 @@ Evaluate level of risks of the project execution:
 Reviewer recommendation
 </td>
   <td class="inTwo">
-<input type="radio" name="recommendation" value="3" ng-model="review.recommendation" style="margin:10px">Strongly accept
-<input type="radio" name="recommendation" value="2" ng-model="review.recommendation" style="margin:10px">Accept
-<input type="radio" name="recommendation" value="1" ng-model="review.recommendation" style="margin:10px">Weakly accept
-<input type="radio" name="recommendation" value="0" ng-model="review.recommendation" style="margin:10px">Reject
-<input type="radio" name="recommendation" value="-1" ng-model="review.recommendation" style="margin:10px">Strongly reject
+<input type="radio" name="data.select.editedNote.recommendation" value="3" ng-model="data.select.editedNote.recommendation" style="margin:10px">Strongly accept
+<input type="radio" name="data.select.editedNote.recommendation" value="2" ng-model="data.select.editedNote.recommendation" style="margin:10px">Accept
+<input type="radio" name="data.select.editedNote.recommendation" value="1" ng-model="data.select.editedNote.recommendation" style="margin:10px">Weakly accept
+<input type="radio" name="data.select.editedNote.recommendation" value="0" ng-model="data.select.editedNote.recommendation" style="margin:10px">Reject
+<input type="radio" name="data.select.editedNote.recommendation" value="-1" ng-model="data.select.editedNote.recommendation" style="margin:10px">Strongly reject
 </td>
 </table>
 Comments (300 words max, general comments/how to improve proposal)<br />
-<textarea class='form-control' ng-model="review.comments" maxlength="3000"></textarea>
+<textarea class='form-control' ng-model="data.select.editedNote.comment" maxlength="3000"></textarea>
+<br />
+<button type="submit" class="btn btn-primary btn-lg">Save note</button>
+</form>
 </div>

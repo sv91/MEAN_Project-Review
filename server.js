@@ -273,6 +273,8 @@ app.use(methodOverride());
     funded          : Boolean,
     human           : Boolean,
     computing       : Boolean,
+    humanpr         : String,
+    computingpr     : String,
     risks           : Number,
     recommandation  : Number,
     comment         : String
@@ -1217,7 +1219,9 @@ app.use(methodOverride());
         trackrecord     : req.body.trackrecord,
         funded          : req.body.funded,
         human           : req.body.human,
+        humanpr         : req.body.humanpr,
         computing       : req.body.computing,
+        computingpr     : req.body.computingpr,
         risks           : req.body.risks,
         recommandation  : req.body.recommandation,
         comment         : req.body.comment

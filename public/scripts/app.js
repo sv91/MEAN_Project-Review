@@ -788,11 +788,57 @@ angular
 				$http.post('/api/reviews/'+$scope.data.select.review._id+'/comments',comments)
 					.success(function(){
 						console.log("Review successfully updated.");
+						window.location.reload(false);
 					})
 					.error(function(data) {
 						console.log('Error: Review Update ' + data);
 					});
 				console.log("End submitting comment");
+			})
+			.error(function(data) {
+				console.log('Error: ' + data);
+			});
+		});
+	};
+
+	$scope.saveNote = function() {
+		console.log("Saving Note " );
+		sharedService.findOrCreate('persons',$scope.activeUser)
+		.then(function(res){
+		var sub = {
+			'reviewer' 				: res,
+			'bbpobjective'    : $scope.data.select.editedNote.bbpobjective,
+			'contracted'      : $scope.data.select.editedNote.contracted,
+			'impact'          : $scope.data.select.editedNote.impact,
+			'criticality'     : $scope.data.select.editedNote.criticality,
+			'clear'           : $scope.data.select.editedNote.clear,
+			'meaningful'      : $scope.data.select.editedNote.meaningful,
+			'achievable'      : $scope.data.select.editedNote.achievable,
+			'reqclear'        : $scope.data.select.editedNote.reqclear,
+			'skill'           : $scope.data.select.editedNote.skill,
+			'trackrecord'     : $scope.data.select.editedNote.trackrecord,
+			'funded'          : $scope.data.select.editedNote.funded,
+			'human'           : $scope.data.select.editedNote.human,
+			'computing'       : $scope.data.select.editedNote.computing,
+			'humanpr'         : $scope.data.select.editedNote.humanpr,
+			'computingpr'     : $scope.data.select.editedNote.computingpr,
+			'risks'           : $scope.data.select.editedNote.risks,
+			'recommandation'  : $scope.data.select.editedNote.recommandation,
+			'comment'         : $scope.data.select.editedNote.comment
+		}
+		$http.post('/api/notes', sub)
+			.success(function(data){
+				var notes = $scope.data.select.review.notes;
+				notes.push(data);
+				$http.post('/api/reviews/'+$scope.data.select.review._id+'/notes',notes)
+					.success(function(){
+						console.log("Review successfully updated.");
+						window.location.reload(false);
+					})
+					.error(function(data) {
+						console.log('Error: Review Update ' + data);
+					});
+				console.log("End submitting note");
 			})
 			.error(function(data) {
 				console.log('Error: ' + data);
