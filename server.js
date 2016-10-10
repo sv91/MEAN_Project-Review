@@ -276,6 +276,7 @@ app.use(methodOverride());
     humanpr         : String,
     computingpr     : String,
     risks           : Number,
+    total           : Number,
     recommandation  : Number,
     comment         : String
   });
@@ -1248,6 +1249,7 @@ app.use(methodOverride());
         computing       : req.body.computing,
         computingpr     : req.body.computingpr,
         risks           : req.body.risks,
+        total           : req.body.total,
         recommandation  : req.body.recommandation,
         comment         : req.body.comment
       }, function(err,project){

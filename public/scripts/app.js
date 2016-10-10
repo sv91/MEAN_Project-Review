@@ -823,6 +823,7 @@ angular
 			'humanpr'         : $scope.data.select.editedNote.humanpr,
 			'computingpr'     : $scope.data.select.editedNote.computingpr,
 			'risks'           : $scope.data.select.editedNote.risks,
+			'total'           : $scope.data.select.editedNote.total,
 			'recommandation'  : $scope.data.select.editedNote.recommandation,
 			'comment'         : $scope.data.select.editedNote.comment
 		}

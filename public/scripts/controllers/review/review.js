@@ -11,6 +11,8 @@ angular.module('proposalReviewApp')
 .controller('ReviewerCtrl', function ($scope, $stateParams, $http) {
   $scope.data.params = $stateParams;
   $scope.data.select.loaded = false;
+  $scope.reviewing = [];
+  $scope.grade = "Not deffined yet";
 
   function findByID(list,obj){
     var toReturn;
@@ -65,6 +67,8 @@ angular.module('proposalReviewApp')
           $scope.data.select.notes.push(val);
         }
       });
+      countReviewers();
+      computeGrade();
   	})
   	.error(function(data) {
   		console.log('Error: Review/Review.JS: Notes could not be loaded.');
@@ -74,4 +78,30 @@ angular.module('proposalReviewApp')
 
   $scope.data.select.loaded = true;
 
+  function countReviewers(){
+    angular.forEach($scope.data.select.comments, function(val){
+      if($scope.reviewing.indexOf(val.reviewer)==-1 && val.reviewer!= null){
+        $scope.reviewing.push(val.reviewer);
+      }
+    });
+      angular.forEach($scope.data.select.notes, function(val){
+        if($scope.reviewing.indexOf(val.reviewer)==-1 && val.reviewer!= null){
+          $scope.reviewing.push(val.reviewer);
+        }
+      });
+  }
+
+  function computeGrade(){
+    var counter = 0;
+    var sum = 0;
+    angular.forEach($scope.data.select.notes, function(val){
+      if(val.total!= null && val.total!= undefined && val.total!= ''){
+        sum += val.total;
+        counter ++;
+      }
+    });
+    if (counter>0){
+      $scope.grade = Math.round(sum/counter);
+    }
+  }
 })
