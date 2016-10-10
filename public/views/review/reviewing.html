@@ -22,7 +22,7 @@
 <hr />
 <label>Grade</label>
 <div id="summary" class="reviewButtonFrame">
-  <div class="centeredText"><label>{{grade}}</label><br />({{reviewing.length}} reviews)
+  <div class="centeredText"><label class="grade" id="grade"><span class="grade-sub">{{grade}}</span></label><br />({{reviewing.length}} reviews)
   </div>
 </div>
 
@@ -30,4 +30,5 @@
 function goTo(div){
   var _open = window.open(window.location.href +'/'+ div.parentNode.parentNode.id, "_self");
 }
+
 </script>

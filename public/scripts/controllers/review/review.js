@@ -14,6 +14,33 @@ angular.module('proposalReviewApp')
   $scope.reviewing = [];
   $scope.grade = "Not deffined yet";
 
+  $scope.$watch('grade', function(attrs) {
+		var div = document.getElementById('grade');
+    var r = 0;
+    var g = 0;
+    var b = 0;
+    var grade = parseInt($scope.grade);
+    console.log(grade);
+    if(grade <40){
+      r = grade * 3;
+    }
+    if (40<= grade <60) {
+      r = 120 + (grade-40)*6;
+      g = 8 * (grade-40);
+    }
+    if (60<=grade < 80) {
+      r = 240 - (grade-60)*9;
+      g = 160 - (grade-60);
+    }
+    if (80<=grade){
+      r = 60 - (grade-80)*3;
+      b = 7 * (grade-80);
+    }
+
+    console.log("rgb("+r+","+g+","+b+")");
+    div.style.backgroundColor = "rgb("+r+","+g+","+b+")";
+	}, true);
+
   function findByID(list,obj){
     var toReturn;
     angular.forEach(list, function(val){
