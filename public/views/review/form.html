@@ -14,7 +14,7 @@
     <div ng-show="bubble.text == ''">
       <label>Comment {{bubble.title}}:</label><br />
       <ul>
-        <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} '>{{com.value}}</li>
+        <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} '><u ng-repeat="usr in data.persons | filter:{_id : com.reviewer}">{{usr.displayName}}</u>:<br />{{com.value}}</li>
         <li>
           <form ng-submit="saveComment()">
             Your comment:<br />
