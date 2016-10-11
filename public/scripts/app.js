@@ -720,12 +720,6 @@ angular
 
 
 .controller('reviewAppController', function ($scope, $http, $sessionStorage, sharedService) {
-	if ($scope.data == undefined){
-		$scope.data= $sessionStorage;
-		$scope.data.select = {};
-		$scope.formData = {};
-	}
-	$scope.data.select = {};
 
 	// when landing on the page, get all the projects and show them
 	$http.get('/api/projects')
@@ -763,14 +757,14 @@ angular
 		console.log('Error: reviewAppController: Reviews could not be loaded.');
 	});
 
-	// when landing on the page, get all the projects and show them
 	$http.get('/api/persons')
 	.success(function(data) {
-		$scope.data.persons = data;
+		$scope.persons = data;
 	})
 	.error(function(data) {
-		console.log('Error: reviewAppController: Persons could not be loaded.');
+		console.log('Error: MainController: Persons could not be loaded.');
 	});
+	$scope.data.persons = $scope.persons;
 
 	$scope.saveComment = function() {
 		console.log("Saving: " + $scope.bubble.field);
@@ -848,7 +842,14 @@ angular
 	};
 })
 
-.controller('MainController', function($scope, $http) {
+.controller('MainController', function($scope, $http, sharedService, $sessionStorage) {
+	if ($scope.data == undefined){
+		$scope.data= $sessionStorage;
+		$scope.data.select = {};
+		$scope.formData = {};
+	}
+	$scope.data.select = {};
+
 	$scope.bubble = {
 		'show'	: false,
 		'title' : '',
@@ -856,12 +857,25 @@ angular
 		'field'	: ''
 	};
 	$scope.activeUser;
-	$http.get('https://services.humanbrainproject.eu/idm/v1/api/user/me')
-	.success(function(data) {
-		$scope.activeUser = data;
-	})
-	.error(function(data) {
-		console.log('Error: GetActiveUser: Information could not be retrieved.');
+
+	function getActiveUser(){
+		return new Promise(function(fulfill,reject){
+			$http.get('https://services.humanbrainproject.eu/idm/v1/api/user/me')
+			.success(function(data) {
+				$scope.activeUser = data;
+				fulfill(data);
+			})
+			.error(function(data) {
+				console.log('Error: GetActiveUser: Information could not be retrieved.');
+			})
+		});
+	}
+
+	getActiveUser().then(function(res){
+		sharedService.findOrCreate('persons',res)
+		.then(function(res2){
+			$scope.activeUser.db_id = res2;
+		});
 	});
 
 	/**
@@ -894,6 +908,11 @@ angular
 		} else {
 			$scope.bubble.text = txt;
 		}
+		angular.forEach($scope.data.select.comments, function(val){
+			if(val.field == $scope.bubble.field && val.reviewer == $scope.activeUser.db_id){
+			$scope.toSubmit = val.value;
+		}
+		});
 		var containerRect = document.getElementById("form-views").getBoundingClientRect();
 		var divRect = refDiv.getBoundingClientRect();
 		var offset = divRect.top - containerRect.top;

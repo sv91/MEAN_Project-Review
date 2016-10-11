@@ -14,11 +14,11 @@
     <div ng-show="bubble.text == ''">
       <label>Comment {{bubble.title}}:</label><br />
       <ul>
-        <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} '><u ng-repeat="usr in data.persons | filter:{_id : com.reviewer}">{{usr.displayName}}</u>:<br />{{com.value}}</li>
+        <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer: !activeUser.db_id }'><u ng-repeat="usr in data.persons | filter:{_id : com.reviewer}">{{usr.displayName}}</u>:<br />{{com.value}}</li>
         <li>
           <form ng-submit="saveComment()">
             Your comment:<br />
-            <textarea class='form-control' ng-model='toSubmit'>{{ data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer:{id: activeUser.id} } }}</textarea>
+            <textarea class='form-control' ng-model='toSubmit'></textarea>
             <button type="submit" class="btn btn-primary btn-lg">Save comment</button>
           </form>
         </li>
@@ -32,6 +32,7 @@
   {{data.select | json}}
 </pre>
   <pre>
+  {{ activeUser.db_id | json }}
   {{ data | json }}
 </pre>
 -->
