@@ -10,6 +10,7 @@
 */
 angular
 .module('proposalReviewApp', ['ui.router','ui.select','angular.filter','hbpCommon','bbpOidcClient','ui.bootstrap', 'ngStorage', 'ngMaterial'])
+
 .config(function ($stateProvider, $urlRouterProvider) {
 	// link adresses to views and controllers
 	$stateProvider
@@ -717,8 +718,6 @@ angular
 	return sharedService;
 })
 
-
-
 .controller('reviewAppController', function ($scope, $http, $sessionStorage, sharedService) {
 
 	// when landing on the page, get all the projects and show them
@@ -767,13 +766,12 @@ angular
 	$scope.data.persons = $scope.persons;
 
 	$scope.saveComment = function() {
-		console.log("Saving: " + $scope.bubble.field);
 		sharedService.findOrCreate('persons',$scope.activeUser)
 		.then(function(res){
 		var sub = {
 			'reviewer' 	: res,
 			'field' 		: $scope.bubble.field,
-			'value'			: $scope.toSubmit
+			'value'			: $scope.toSubmit.value
 		}
 		$http.post('/api/comments', sub)
 			.success(function(data){
@@ -782,12 +780,22 @@ angular
 				$http.post('/api/reviews/'+$scope.data.select.review._id+'/comments',comments)
 					.success(function(){
 						console.log("Review successfully updated.");
-						window.location.reload(false);
+						  $http.get('/api/comments/')
+						  .success(function(data) {
+						    $scope.data.select.comments = [];
+						    angular.forEach(data,function(val){
+						      if($scope.data.select.review.comments.indexOf(val._id)>-1){
+						        $scope.data.select.comments.push(val);
+						      }
+						    });
+						  })
+						  .error(function(data) {
+						    console.log('Error: Review/Proposal.JS: Comments could not be loaded.');
+						  });
 					})
 					.error(function(data) {
 						console.log('Error: Review Update ' + data);
 					});
-				console.log("End submitting comment");
 			})
 			.error(function(data) {
 				console.log('Error: ' + data);
@@ -796,7 +804,6 @@ angular
 	};
 
 	$scope.saveNote = function() {
-		console.log("Saving Note " );
 		sharedService.findOrCreate('persons',$scope.activeUser)
 		.then(function(res){
 		var sub = {
@@ -828,12 +835,10 @@ angular
 				$http.post('/api/reviews/'+$scope.data.select.review._id+'/notes',notes)
 					.success(function(){
 						console.log("Review successfully updated.");
-						window.location.reload(false);
 					})
 					.error(function(data) {
 						console.log('Error: Review Update ' + data);
 					});
-				console.log("End submitting note");
 			})
 			.error(function(data) {
 				console.log('Error: ' + data);
@@ -849,6 +854,8 @@ angular
 		$scope.formData = {};
 	}
 	$scope.data.select = {};
+	$scope.toSubmit = {};
+	$scope.toSubmit.value = "";
 
 	$scope.bubble = {
 		'show'	: false,
@@ -888,12 +895,14 @@ angular
 	* @param {String} html    The html code that will be in the bubble.
 	*/
 	$scope.updateBubble = function($event, html){
+		console.log("Actual value: " + JSON.stringify($scope.toSubmit));
 		$scope.bubble = {
 			'show'	: true,
 			'title' : '',
 			'text' 	: '',
 			'field'	: ''
 		};
+		$scope.toSubmit.value = "";
 		var refDiv = $event.currentTarget;
 		var txt = html;
 		if(html == undefined){
@@ -910,7 +919,7 @@ angular
 		}
 		angular.forEach($scope.data.select.comments, function(val){
 			if(val.field == $scope.bubble.field && val.reviewer == $scope.activeUser.db_id){
-			$scope.toSubmit = val.value;
+      	$scope.toSubmit.value = val.value;
 		}
 		});
 		var containerRect = document.getElementById("form-views").getBoundingClientRect();
@@ -922,6 +931,7 @@ angular
 			div.style.display="";
 		}
 		div.style.marginTop = offset + 'px';
+		console.log("Set out: " + JSON.stringify($scope.toSubmit));
 	};
 
 	/**
@@ -938,6 +948,7 @@ angular
 			'text' 	: '',
 			'field'	: ''
 		};
+		$scope.toSubmit = "";
 	};
 })
 
