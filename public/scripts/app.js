@@ -895,7 +895,6 @@ angular
 	* @param {String} html    The html code that will be in the bubble.
 	*/
 	$scope.updateBubble = function($event, html){
-		console.log("Actual value: " + JSON.stringify($scope.toSubmit));
 		$scope.bubble = {
 			'show'	: true,
 			'title' : '',
@@ -931,7 +930,6 @@ angular
 			div.style.display="";
 		}
 		div.style.marginTop = offset + 'px';
-		console.log("Set out: " + JSON.stringify($scope.toSubmit));
 	};
 
 	/**
