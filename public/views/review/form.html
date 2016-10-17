@@ -17,7 +17,7 @@
         <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer: !activeUser.db_id }'><u ng-repeat="usr in data.persons | filter:{_id : com.reviewer}">{{usr.displayName}}</u>:<br />{{com.value}}</li>
         <li>
             Your comment:<br />
-            <textarea class='form-control' ng-model='toSubmit.value'>{{toSubmit.value}}</textarea>
+            <textarea class='form-control' ng-model='toSubmit.valueTA'>{{toSubmit.valueTA}}</textarea>
             <button ng-click="saveComment()" class="btn btn-primary btn-lg">Save comment</button>
         </li>
       </ul>

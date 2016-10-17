@@ -771,7 +771,7 @@ angular
 		var sub = {
 			'reviewer' 	: res,
 			'field' 		: $scope.bubble.field,
-			'value'			: $scope.toSubmit.value
+			'value'			: $scope.toSubmit.valueTA
 		}
 		$http.post('/api/comments', sub)
 			.success(function(data){
@@ -855,7 +855,7 @@ angular
 	}
 	$scope.data.select = {};
 	$scope.toSubmit = {};
-	$scope.toSubmit.value = "";
+	$scope.toSubmit.valueTA = "";
 
 	$scope.bubble = {
 		'show'	: false,
@@ -901,7 +901,7 @@ angular
 			'text' 	: '',
 			'field'	: ''
 		};
-		$scope.toSubmit.value = "";
+		$scope.toSubmit.valueTA = "";
 		var refDiv = $event.currentTarget;
 		var txt = html;
 		if(html == undefined){
@@ -918,7 +918,7 @@ angular
 		}
 		angular.forEach($scope.data.select.comments, function(val){
 			if(val.field == $scope.bubble.field && val.reviewer == $scope.activeUser.db_id){
-      	$scope.toSubmit.value = val.value;
+      	$scope.toSubmit.valueTA = val.value;
 		}
 		});
 		var containerRect = document.getElementById("form-views").getBoundingClientRect();
