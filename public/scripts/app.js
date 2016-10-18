@@ -946,7 +946,7 @@ angular
 			'text' 	: '',
 			'field'	: ''
 		};
-		$scope.toSubmit = "";
+		$scope.toSubmit.valueTA = "";
 	};
 })
 

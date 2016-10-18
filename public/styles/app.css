@@ -353,17 +353,17 @@ textarea:-moz-read-only {
   border-width: 1px;
 }
 
-textarea:required{
+textarea:required:invalid{
   background-color: #FA787E !important;
   border-color: #CA5B5B !important;
 }
 
-input:required:-moz-read-only { /* For Firefox */
+input:required:invalid:-moz-read-only { /* For Firefox */
   background-color: #FA787E;
   border-color: #CA5B5B;
 }
 
-input:read-only:required {
+input:read-only:required:invalid {
   background-color: #FA787E;
   border-color: #CA5B5B;
 }
