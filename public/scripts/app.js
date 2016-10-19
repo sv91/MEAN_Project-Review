@@ -908,7 +908,7 @@ angular
 			$scope.bubble.text = '';
 			$scope.bubble.field = refDiv.id;
 			var label = refDiv.childNodes[1];
-			if(label != null && label != undefined && label.tagName == "LABEL"){
+			if(label != null && label != undefined && (label.tagName == "LABEL" || label.tagName == "U")){
 				$scope.bubble.title = "on "+label.textContent;
 			} else {
 					$scope.bubble.title = "";
