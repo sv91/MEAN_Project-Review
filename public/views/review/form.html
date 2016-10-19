@@ -14,7 +14,7 @@
     <div ng-show="bubble.text == ''">
       <label>Comments {{bubble.title}}:</label><br />
       <ul>
-        <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer: !activeUser.db_id }'><u ng-repeat="usr in data.persons | filter:{_id : com.reviewer}">{{usr.displayName}}</u>:<br />{{com.value}}</li>
+        <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer: "!"+activeUser.db_id }'><u ng-repeat="usr in data.persons | filter:{_id : com.reviewer}">{{usr.displayName}}</u>:<br />{{com.value}}</li>
         <li>
             Your comment:<br />
             <textarea class='form-control' ng-model='toSubmit.valueTA'>{{toSubmit.valueTA}}</textarea>
@@ -25,11 +25,11 @@
   </div>
 </div>
 
-<!-- For tests
+
 <pre>
   {{data.select | json}}
-</pre>
-  <pre>
+</pre><!-- For tests
+  <pre><!-- For tests
   {{ activeUser.db_id | json }}
   {{ data | json }}
 </pre>

@@ -759,11 +759,11 @@ angular
 	$http.get('/api/persons')
 	.success(function(data) {
 		$scope.persons = data;
+		$scope.data.persons =data;
 	})
 	.error(function(data) {
 		console.log('Error: MainController: Persons could not be loaded.');
 	});
-	$scope.data.persons = $scope.persons;
 
 	$scope.saveComment = function() {
 		sharedService.findOrCreate('persons',$scope.activeUser)
