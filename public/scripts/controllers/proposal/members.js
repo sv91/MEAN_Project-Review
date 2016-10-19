@@ -12,7 +12,6 @@ angular.module('proposalReviewApp')
     $http.get('/api/teams')
       .success(function(data) {
         $scope.availableTeams = data;
-        console.log(data);
       })
       .error(function(data) {
         console.log('Error: Loading Teams: ' + data);

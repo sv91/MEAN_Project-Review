@@ -18,7 +18,6 @@ angular.module('proposalReviewApp')
   $http.get('/api/grants')
     .success(function(data) {
       $scope.availableGrants = data;
-      console.log(data);
     })
     .error(function(data) {
       console.log('Error: Loading Grants: ' + data);
@@ -28,17 +27,15 @@ angular.module('proposalReviewApp')
   $http.get('/api/tasks')
     .success(function(data) {
       $scope.availableTasks = data;
-      console.log(data);
     })
     .error(function(data) {
       console.log('Error: Loading Tasks: ' + data);
     });
-    
+
   //Tags
   $http.get('/api/tags')
     .success(function(data) {
       $scope.availableTags = data;
-      console.log(data);
     })
     .error(function(data) {
       console.log('Error: Loading Tags: ' + data);

@@ -21,7 +21,7 @@
         ng-required="record.projectType >= 2" ng-model="svPair.name">
       </div>
       <br />
-      <div ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Delivery date.<br />Should be between the project start date and end date.')">
+      <div ng-show="record.projectType >= 1" ng-click="updateBubble($event,'Delivery date. Should be between the project start date and end date.')">
         <label>Date</label>
         <md-datepicker ng-required="record.projectType >= 2" ng-model="svPair.date"
           md-placeholder="Enter date"
