@@ -20,7 +20,6 @@ angular.module('proposalReviewApp')
     var g = 0;
     var b = 0;
     var grade = parseInt($scope.grade);
-    console.log(grade);
     if(grade <40){
       r = grade * 3;
     }
@@ -36,8 +35,6 @@ angular.module('proposalReviewApp')
       r = 60 - (grade-80)*3;
       b = 7 * (grade-80);
     }
-
-    console.log("rgb("+r+","+g+","+b+")");
     div.style.backgroundColor = "rgb("+r+","+g+","+b+")";
 	}, true);
 

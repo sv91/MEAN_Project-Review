@@ -111,18 +111,25 @@ angular
 	$urlRouterProvider.otherwise('/');
 })
 
-.factory('sharedService', function($rootScope, $http){
+.factory('sharedService', function($rootScope, $http, $timeout, $window){
 	var sharedService = {};
 
 		// Functions managing the creation of new entries in the DB ==================
 		sharedService.saveProject = function(val){
+			return new Promise(function (fulfill, reject){
 			console.log('saveProject');
 			sharedService.findOrCreate('projects',val)
 			.then(function(res){
 				console.log('Project Saved :' + res);
+				$timeout(function(){
+					$window.alert('Project Saved.');
+				});
+				fulfill(true);
 			}, function(){
 				console.log('Project Not Saved');
+				fulfill(false);
 			});
+		});
 		};
 
 		sharedService.findOrCreate = function(model, value){
@@ -502,7 +509,6 @@ angular
 
 		sharedService.treatPerson = function(value){
 			return new Promise(function (fulfill, reject){
-				console.log('Treating :'+ JSON.stringify(value));
 				var treatedValues = null;
 				if(value != undefined && value!=null && value!=''){
 					treatedValues = {
@@ -961,7 +967,7 @@ angular
 
 		$scope.membersAndLead = [];
 
-		$scope.good = false;
+		$scope.record.good = false;
 		$scope.minDate = new Date();
 		$scope.maxDate = new Date();
 		$scope.created = {};
@@ -969,7 +975,7 @@ angular
 	$scope.record.activeUser=$scope.activeUser;
 
 	// Check if all the required values were filled
-	$scope.$watch('record', function(attrs) {
+/*	$scope.$watch('record', function(attrs) {
 		var level = $scope.record.projectType;
 		var temp = true;
 		angular.forEach($scope.fields,function(elem){
@@ -981,16 +987,16 @@ angular
 			}
 		})
 		$scope.good = temp;
-	}, true);
+	}, true);*/
 
 	// Activate or disactivate the submit button
-	$scope.$watch('good', function() {
+	$scope.$watch('record.good', function() {
 		var classes = 'finalN';
-		if(!$scope.good){
+		if(!$scope.record.good){
 			classes += ' disabled';
 		}
 		document.getElementById('final').className = classes;
-	});
+	},true);
 
 
 	// Change the minimum date of the projects depending on the type of projects
@@ -1079,6 +1085,12 @@ angular
 
 	// function to process the form
 	$scope.processForm = function() {
-		sharedService.saveProject($scope.record);
+		sharedService.saveProject($scope.record)
+		.then(function(res){
+			if(res){
+				sessionStorage.clear();
+				$scope.record = $sessionStorage;
+			}
+		});
 	};
 });
