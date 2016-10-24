@@ -353,7 +353,7 @@ textarea:-moz-read-only {
   border-width: 1px;
 }
 
-textarea:required:invalid{
+textarea:required:invalid:ng-touched{
   background-color: #FA787E !important;
   border-color: #CA5B5B !important;
 }
@@ -547,6 +547,17 @@ md-datepicker{
 #main-menu a:hover{
   text-decoration:none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.menu{
+    color:#000;
+    display:inline-block;
+    font-size:15px;
+    text-align:center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.065);
+    padding-bottom: 6px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .typePicture{

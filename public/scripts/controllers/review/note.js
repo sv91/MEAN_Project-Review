@@ -11,7 +11,11 @@ angular.module('proposalReviewApp')
 .controller('NoteCtrl', function ($scope, $stateParams, $http) {
   $scope.data.params = $stateParams;
   $scope.data.select.editedNote = {};
-  
+
+  $scope.data.menu.project = $scope.data.params[Object.keys($scope.data.params)[0]];
+  $scope.data.menu.notes = true;
+  $scope.data.menu.comments = false;
+
   function findByID(list,obj){
     var toReturn;
     angular.forEach(list, function(val){

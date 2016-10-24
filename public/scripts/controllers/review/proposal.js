@@ -8,6 +8,10 @@ angular.module('proposalReviewApp')
   $scope.comp   = true;
   $scope.hr     = true;
 
+  $scope.data.menu.project = $scope.data.params[Object.keys($scope.data.params)[0]];
+  $scope.data.menu.notes = false;
+  $scope.data.menu.comments = true;
+
   function findByID(list,obj){
     var toReturn;
     angular.forEach(list, function(val){

@@ -2,7 +2,20 @@
   <!-- placeholder  -->
   placeholder
 </div>
-<div class="middlePart midform">
+<div class="middlePart midform ">
+  <div class="text-center container">
+    <a ng-click="resetBubble(); goToMenu('');"  class="menu" >Reviews List</a>
+    <span ng-show="data.menu.project.length != '' ">
+       >> <a ng-click="resetBubble(); goToMenu('/'+data.menu.project);" class="menu">Project Review</a>
+    </span>
+    <span ng-show="data.menu.comments">
+       >> <a ng-click="resetBubble(); goToMenu('/'+data.menu.project+'/proposal');" class="menu">Comments</a>
+    </span>
+    <span ng-show="data.menu.notes">
+       >> <a ng-click="resetBubble(); goToMenu('/'+data.menu.project+'/notes');" class="menu">Notes</a>
+    </span>
+  </div>
+  <br />
   <div ui-view id="form-views"></div>
 </div>
 
@@ -18,9 +31,9 @@
           <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer: usr._id } |  orderBy: "-timestamp" | limitTo:1'><u>{{usr.displayName}}</u>:<br />{{com.value}}</li>
         </div>
         <li>
-            Your comment:<br />
-            <textarea class='form-control' ng-model='toSubmit.valueTA'>{{toSubmit.valueTA}}</textarea>
-            <button ng-click="saveComment()" class="btn btn-primary btn-lg">Save comment</button>
+          Your comment:<br />
+          <textarea class='form-control' ng-model='toSubmit.valueTA'>{{toSubmit.valueTA}}</textarea>
+          <button ng-click="saveComment()" class="btn btn-primary btn-lg">Save comment</button>
         </li>
       </ul>
     </div>
@@ -29,10 +42,10 @@
 
 <!-- For tests
 <pre>
-  {{data.select | json}}
+{{data.select | json}}
 </pre>
-  <pre>
-  {{ activeUser.db_id | json }}
-  {{ data | json }}
+<pre>
+{{ activeUser.db_id | json }}
+{{ data | json }}
 </pre>
 -->

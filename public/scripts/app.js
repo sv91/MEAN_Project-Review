@@ -725,6 +725,17 @@ angular
 })
 
 .controller('reviewAppController', function ($scope, $http, $sessionStorage, sharedService) {
+	$scope.data.menu ={};
+  $scope.data.menu.project = '';
+  $scope.data.menu.notes = false;
+  $scope.data.menu.comments = false;
+
+	$scope.goToMenu = function(address, $window){
+		$scope.data.menu.project = '';
+	  $scope.data.menu.notes = false;
+	  $scope.data.menu.comments = false;
+	  var _open = window.open('/#/review'+address, "_self");
+	}
 
 	// when landing on the page, get all the projects and show them
 	$http.get('/api/projects')
@@ -855,7 +866,7 @@ angular
 
 .controller('MainController', function($scope, $http, sharedService, $sessionStorage) {
 	if ($scope.data == undefined){
-		$scope.data= $sessionStorage;
+		$scope.data = $sessionStorage;
 		$scope.data.select = {};
 		$scope.formData = {};
 	}

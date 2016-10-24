@@ -11,6 +11,9 @@ angular.module('proposalReviewApp')
 .controller('ReviewerCtrl', function ($scope, $stateParams, $http) {
   $scope.data.params = $stateParams;
   $scope.data.select.loaded = false;
+  $scope.data.menu.project = $scope.data.params[Object.keys($scope.data.params)[0]];
+  $scope.data.menu.notes = false;
+  $scope.data.menu.comments = false;
   $scope.reviewing = [];
   $scope.grade = "Not deffined yet";
 
