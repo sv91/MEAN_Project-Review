@@ -194,30 +194,30 @@
           <div class="p10">
             <table width="100%">
               <tr>
-                <td class="inTwo" ng-click="updateBubble($event);">
+                <td class="inTwo" id="soft_dev" ng-click="updateBubble($event);">
                   <u>Software development</u>
-                  <ul ng-show="summ.softdev.length">
-                    <li ng-repeat="soft in summ.softdev">{{soft.name}}</li>
+                  <ul ng-show="data.summ.softdev.length">
+                    <li ng-repeat="soft in data.summ.softdev">{{soft.name}}</li>
                   </ul>
-                  <span ng-hide="summ.softdev.length" class="nonePadding"><br />None<br /></span>
+                  <span ng-hide="data.summ.softdev.length" class="nonePadding"><br />None<br /></span>
                 </td>
                 <td class="inTwoEmptySeparator">
                 </td>
-                <td class="inTwo" ng-click="updateBubble($event);">
+                <td class="inTwo" id="data_transfer" ng-click="updateBubble($event);">
                   <u>Data Transfer</u>
-                  <ul ng-show="summ.datatransfer.length">
-                    <li ng-repeat="soft in summ.datatransfer">{{soft.name}}</li>
+                  <ul ng-show="data.summ.datatransfer.length">
+                    <li ng-repeat="soft in data.summ.datatransfer">{{soft.name}}</li>
                   </ul>
-                  <span ng-hide="summ.datatransfer.length" class="nonePadding"><br />None<br /></span>
+                  <span ng-hide="data.summ.datatransfer.length" class="nonePadding"><br />None<br /></span>
                 </td>
               </tr>
             </table>
-            <div ng-click="updateBubble($event);">
+            <div id="collab" ng-click="updateBubble($event);">
             <u>HBP Collab</u>
-            <ul ng-show="summ.collabs.length">
-              <li ng-repeat="collab in summ.collabs">{{collab.title}}</li>
+            <ul ng-show="data.summ.collabs.length">
+              <li ng-repeat="collab in data.summ.collabs">{{collab.title}}</li>
             </ul>
-            <span ng-hide="summ.collabs.length" class="nonePadding"><br />None<br /></span>
+            <span ng-hide="data.summ.collabs.length" class="nonePadding"><br />None<br /></span>
           </div>
           </div>
         </div>
@@ -226,21 +226,21 @@
           <div class="p10">
             <table width="100%">
               <tr>
-                <td class="inTwo" ng-click="updateBubble($event);">
+                <td class="inTwo" id="virtualization" ng-click="updateBubble($event);">
                   <u>Virtualization</u>
-                  <ul ng-show="summ.virtualization.length">
-                    <li ng-repeat="soft in summ.virtualization">{{soft.name}}</li>
+                  <ul ng-show="data.summ.virtualization.length">
+                    <li ng-repeat="soft in data.summ.virtualization">{{soft.name}}</li>
                   </ul>
-                  <span ng-hide="summ.virtualization.length" class="nonePadding"><br />None<br /></span>
+                  <span ng-hide="data.summ.virtualization.length" class="nonePadding"><br />None<br /></span>
                 </td>
                 <td class="inTwoEmptySeparator">
                 </td>
-                <td class="inTwo" ng-click="updateBubble($event);">
+                <td class="inTwo" id="dev_env" ng-click="updateBubble($event);">
                   <u>Development environment</u>
-                  <ul ng-show="summ.devenv.length">
-                    <li ng-repeat="soft in summ.devenv">{{soft.name}}</li>
+                  <ul ng-show="data.summ.devenv.length">
+                    <li ng-repeat="soft in data.summ.devenv">{{soft.name}}</li>
                   </ul>
-                  <span ng-hide="summ.devenv.length" class="nonePadding"><br />None<br /></span>
+                  <span ng-hide="data.summ.devenv.length" class="nonePadding"><br />None<br /></span>
                 </td>
               </tr>
             </table>
@@ -248,29 +248,29 @@
         </div>
         <div class="p10-5">
           <label>Infrastructure as a Service (IaaS)</label>
-          <div ng-show="data.select.proposal.projectType == 1" ng-click="updateBubble($event);">
+          <div ng-show="data.select.proposal.projectType == 1">
             <table width="100%" class="hpcList p10" ng-show="data.select.proposal.projectType == 1" >
               <td class="inTwo">
-                <div class="form-group" ng-click="updateBubble($event);">
-                  <input type="checkbox" ng-model="summ.hpcRessource" disabled="disabled"> HPC Ressources
+                <div class="form-group" id="hpcSilv" ng-click="updateBubble($event);">
+                  <input type="checkbox" ng-model="data.summ.hpcRessource" disabled="disabled"> HPC Ressources
                 </div>
               </td>
               <td class="inTwoEmptySeparator">
               </td>
               <td class="inTwo">
-                <div class="form-group" ng-click="updateBubble($event);">
-                  <input type="checkbox" ng-model="summ.cloudRessource" disabled="disabled"> Cloud Ressources
+                <div class="form-group" id="cloudSilv" ng-click="updateBubble($event);">
+                  <input type="checkbox" ng-model="data.summ.cloudRessource" disabled="disabled"> Cloud Ressources
                 </div>
               </td>
             </table>
           </div>
           <div class="p10" ng-show="data.select.proposal.projectType >= 2" >
-            <div ng-click="updateBubble($event);">
+            <div ng-click="updateBubble($event);" id="sys_archi">
             <u>System Architectures</u>
-            <ul ng-show="summ.architecture.length">
-              <li ng-repeat="tasks in summ.architecture">{{tasks.name}}</li>
+            <ul ng-show="data.summ.architecture.length">
+              <li ng-repeat="tasks in data.summ.architecture">{{tasks.name}}</li>
             </ul>
-            <span ng-hide="summ.architecture.length" class="nonePadding"><br />None<br /></span>
+            <span ng-hide="data.summ.architecture.length" class="nonePadding"><br />None<br /></span>
           </div>
 
             <br />
@@ -279,22 +279,22 @@
                 <td class="inTwo">
                   <u>HPC Computing</u>
                   <div class="p10 form-group">
-                    <div ng-click="updateBubble($event);">
+                    <div ng-click="updateBubble($event);" id="hpc_runs">
                     <u>Total number of runs</u>
                     <input type="number" readonly ng-model="
-                    summ.hpc.runs
+                    data.summ.hpc.runs
                     ">
                   </div>
-                      <div ng-click="updateBubble($event);">
+                      <div ng-click="updateBubble($event);" id="hpc_part_size">
                     <u>Average partition size (Number of processors)</u>
                     <input type="number" readonly ng-model="
-                    summ.hpc.partition
+                    data.summ.hpc.partition
                     ">
                   </div>
-                      <div ng-click="updateBubble($event);">
+                      <div ng-click="updateBubble($event);" id="hpc_time">
                     <u>Time to solution (In hours)</u>
                     <input type="number" readonly ng-model="
-                    summ.hpc.time
+                    data.summ.hpc.time
                     ">
                   </div>
                   </div>
@@ -304,16 +304,16 @@
                 <td class="inTwo">
                   <u>HPC Storage</u>
                   <div class="p10 form-group">
-                    <div ng-click="updateBubble($event);">
+                    <div ng-click="updateBubble($event);" id="hpc_storage">
                     <u>Number of artefacts</u>
                     <input type="number" readonly ng-model="
-                    summ.hpc.numarte
+                    data.summ.hpc.numarte
                     ">
                   </div>
-                      <div ng-click="updateBubble($event);">
+                      <div ng-click="updateBubble($event);" id="hpc_size_artefact">
                     <u>Average size of artefacts (in GB)</u>
                     <input type="number" readonly ng-model="
-                    summ.hpc.sizearte
+                    data.summ.hpc.sizearte
                     ">
                   </div>
                   </div>
@@ -321,12 +321,12 @@
               </tr>
             </table>
 
-            <div ng-click="updateBubble($event);">
+            <div ng-click="updateBubble($event);" id="provider">
             <u>Providers</u>
-            <ul ng-show="summ.architectureC.length">
-              <li ng-repeat="tasks in summ.architectureC">{{tasks.name}}</li>
+            <ul ng-show="data.summ.architectureC.length">
+              <li ng-repeat="tasks in data.summ.architectureC">{{tasks.name}}</li>
             </ul>
-            <span ng-hide="summ.architectureC.length" class="nonePadding"><br />None<br /></span>
+            <span ng-hide="data.summ.architectureC.length" class="nonePadding"><br />None<br /></span>
           </div>
 
             <br />
@@ -335,22 +335,22 @@
                 <td class="inTwo">
                   <u>Cloud Computing</u>
                   <div class="p10 form-group">
-                    <div ng-click="updateBubble($event);">
+                    <div ng-click="updateBubble($event);" id="cloud_runs">
                     <u>Total number of runs</u>
                     <input type="number" readonly ng-model="
-                    summ.cloud.runs
+                    data.summ.cloud.runs
                     ">
                   </div>
-                      <div ng-click="updateBubble($event);">
+                      <div ng-click="updateBubble($event);" id="cloud_part_size">
                     <u>Average partition size (Number of processors)</u>
                     <input type="number" readonly ng-model="
-                    summ.cloud.partition
+                    data.summ.cloud.partition
                     ">
                   </div>
-                      <div ng-click="updateBubble($event);">
+                      <div ng-click="updateBubble($event);" id="cloud_time">
                     <u>Time to solution (In hours)</u>
                     <input type="number" readonly ng-model="
-                    summ.cloud.time
+                    data.summ.cloud.time
                     ">
                   </div>
                   </div>
@@ -360,16 +360,16 @@
                 <td class="inTwo">
                   <u>Cloud Storage</u>
                   <div class="p10 form-group">
-                    <div ng-click="updateBubble($event);">
+                    <div ng-click="updateBubble($event);" id="cloud_storage">
                     <u>Number of artefacts</u>
                     <input type="number" readonly ng-model="
-                    summ.cloud.numarte
+                    data.summ.cloud.numarte
                     ">
                   </div>
-                      <div ng-click="updateBubble($event);">
+                      <div ng-click="updateBubble($event);" id="cloud_size_arte">
                     <u>Average size of artefacts (in GB)</u>
                     <input type="number" readonly ng-model="
-                    summ.cloud.sizearte
+                    data.summ.cloud.sizearte
                     ">
                   </div>
                   </div>
@@ -380,10 +380,10 @@
         </div>
         <div class="p10-5">
           <label>Hardware as a Service (HaaS)</label>
-          <ul ng-show="summ.hardware.length">
-            <li ng-repeat="hard in summ.hardware" ng-click="updateBubble($event);"><b>{{hard.name}}</b>: {{hard.description}}<br />Price: {{hard.price}} CHF<br />{{hard.link}}</li>
+          <ul ng-show="data.summ.hardware.length">
+            <li ng-repeat="hard in data.summ.hardware" ng-click="updateBubble($event);" id="hardware_{{$index}}"><b>{{hard.name}}</b>: {{hard.description}}<br />Price: {{hard.price}} CHF<br />{{hard.link}}</li>
           </ul>
-          <span ng-hide="summ.hardware.length" class="nonePadding"><br />None<br /></span>
+          <span ng-hide="data.summ.hardware.length" class="nonePadding"><br />None<br /></span>
         </div>
       </div>
       <hr />
@@ -405,15 +405,15 @@
           </td>
         </table>
 
-        <div class="memberList" data-ng-model="summ.members">
-          <div ng-repeat="member in summ.members">
+        <div class="memberList" data-ng-model="data.summ.members">
+          <div ng-repeat="member in data.summ.members">
             <table>
-              <td class="inTwo" ng-click="updateBubble($event);">
+              <td class="inTwo" ng-click="updateBubble($event);" id="member_{{$index}}">
                 {{member.name}}
               </td>
               <td class="inTwo">
                 <input type="number" readonly class=""
-                ng-model="member.pm" ng-click="updateBubble($event);">
+                ng-model="member.pm" ng-click="updateBubble($event);" id="member_pm_{{$index}}">
               </td>
             </table>
           </div>
@@ -424,8 +424,8 @@
 
   <hr />
 
-  <div data-ng-model="summ.deliverables">
-    <div ng-repeat="deli in summ.deliverables">
+  <div>
+    <div ng-repeat="deli in data.select.proposal.deliverables">
       <input id="deli{{$index}}" type="checkbox" class="plusMinus" ng-model="deli.summaryShow">
       <label for="deli{{$index}}" class="css-label"><span class="glyphicon glyphicon-plus"></span>
         <span class="glyphicon glyphicon-minus"></span> Deliverable {{deli.name}}
@@ -436,33 +436,33 @@
           <span class="glyphicon glyphicon-minus"></span> Summary
         </label>
         <div ng-show="deli.info">
-          <div class="form-group" ng-click="updateBubble($event);">
+          <div class="form-group" ng-click="updateBubble($event);" id="deli_{{$index}}_name">
             <label>Name</label>
             <div>
               <input type="text" readonly value="{{deli.name}}">
             </div>
           </div>
 
-          <div class="form-group" ng-click="updateBubble($event);">
+          <div class="form-group" ng-click="updateBubble($event);" id="deli_{{$index}}_deliverydate">
             <label>Delivery Date</label><br />
             <input type="date" readonly value="{{deli.date | date:'yyyy-MM-dd'}}">
           </div>
 
-          <div class="form-group" ng-click="updateBubble($event);">
+          <div class="form-group" ng-click="updateBubble($event);" id="deli_{{$index}}_desc">
             <label>Description</label>
             <div>
               <textarea readonly>{{deli.desc}}</textarea>
             </div>
           </div>
 
-          <div class="form-group" ng-click="updateBubble($event);">
+          <div class="form-group" ng-click="updateBubble($event);" id="deli_{{$index}}_risks">
             <label>Risks</label>
             <div>
               <input type="text" readonly value="{{deli.risks}}">
             </div>
           </div>
 
-          <div class="form-group" ng-click="updateBubble($event);">
+          <div class="form-group" ng-click="updateBubble($event);" id="deli_{{$index}}_dependency">
             <label>Deliverable Dependencies</label>
             <ul ng-show="deli.dependency.length">
               <li ng-repeat="dep in deli.dependency">{{dep}}</li>
@@ -470,7 +470,7 @@
             <span ng-hide="deli.dependency.length" class="nonePadding"><br />None<br /></span>
           </div>
 
-          <div class="form-group" ng-click="updateBubble($event);">
+          <div class="form-group" ng-click="updateBubble($event);" id="deli_{{$index}}_requirements">
             <label>Requirement Dependencies</label>
             <ul ng-show="deli.requirements.length">
               <li ng-repeat="dep in deli.requirements">{{dep}}</li>
@@ -490,7 +490,7 @@
             <div class="p10">
               <table width="100%">
                 <tr>
-                  <td class="inTwo">
+                  <td class="inTwo" ng-click="updateBubble($event);" id="deli_{{$index}}_soft_dev">
                     <u>Software development</u>
                     <ul ng-show="deli.softdev.length">
                       <li ng-repeat="soft in deli.softdev">{{soft.name}}</li>
@@ -499,7 +499,7 @@
                   </td>
                   <td class="inTwoEmptySeparator">
                   </td>
-                  <td class="inTwo">
+                  <td class="inTwo" ng-click="updateBubble($event);" id="deli_{{$index}}_data_transfer">
                     <u>Data Transfer</u>
                     <ul ng-show="deli.datatransfer.length">
                       <li ng-repeat="collab in deli.datatransfer">{{datatransfer.name}}</li>
@@ -508,11 +508,13 @@
                   </td>
                 </tr>
               </table>
+              <div ng-click="updateBubble($event);" id="deli_{{$index}}_collabs">
               <u>HBP Collab</u>
               <ul ng-show="deli.collabs.length">
                 <li ng-repeat="collab in deli.collabs">{{collab.title}}</li>
               </ul>
               <span ng-hide="deli.collabs.length" class="nonePadding"><br />None<br /></span>
+            </div>
             </div>
           </div>
           <div class="p10-5">
@@ -520,7 +522,7 @@
             <div class="p10">
               <table width="100%">
                 <tr>
-                  <td class="inTwo">
+                  <td class="inTwo" ng-click="updateBubble($event);" id="deli_{{$index}}_virtualization">
                     <u>Virtualization</u>
                     <ul ng-show="deli.virtualization.length">
                       <li ng-repeat="soft in deli.virtualization">{{soft.name}}</li>
@@ -529,7 +531,7 @@
                   </td>
                   <td class="inTwoEmptySeparator">
                   </td>
-                  <td class="inTwo">
+                  <td class="inTwo" ng-click="updateBubble($event);" id="deli_{{$index}}_dev_env">
                     <u>Development Environment</u>
                     <ul ng-show="deli.devenv.length">
                       <li ng-repeat="collab in deli.devenv">{{datatransfer.name}}</li>
@@ -545,42 +547,50 @@
             <div ng-show="data.select.proposal.projectType == 1" >
               <table width="100%" class="hpcList p10" ng-show="data.select.proposal.projectType == 1" >
                 <td class="inTwo">
-                  <div class="form-group" ng-click="updateBubble($event);">
+                  <div class="form-group" ng-click="updateBubble($event);" id="deli_{{$index}}_hpcSilv">
                     <input type="checkbox" ng-model="deli.hpcRessource" disabled="disabled"> HPC Ressources
                   </div>
                 </td>
                 <td class="inTwoEmptySeparator">
                 </td>
                 <td class="inTwo">
-                  <div class="form-group" ng-click="updateBubble($event);">
+                  <div class="form-group" ng-click="updateBubble($event);" id="deli_{{$index}}_cloudSilv">
                     <input type="checkbox" ng-model="deli.cloudRessource" disabled="disabled"> Cloud Ressources
                   </div>
                 </td>
               </table>
             </div>
             <div class="p10" ng-show="data.select.proposal.projectType >= 2" >
+              <div ng-click="updateBubble($event);" id="deli_{{$index}}_archi">
               <u>Prefered Architecture</u>
               <ul ng-show="deli.architecture.length">
                 <li ng-repeat="tasks in deli.architecture">{{tasks.name}}</li>
               </ul>
               <span ng-hide="deli.architecture.length" class="nonePadding"><br />None<br /></span>
+            </div>
               <br />
               <table width="100%" style="padding-top:15px;"><tr>
                 <td class="inTwo">
                   <u>HPC Computing</u>
                   <div class="p10 form-group">
+                    <div ng-click="updateBubble($event);" id="deli_{{$index}}_hpc_runs">
                     <u>Total number of runs</u>
                     <input type="number" readonly ng-model="
                     deli.hpc.runs
                     ">
+                    </div>
+                    <div ng-click="updateBubble($event);" id="deli_{{$index}}_hpc_part_size">
                     <u>Average partition size (Number of processors)</u>
                     <input type="number" readonly ng-model="
                     deli.hpc.partition
                     ">
+                    </div>
+                    <div ng-click="updateBubble($event);" id="deli_{{$index}}_hpc_time">
                     <u>Time to solution (In hours)</u>
                     <input type="number" readonly ng-model="
                     deli.hpc.time
                     ">
+                    </div>
                   </div>
                 </td>
                 <td class="inTwoEmptySeparator">
@@ -588,42 +598,54 @@
                 <td class="inTwo">
                   <u>HPC Storage</u>
                   <div class="p10 form-group">
+                  <div ng-click="updateBubble($event);" id="deli_{{$index}}_hpc_arte">
                     <u>Number of artefacts</u>
                     <input type="number" readonly ng-model="
                     deli.hpc.numarte
                     ">
+                    </div>
+                    <div ng-click="updateBubble($event);" id="deli_{{$index}}_hpc_arte_size">
                     <u>Average size of artefacts (in GB)</u>
                     <input type="number" readonly ng-model="
                     deli.hpc.sizearte
                     ">
+                    </div>
                   </div>
                 </td>
               </tr>
             </table>
 
             <u>Prefered Cloud Architecture</u>
+            <div ng-click="updateBubble($event);" id="deli_{{$index}}_cloud_archi">
             <ul ng-show="deli.architectureC.length">
               <li ng-repeat="tasks in deli.architectureC">{{tasks.name}}</li>
             </ul>
             <span ng-hide="deli.architectureC.length" class="nonePadding"><br />None<br /></span>
+            </div>
             <br />
             <table>
               <tr>
                 <td class="inTwo">
                   <u>Cloud Computing</u>
                   <div class="p10 form-group">
+                  <div ng-click="updateBubble($event);" id="deli_{{$index}}_cloud_runs">
                     <u>Total number of runs</u>
                     <input type="number" readonly ng-model="
                     deli.cloud.runs
                     ">
+                    </div>
+                    <div ng-click="updateBubble($event);" id="deli_{{$index}}_cloud_part_size">
                     <u>Average partition size (Number of processors)</u>
                     <input type="number" readonly ng-model="
                     deli.cloud.partition
                     ">
+                    </div>
+                    <div ng-click="updateBubble($event);" id="deli_{{$index}}_cloud_time">
                     <u>Time to solution (In hours)</u>
                     <input type="number" readonly ng-model="
                     deli.cloud.time
                     ">
+                    </div>
                   </div>
                 </td>
                 <td class="inTwoEmptySeparator">
@@ -631,14 +653,18 @@
                 <td class="inTwo">
                   <u>Cloud Storage</u>
                   <div class="p10 form-group">
+                  <div ng-click="updateBubble($event);" id="deli_{{$index}}_cloud_part_arte">
                     <u>Number of artefacts</u>
                     <input type="number" readonly ng-model="
                     deli.cloud.numarte
                     ">
+                    </div>
+                    <div ng-click="updateBubble($event);" id="deli_{{$index}}_cloud_part_size_arte">
                     <u>Average size of artefacts (in GB)</u>
                     <input type="number" readonly ng-model="
                     deli.cloud.sizearte
                     ">
+                    </div>
                   </div>
                 </td>
               </tr>
@@ -648,7 +674,7 @@
         <div class="p10-5">
           <label>Hardware as a Service (HaaS)</label>
           <ul ng-show="deli.hardware.length">
-            <li ng-repeat="hard in deli.hardware"><b>{{hard.name}}</b>: {{hard.description}}<br />Price: {{hard.price}} CHF<br />{{hard.link}}</li>
+            <li ng-repeat="hard in deli.hardware" ng-click="updateBubble($event);" id="deli_{{$parent.$index}}_hardware_{{$index}}"><b>{{hard.name}}</b>: {{hard.description}}<br />Price: {{hard.price}} CHF<br />{{hard.link}}</li>
           </ul>
           <span ng-hide="deli.hardware.length" class="nonePadding"><br />None<br /></span>
         </div>
@@ -672,10 +698,10 @@
         <div class="memberList" data-ng-model="deli.members">
           <div ng-repeat="member in deli.members">
             <table>
-              <td class="inTwo">
+              <td class="inTwo" ng-click="updateBubble($event);" id="deli_{{$parent.$index}}_member_{{$index}}">
                 {{member.name}}
               </td>
-              <td class="inTwo">
+              <td class="inTwo" ng-click="updateBubble($event);" id="deli_{{$parent.$index}}_member_pm_{{$index}}">
                 <input type="number" readonly class=""
                 ng-model="member.pm">
               </td>
