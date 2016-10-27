@@ -50,6 +50,20 @@ angular.module('proposalReviewApp')
             member = true;
           }
         });
+        var bbp = 0;
+        if(scope.record.bbpProject == 1){
+          bbp = 2;
+          angular.forEach(options.institutions, function(val){
+            if(val.department == "Blue Brain Project"){
+              bbp = 1;
+            }
+          });
+        }
+        if(bbp == 2) {
+          $timeout(function(){
+            $window.alert("You have selected previously that the project is a BBP project but "+options.displayName + " is not part of Blue Brain Project.");
+          });
+        } else {
         // Verify if the selected pi is not yet selected as co-pi or member.
         if(!copi && !member){
           // If not, add the user as pi
@@ -65,6 +79,7 @@ angular.module('proposalReviewApp')
             $window.alert(options.displayName + " is already defined as Member.");
           });
         }
+      }
       }
     }
   }
@@ -102,6 +117,20 @@ angular.module('proposalReviewApp')
             member = true;
           }
         });
+        var bbp = 0;
+        if(scope.record.bbpProject == 1){
+          bbp = 2;
+          angular.forEach(options.institutions, function(val){
+            if(val.department == "Blue Brain Project"){
+              bbp = 1;
+            }
+          });
+        }
+        if(bbp == 2) {
+          $timeout(function(){
+            $window.alert("You have selected previously that the project is a BBP project but "+options.displayName + " is not part of Blue Brain Project.");
+          });
+        } else {
         // Verify if the selected co-pi is not yet selected as pi or member.
         if(!pi && !member){
           // If not, add the user as pi
@@ -118,6 +147,7 @@ angular.module('proposalReviewApp')
           });
         }
       }
+    }
     }
   }
 })
@@ -155,6 +185,20 @@ angular.module('proposalReviewApp')
         if(scope.record.copi != undefined){
           copi = (scope.record.copi.id == options.id);
         }
+        var bbp = 0;
+        if(scope.record.bbpProject == 1){
+          bbp = 2;
+          angular.forEach(options.institutions, function(val){
+            if(val.department == "Blue Brain Project"){
+              bbp = 1;
+            }
+          });
+        }
+        if(bbp == 2) {
+          $timeout(function(){
+            $window.alert("You have selected previously that the project is a BBP project but "+options.displayName + " is not part of Blue Brain Project.");
+          });
+        } else {
         // Verify if the selected member is not yet selected as pi or co-pi.
         if(!pi && !copi){
           // Verify if the selected user is not selected yet.
@@ -181,6 +225,7 @@ angular.module('proposalReviewApp')
           });
         }
       }
+    }
     }
   }
 })
@@ -222,6 +267,20 @@ angular.module('proposalReviewApp')
           if(scope.record.copi != undefined){
             copi = (scope.record.copi.id == options.id);
           }
+          var bbp = 0;
+          if(scope.record.bbpProject == 1){
+            bbp = 2;
+            angular.forEach(options.institutions, function(val){
+              if(val.department == "Blue Brain Project"){
+                bbp = 1;
+              }
+            });
+          }
+          if(bbp == 2) {
+            $timeout(function(){
+              $window.alert("You have selected previously that the project is a BBP project but "+options.displayName + " is not part of Blue Brain Project.");
+            });
+          } else {
           // Verify if the selected member is not yet selected as pi or co-pi.
           if(!pi && !copi){
             // Verify if the selected user is not selected yet.
@@ -247,7 +306,7 @@ angular.module('proposalReviewApp')
               $window.alert(options.displayName + " is already defined as Co-Project Leader.");
             });
           }
-
+}
         }
         else {
           $timeout(function(){
