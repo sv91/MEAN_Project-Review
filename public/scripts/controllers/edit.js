@@ -26,6 +26,21 @@ angular.module('proposalReviewApp')
     {'name':'reviews'}
   ];
 
+  $scope.sendEmail = function(){
+    console.log("IN");
+    var val = {
+      'person' : "Vostriakov Alexanderrrrr",
+      'project': "58078325dbf3094548d0794a"
+    };
+    $http.post('/api/email/submission',val)
+      .success(function(data) {
+        console.log("Email send.");
+      })
+      .error(function(data) {
+        console.log('Error: ' + data);
+      });
+  };
+
   $scope.formData = [];
   angular.forEach($scope.edit.tables,function(val){
     $scope.formData[val.name] = {};

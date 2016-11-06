@@ -6,6 +6,7 @@ var Schema          = mongoose.Schema;
 var morgan          = require('morgan');
 var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
+var email           = require('emailjs');
 
 // Configuration ===============================================================
 mongoose.connect('mongodb://localhost:27017/proposaldb');
@@ -1267,6 +1268,27 @@ app.use(methodOverride());
   // Application ---------------------------------------------------------------
   app.get('*', function(req, res) {
     res.sendFile('./public/index.html'); //load the single view file
+  });
+
+// Emails ======================================================================
+var server = email.server.connect({
+  user:     "submission",
+  password: "sub",
+  host:     "bbpca031.bbp.epfl.ch",
+  ssl: false
+});
+
+  // Api send ------------------------------------------------------------------
+  app.post('/api/email/submission', function(req,res){
+
+    server.send({
+      text    : "A new project has been submitted by "+ req.body.person +". \nYou can review it by going to <a href='http://localhost:63001/#/review/" + req.body.proj + "'>http://localhost:63001/#/review/" + req.body.proj + "</a>",
+      from    : "Submissions <submission@bbpca031.bbp.epfl.ch>",
+      to      : "alexander.vostriakov@epfl.ch",
+      subject : "New Submission",
+    }, function(err, message) {
+              console.log("Done" +err + message);
+    });
   });
 
 // Listen ======================================================================
