@@ -1286,9 +1286,9 @@ var server = email.server.connect({
       from    : "Submissions <submission@bbpca031.bbp.epfl.ch>",
       to      : "alexander.vostriakov@epfl.ch",
       subject : "New Submission",
-    }, function(err, message) {
-              console.log("Done" +err + message);
-    });
+    },  function (err, message) {
+  console.log(err || message);
+});
   });
 
 // Listen ======================================================================
