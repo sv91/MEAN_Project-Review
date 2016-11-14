@@ -124,7 +124,7 @@ angular
 				$timeout(function(){
 					$window.alert('Project Saved.');
 				});
-				fulfill(true);
+				fulfill(res);
 			}, function(){
 				console.log('Project Not Saved');
 				fulfill(false);
@@ -1094,14 +1094,29 @@ angular
 		goToState('previous');
 	};
 
+	function sendEmail(project){
+    var val = {
+			'to' : 'twotesting',
+      'title' 	: "New submission",
+      'text': "Dear Reviewer, \nA new proposal has been submitted by " + $scope.activeUser.displayName + ". \nYou can access it by clicking on the following link:\n<a href='http://bbpca031.epfl.ch:63001/#/review/"+project+"'>http://bbpca031.epfl.ch:63001/#/review/"+project+"</a>",
+      'html': "Dear Reviewer,<br />A new proposal has been submitted by " + $scope.activeUser.displayName + ". <br />You can access it by clicking on the following link:\n<a href='http://bbpca031.epfl.ch:63001/#/review/"+project+"'>http://bbpca031.epfl.ch:63001/#/review/"+project+"</a>"
+    };
+    $http.post('/api/email/submission',val)
+      .success(function(data) {
+        console.log("Email send.");
+      })
+      .error(function(data) {
+        console.log('Error: ' + data);
+      });
+  };
+
 	// function to process the form
 	$scope.processForm = function() {
 		sharedService.saveProject($scope.record)
 		.then(function(res){
-			if(res){
-				sessionStorage.clear();
-				$scope.record = $sessionStorage;
-			}
+			sendEmail(res);
+			sessionStorage.clear();
+			$scope.record = $sessionStorage;
 		});
 	};
 });

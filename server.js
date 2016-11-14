@@ -6,7 +6,7 @@ var Schema          = mongoose.Schema;
 var morgan          = require('morgan');
 var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
-var email           = require('emailjs');
+var nodemailer      = require('nodemailer');
 
 // Configuration ===============================================================
 mongoose.connect('mongodb://localhost:27017/proposaldb');
@@ -17,6 +17,8 @@ app.use(bodyParser.urlencoded({ 'extended':'true' }));
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(methodOverride());
+  // create reusable transporter object using the default SMTP transport
+var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmail.com:Supp0rt123@smtp.gmail.com');
 
 // Defining models =============================================================
 
@@ -1270,25 +1272,40 @@ app.use(methodOverride());
     res.sendFile('./public/index.html'); //load the single view file
   });
 
-// Emails ======================================================================
-var server = email.server.connect({
-  user:     "submission",
-  password: "sub",
-  host:     "bbpca031.bbp.epfl.ch",
-  ssl: false
-});
 
   // Api send ------------------------------------------------------------------
   app.post('/api/email/submission', function(req,res){
+    console.log("HERE");
+    // setup e-mail data with unicode symbols
+    var mailOptions = {
+      to: 'alexander.vostriakov@epfl.ch', // list of receivers
+      subject: req.body.title, // Subject line
+      text: req.body.text, // plaintext body
+      html: req.body.html
+    };
+    switch(req.body.to) {
+    case 'onlyone':
+        mailOptions.to = 'alexander.vostriakov@epfl.ch';
+        break;
+    case 'twotesting':
+        mailOptions.to = 'alexander.vostriakov@epfl.ch, fabien.delalondre@epfl.ch';
+        break;
+    case 'reviewingteam':
+        mailOptions.to = '';
+        break;
+    default:
+        mailOptions.to = '';
+    }
 
-    server.send({
-      text    : "A new project has been submitted by "+ req.body.person +". \nYou can review it by going to <a href='http://localhost:63001/#/review/" + req.body.proj + "'>http://localhost:63001/#/review/" + req.body.proj + "</a>",
-      from    : "Submissions <submission@bbpca031.bbp.epfl.ch>",
-      to      : "alexander.vostriakov@epfl.ch",
-      subject : "New Submission",
-    },  function (err, message) {
-  console.log(err || message);
+
+// send mail with defined transport object
+transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+        return console.log(error);
+    }
+    console.log('Message sent: ' + info.response);
 });
+  res.json("Good");
   });
 
 // Listen ======================================================================
