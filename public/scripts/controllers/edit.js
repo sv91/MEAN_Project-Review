@@ -29,8 +29,10 @@ angular.module('proposalReviewApp')
   $scope.sendEmail = function(){
     console.log("IN");
     var val = {
-      'person' : "Vostriakov Alexanderrrrr",
-      'project': "58078325dbf3094548d0794a"
+      'to' : 'onlyone',
+      'subject':'Just a test',
+'text':'Testing some stuff',
+'html': 'Other stuff'
     };
     $http.post('/api/email/submission',val)
       .success(function(data) {
