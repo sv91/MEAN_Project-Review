@@ -44,6 +44,7 @@ angular.module('proposalReviewApp')
   }
 
   function getAllByID(list,type){
+    console.log("GetAllById: "+type);
     return new Promise(function (fulfill, reject){
       if(list != undefined && list != "" && list != null && list != [])
       {
