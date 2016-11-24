@@ -130,9 +130,9 @@
     ng-required="record.projectType >= 2" ng-model="record.tags"
     theme="bootstrap"
     sortable="true">
-    <ui-select-match placeholder="Click to select a keyword or write down to add new ones">{{$item}}</ui-select-match>
+    <ui-select-match placeholder="Click to select a keyword or write down to add new ones">{{$item.name}}</ui-select-match>
     <ui-select-choices repeat="tag in availableTags | filter:$select.search">
-      {{tag}}
+      {{tag.name}}
     </ui-select-choices>
   </ui-select>
 </div>
