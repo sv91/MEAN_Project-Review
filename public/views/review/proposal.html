@@ -80,7 +80,7 @@
       <div class="form-group" id="keywords" ng-click="updateBubble($event);">
         <label>Project Key Words</label>
         <ul ng-show="data.select.proposal.tags.length">
-          <li ng-repeat="tag in data.select.proposal.tags">{{tag}}</li>
+          <li ng-repeat="tag in data.select.proposal.tags">{{tag.name}}</li>
         </ul>
         <span ng-hide="data.select.proposal.tags.length" class="nonePadding"><br />None<br /></span>
       </div>
