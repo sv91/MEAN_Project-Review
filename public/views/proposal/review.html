@@ -86,37 +86,37 @@
         </div>
 
         <div class="form-group">
-          <label>Executive Summary</label>
+          <label ng-show="record.projectType >= 1">Executive Summary</label><label ng-show="record.projectType == 0">Project Summary</label> (1000 characters max.)
           <div>
-            <textarea readonly required value="{{record.executiveSummary}}"></textarea>
+            <textarea readonly required>{{record.executiveSummary}}</textarea>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" ng-show="record.projectType >= 0" >
           <label>Impact Statement</label>
           <div>
-            <textarea readonly required value="{{record.impactStatement}}"></textarea>
+            <textarea readonly required>{{record.impactStatement}}</textarea>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group"  ng-show="record.projectType >= 2">
           <label>Benefit to Community</label>
           <div>
-            <textarea readonly required value="{{record.benefitToCommunity}}"></textarea>
+            <textarea readonly required>{{record.benefitToCommunity}}</textarea>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" ng-show="record.projectType >= 2">
           <label>Scientific Summary</label>
           <div>
-            <textarea readonly required value="{{record.scientificSummary}}"></textarea>
+            <textarea readonly required>{{record.scientificSummary}}</textarea>
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Technological Summary</label>
+        <div class="form-group" ng-show="record.projectType >= 1" >
+          <label ng-show="record.projectType > 1">Technological Summary</label><label ng-show="record.projectType == 1">Scientific/Technological Summary</label> (2000 characters max.)
           <div>
-            <textarea readonly required value="{{record.technologicalSummary}}"></textarea>
+            <textarea readonly required>{{record.technologicalSummary}}</textarea>
           </div>
         </div>
 
