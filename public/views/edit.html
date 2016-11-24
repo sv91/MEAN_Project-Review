@@ -25,9 +25,12 @@
   <hr/>
     <div ng-repeat="table in check.tables">
       <label>{{table.name}}</label>
-      <pre>{{check[table.name] | json}}</pre>
+      <div ng-repeat="valu in check[table.name]">
+      <pre>{{valu | json}}</pre>
+      <button type="submit" class="btn btn-primary btn-lg" ng-click="deleteElement(table.name,valu._id)">X</button>
         <hr />
       </div>
+    </div>
   </div>
 
   <div class="rightSide">

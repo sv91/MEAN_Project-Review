@@ -321,12 +321,15 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
     // deleteOne
     // Delete an element from a model by getting the id through route params.
     //    target : Model wher the element should be deleted.
-    function deleteOne(tId,res,target){
+    function deleteOne(req,res,target){
       target.remove({
-        _id : tId
+        _id : req.params.target_id
       }, function(err, tar) {
+        console.log(err);
+          console.log(tar);
         if (err)
           HandleError(err,res);
+        res.json(tar);
       });
     };
 
@@ -475,7 +478,7 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
       Team.create({
         name        : req.body.name,
         shortName   : req.body.shortName,
-        displayName : 'BBP Team: ' + req.body.shortName
+        displayName : 'BBP Team: ' + req.body.name
       }, function(err,project){
         if (err)
           HandleError(err,res);

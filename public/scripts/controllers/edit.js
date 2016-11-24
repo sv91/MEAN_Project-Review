@@ -89,4 +89,15 @@ angular.module('proposalReviewApp')
       });
   };
 
+  $scope.deleteElement = function(type,id) {
+    console.log('In the function');
+    $http.delete('/api/'+type+'/'+id+'/delete')
+      .success(function(data){
+        console.log('Deleted');
+      })
+      .error(function(data) {
+        console.log('Error: ' + data);
+      });
+  }
+
 });
