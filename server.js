@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(methodOverride());
   // create reusable transporter object using the default SMTP transport
-var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmail.com:Supp0rt123@smtp.gmail.com');
+var transporter = nodemailer.createTransport();
 
 // Defining models =============================================================
 
@@ -1281,6 +1281,7 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
     console.log("HERE");
     // setup e-mail data with unicode symbols
     var mailOptions = {
+      from: "Project Proposal and Review<notification@bbpca031.epfl.ch>",
       to: 'alexander.vostriakov@epfl.ch', // list of receivers
       subject: req.body.title, // Subject line
       text: req.body.text, // plaintext body

@@ -30,9 +30,9 @@ angular.module('proposalReviewApp')
     console.log("IN");
     var val = {
       'to' : 'onlyone',
-      'subject' : 'test',
-      'text' : 'blabla',
-      'text' : 'blablablabla'
+      'subject':'Just a test',
+'text':'Testing some stuff',
+'html': 'Other stuff'
     };
     $http.post('/api/email/submission',val)
       .success(function(data) {
