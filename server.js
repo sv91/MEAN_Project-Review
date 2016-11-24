@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(methodOverride());
   // create reusable transporter object using the default SMTP transport
-var transporter = nodemailer.createTransport();
+var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmail.com:Supp0rt123@smtp.gmail.com');
 
 // Defining models =============================================================
 
@@ -325,8 +325,6 @@ var transporter = nodemailer.createTransport();
       target.remove({
         _id : req.params.target_id
       }, function(err, tar) {
-        console.log(err);
-          console.log(tar);
         if (err)
           HandleError(err,res);
         res.json(tar);
@@ -584,6 +582,11 @@ var transporter = nodemailer.createTransport();
       findAll(res, Grant);
     });
 
+    // Get one
+    app.get('/api/grants/:target_id', function(req, res){
+      findOne(req,res, Grant);
+    });
+
     // Create new Grant
     app.post('/api/grants', function(req, res){
       Grant.create({
@@ -604,6 +607,11 @@ var transporter = nodemailer.createTransport();
     // Get all
     app.get('/api/tasks', function(req, res){
       findAll(res, Task);
+    });
+
+    // Get one
+    app.get('/api/tasks/:target_id', function(req, res){
+      findOne(req,res, Task);
     });
 
     // Create new Task
@@ -627,6 +635,11 @@ var transporter = nodemailer.createTransport();
     // Get all
     app.get('/api/tags', function(req, res){
       findAll(res, Tag);
+    });
+
+    // Get one
+    app.get('/api/tags/:target_id', function(req, res){
+      findOne(req,res, Tag);
     });
 
     // Create new Tag
@@ -1281,7 +1294,6 @@ var transporter = nodemailer.createTransport();
     console.log("HERE");
     // setup e-mail data with unicode symbols
     var mailOptions = {
-      from: "Project Proposal and Review<notification@bbpca031.epfl.ch>",
       to: 'alexander.vostriakov@epfl.ch', // list of receivers
       subject: req.body.title, // Subject line
       text: req.body.text, // plaintext body
