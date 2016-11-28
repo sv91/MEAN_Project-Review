@@ -471,6 +471,11 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
       findAll(res, Team);
     });
 
+    // Get one
+    app.get('/api/teams/:target_id', function(req, res){
+      findOne(req,res, Team);
+    });
+
     // Create new Team
     app.post('/api/teams', function(req, res){
       Team.create({
