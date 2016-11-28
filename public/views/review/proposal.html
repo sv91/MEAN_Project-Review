@@ -112,6 +112,22 @@
           <textarea readonly>{{data.select.proposal.scientificSummary}}</textarea>
         </div>
       </div>
+      <pre>
+        {{data.select.proposal | json}}
+      </pre>
+
+      <div class="form-group" id="bronzeMembers" ng-show="data.select.proposal.projectType == 0" >
+        <label>Project Members</label>
+        <div ng-click="updateBubble($event);">
+          <u>Project Leader:</u> {{data.select.proposal.pi.displayName}}
+        </div>
+        <div ng-click="updateBubble($event);" ng-show="data.select.proposal.members.length">
+          <u>Members:</u>
+          <ul>
+            <li ng-repeat="mem in data.select.proposal.members" >{{mem.displayName}}
+          </ul>
+        </div>
+      </div>
 
       <div class="form-group" id="technologicalSummary" ng-click="updateBubble($event);" ng-show="data.select.proposal.projectType >= 1" >
         <label ng-show="data.select.proposal.projectType > 1">Technological Summary</label><label ng-show="data.select.proposal.projectType == 1">Scientific/Technological Summary</label>
