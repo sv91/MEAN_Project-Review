@@ -10,3 +10,5 @@ This app aims to provide an easy to follow Project proposal form, as well as an 
 * Better management of tags
 * Correct the refresh bug of Comments
 * Review: Bug of the menu when clicking on the link of the opened page
+* Unlock submit button only after filling everything
+* Display the results of the "Notes" in a user-friendly wayfor the reviewed person
