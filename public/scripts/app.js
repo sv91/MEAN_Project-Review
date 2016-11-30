@@ -986,29 +986,88 @@ angular
 	$scope.record.activeUser=$scope.activeUser;
 
 	// Check if all the required values were filled
-/*	$scope.$watch('record', function(attrs) {
-		var level = $scope.record.projectType;
-		var temp = true;
-		angular.forEach($scope.fields,function(elem){
-			if( elem.required >= level ){
-				var iter = $scope.record[elem.name];
-				if(iter == undefined || iter == '' || iter == null){
-					temp = false;
-				}
-			}
-		})
-		$scope.good = temp;
-	}, true);*/
-
-	// Activate or disactivate the submit button
-	$scope.$watch('record.good', function() {
+	$scope.$watch('record', function(attrs) {
 		var classes = 'finalN';
-		if(!$scope.record.good){
-			classes += ' disabled';
+		if(!checkValues()){
+			classes += ' notready';
 		}
 		document.getElementById('final').className = classes;
-	},true);
+	}, true);
 
+	function checkValues(){
+		switch($scope.record.projectType){
+			case '0':
+				return checkBronze();
+				break;
+			case '1':
+				return checkSilver();
+				break;
+			case '2':
+				return checkGold();
+				break;
+			default:
+				return false;
+		}
+	}
+
+	function checkInput(field,acceptedValues){
+		if(acceptedValues.indexOf(field)== -1){
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	function checkNotEmpty(field,avoid){
+		if (typeof field === 'undefined'){
+			return false;
+		}
+		if (typeof avoid === 'undefined'){
+			avoid = "";
+		}
+		if(typeof field != 'object' && field.toString().replace(" ","").length > 0){
+			return true;
+		} else if(typeof field == 'object'){
+			var isGood = true;
+			angular.forEach(field,function(val,key){
+				if(avoid.indexOf(key)!=-1){
+				}
+				if(avoid.indexOf(key)==-1){
+					isGood = isGood && checkNotEmpty(val,avoid);
+				}
+			});
+			return isGood;
+		} else {
+			return false;
+		}
+	}
+
+	function checkBasic(){
+		var pi = checkNotEmpty($scope.record.pi.displayName); // some fields from a person can be empty
+		return checkInput($scope.record.bbpProject,['0','1']) &&
+					 pi &&
+					 checkInput($scope.record.newproject,['true','false']) &&
+					 checkNotEmpty($scope.record.executiveSummary) &&
+					 checkNotEmpty($scope.record.impactStatement) &&
+					 checkNotEmpty($scope.record.projectTitle) &&
+					 checkNotEmpty($scope.record.projectStartDate) &&
+					 checkNotEmpty($scope.record.projectEndDate) &&
+					 checkNotEmpty($scope.record.usecase);
+	}
+
+	function checkBronze(){
+		return checkBasic() && checkNotEmpty($scope.record.shortDeliverable) &&
+					 checkNotEmpty($scope.record.requirements,["feature","input","output"]);
+	}
+
+	function checkSilver(){
+
+	}
+
+	function checkGold(){
+
+	}
 
 	// Change the minimum date of the projects depending on the type of projects
 	$scope.$watchGroup(['record.projectType', 'record.projectStartDate'], function() {
@@ -1114,7 +1173,7 @@ angular
 	$scope.processForm = function() {
 		sharedService.saveProject($scope.record)
 		.then(function(res){
-			sendEmail(res);
+//During test			sendEmail(res);
 			sessionStorage.clear();
 			$scope.record = $sessionStorage;
 		});

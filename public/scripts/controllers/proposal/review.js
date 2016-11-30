@@ -22,7 +22,7 @@ angular.module('proposalReviewApp')
   $scope.summ.hardware=[];
   $scope.summ.members=[];
   $scope.summ.deliverables=[];
-  $scope.record.good = true;
+  $scope.record.reachedReview = true;
 
   /**
   * @ngdoc function

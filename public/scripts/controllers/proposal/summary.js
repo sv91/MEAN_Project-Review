@@ -12,6 +12,8 @@ angular.module('proposalReviewApp')
   // default value for the 'New Project' field.
   $scope.record.newproject = 'true';
   $scope.record.projectStartDateMD = new Date();
+  $scope.record.projectStartDate = new Date($scope.record.projectStartDate);
+  $scope.record.projectEndDate = new Date($scope.record.projectEndDate);
 
   // Loading available values from DB
   //Grants
@@ -136,6 +138,12 @@ angular.module('proposalReviewApp')
       if (!scope.record.relatedProjects) {
         scope.record.relatedProjects = [];
       }
+
+      angular.forEach(scope.record.relatedProjects,function(val){
+        val.startDate = new Date(val.startDate);
+        val.endDate = new Date(val.endDate);
+      });
+
       /**
       * @ngdoc function
       * @name deleteProject
@@ -189,6 +197,11 @@ angular.module('proposalReviewApp')
       if (!scope.record.shortDeliverable) {
         scope.record.shortDeliverable = [];
       }
+
+      angular.forEach(scope.record.shortDeliverable,function(val){
+        val.deliveryDate = new Date(val.deliveryDate);
+      });
+
       /**
       * @ngdoc function
       * @name deleteDeliverable

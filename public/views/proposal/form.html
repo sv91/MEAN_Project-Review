@@ -20,7 +20,7 @@
           <a ng-click="resetBubble()" style="visibility:hidden;"><span>?</span>place</a>
         </div>
         <div class="submitDiv">
-        <a ng-click="resetBubble(); processForm();" href="#/" id="final" class="finalN disabled" ng-show="record.good"><span>✓</span>Submit the form</a>
+        <a ng-click="resetBubble(); processForm();" href="#/" id="final" class="finalN notready" ng-show="record.reachedReview"><span>✓</span>Submit the form</a>
       </div>
       </div>
 
@@ -45,8 +45,8 @@
 
 
 
-<!-- For tests
+
 <pre>
   {{ record | json }}
-</pre>
+</pre><!-- For tests
 -->

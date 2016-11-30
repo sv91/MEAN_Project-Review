@@ -211,10 +211,10 @@ textarea.ng-invalid.ng-touched {
 
 #status-buttons a.pN span   { background:#C0C0C0; }
 
-a.finalN.disabled span   { color:#671919; }
+a.finalN.notready span   { color:#671919; }
 a.finalN span   { color:#005000; }
 
-a.finalN.disabled   { background-color:#BC4C4C; border: 1px solid #671919; color:#671919; padding: 5px;}
+a.finalN.notready   { background-color:#BC4C4C; border: 1px solid #671919; color:#671919; padding: 5px;}
 a.finalN   { background-color:#00BC8C; border: 1px solid #006726; color:#006726; padding: 5px;}
 
 .submitDiv{
