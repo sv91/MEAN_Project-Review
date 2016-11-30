@@ -982,14 +982,19 @@ angular
 		$scope.minDate = new Date();
 		$scope.maxDate = new Date();
 		$scope.created = {};
+		$scope.record.good = false;
 	}
 	$scope.record.activeUser=$scope.activeUser;
 
 	// Check if all the required values were filled
 	$scope.$watch('record', function(attrs) {
 		var classes = 'finalN';
-		if(!checkValues()){
+		$scope.record.good = checkValues();
+		if(!$scope.record.good){
 			classes += ' notready';
+			document.getElementById('final').href = "";
+		} else {
+		document.getElementById('final').href = '#/';
 		}
 		document.getElementById('final').className = classes;
 	}, true);
@@ -1171,11 +1176,14 @@ angular
 
 	// function to process the form
 	$scope.processForm = function() {
-		sharedService.saveProject($scope.record)
+		if($scope.record.good){
+			sharedService.saveProject($scope.record)
 		.then(function(res){
-//During test			sendEmail(res);
+			//During test
+			sendEmail(res);
 			sessionStorage.clear();
 			$scope.record = $sessionStorage;
 		});
+	}
 	};
 });
