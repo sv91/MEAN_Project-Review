@@ -1067,11 +1067,19 @@ angular
 	}
 
 	function checkSilver(){
-
+		return checkBasic() &&
+		       checkNotEmpty($scope.record.technologicalSummary) &&
+			 		 checkNotEmpty($scope.record.deliverables,["hpc","cloud","requirement","dependency","hardware"]) &&
+			 		 checkNotEmpty($scope.record.requirements);
 	}
 
 	function checkGold(){
-
+		return checkBasic() &&
+		       checkNotEmpty($scope.record.technologicalSummary) &&
+			 		 checkNotEmpty($scope.record.benefitToCommunity) &&
+					 checkNotEmpty($scope.record.scientificSummary) &&
+			 		 checkNotEmpty($scope.record.deliverables,["hpc","cloud","requirement","dependency","hardware"]) &&
+			 		 checkNotEmpty($scope.record.requirements);
 	}
 
 	// Change the minimum date of the projects depending on the type of projects
