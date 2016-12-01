@@ -807,7 +807,7 @@ angular
 						    });
 								var c = confirm("Your comment has been saved. \nDo you want to continue commenting the proposal?");
 								if (c != true) {
-									window.location.href = '/#/review/'+$scope.data.select.review._id;
+									window.location.href = '/#/review/'+$scope.data.select.projectId;
 								}
 						  })
 						  .error(function(data) {
@@ -858,6 +858,10 @@ angular
 					$http.post('/api/reviews/'+$scope.data.select.review._id+'/notes',notes)
 						.success(function(){
 							console.log("Review successfully updated.");
+							$timeout(function(){
+								$window.alert('Notes Saved.');
+							});
+							window.location.href = '/#/review/'+$scope.data.select.projectId;
 						})
 						.error(function(data) {
 							console.log('Error: Review Update ' + data);
