@@ -724,7 +724,7 @@ angular
 	return sharedService;
 })
 
-.controller('reviewAppController', function ($scope, $http, $sessionStorage, sharedService) {
+.controller('reviewAppController', function ($scope, $http, $sessionStorage, sharedService, $timeout, $window) {
 	$scope.data.menu ={};
   $scope.data.menu.project = '';
   $scope.data.menu.notes = false;
@@ -805,6 +805,10 @@ angular
 						        $scope.data.select.comments.push(val);
 						      }
 						    });
+								var c = confirm("Your comment has been saved. \nDo you want to continue commenting the proposal?");
+								if (c != true) {
+									window.location.href = '/#/review/'+$scope.data.select.review._id;
+								}
 						  })
 						  .error(function(data) {
 						    console.log('Error: Review/Proposal.JS: Comments could not be loaded.');
@@ -821,46 +825,49 @@ angular
 	};
 
 	$scope.saveNote = function() {
-		sharedService.findOrCreate('persons',$scope.activeUser)
-		.then(function(res){
-		var sub = {
-			'reviewer' 				: res,
-			'bbpobjective'    : $scope.data.select.editedNote.bbpobjective,
-			'contracted'      : $scope.data.select.editedNote.contracted,
-			'impact'          : $scope.data.select.editedNote.impact,
-			'criticality'     : $scope.data.select.editedNote.criticality,
-			'clear'           : $scope.data.select.editedNote.clear,
-			'meaningful'      : $scope.data.select.editedNote.meaningful,
-			'achievable'      : $scope.data.select.editedNote.achievable,
-			'reqclear'        : $scope.data.select.editedNote.reqclear,
-			'skill'           : $scope.data.select.editedNote.skill,
-			'trackrecord'     : $scope.data.select.editedNote.trackrecord,
-			'funded'          : $scope.data.select.editedNote.funded,
-			'human'           : $scope.data.select.editedNote.human,
-			'computing'       : $scope.data.select.editedNote.computing,
-			'humanpr'         : $scope.data.select.editedNote.humanpr,
-			'computingpr'     : $scope.data.select.editedNote.computingpr,
-			'risks'           : $scope.data.select.editedNote.risks,
-			'total'           : $scope.data.select.editedNote.total,
-			'recommandation'  : $scope.data.select.editedNote.recommandation,
-			'comment'         : $scope.data.select.editedNote.comment
-		}
-		$http.post('/api/notes', sub)
-			.success(function(data){
-				var notes = $scope.data.select.review.notes;
-				notes.push(data);
-				$http.post('/api/reviews/'+$scope.data.select.review._id+'/notes',notes)
-					.success(function(){
-						console.log("Review successfully updated.");
-					})
-					.error(function(data) {
-						console.log('Error: Review Update ' + data);
-					});
-			})
-			.error(function(data) {
-				console.log('Error: ' + data);
+		var c = confirm("Your notes will be saved and you will notbe able to change it. \nAre you sure you finished?");
+		if (c == true) {
+			sharedService.findOrCreate('persons',$scope.activeUser)
+			.then(function(res){
+			var sub = {
+				'reviewer' 				: res,
+				'bbpobjective'    : $scope.data.select.editedNote.bbpobjective,
+				'contracted'      : $scope.data.select.editedNote.contracted,
+				'impact'          : $scope.data.select.editedNote.impact,
+				'criticality'     : $scope.data.select.editedNote.criticality,
+				'clear'           : $scope.data.select.editedNote.clear,
+				'meaningful'      : $scope.data.select.editedNote.meaningful,
+				'achievable'      : $scope.data.select.editedNote.achievable,
+				'reqclear'        : $scope.data.select.editedNote.reqclear,
+				'skill'           : $scope.data.select.editedNote.skill,
+				'trackrecord'     : $scope.data.select.editedNote.trackrecord,
+				'funded'          : $scope.data.select.editedNote.funded,
+				'human'           : $scope.data.select.editedNote.human,
+				'computing'       : $scope.data.select.editedNote.computing,
+				'humanpr'         : $scope.data.select.editedNote.humanpr,
+				'computingpr'     : $scope.data.select.editedNote.computingpr,
+				'risks'           : $scope.data.select.editedNote.risks,
+				'total'           : $scope.data.select.editedNote.total,
+				'recommandation'  : $scope.data.select.editedNote.recommandation,
+				'comment'         : $scope.data.select.editedNote.comment
+			}
+			$http.post('/api/notes', sub)
+				.success(function(data){
+					var notes = $scope.data.select.review.notes;
+					notes.push(data);
+					$http.post('/api/reviews/'+$scope.data.select.review._id+'/notes',notes)
+						.success(function(){
+							console.log("Review successfully updated.");
+						})
+						.error(function(data) {
+							console.log('Error: Review Update ' + data);
+						});
+				})
+				.error(function(data) {
+					console.log('Error: ' + data);
+				});
 			});
-		});
+		}
 	};
 })
 

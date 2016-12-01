@@ -32,7 +32,9 @@ angular.module('proposalReviewApp')
 
   function getById(val,type){
     return new Promise(function (fulfill, reject){
-      console.log("Val:"+ JSON.stringify(val));
+      if(typeof val == "object"){
+        fulfill();
+      } else {
       $http.get('/api/'+type+'/'+val)
       .success(function(data) {
         fulfill(data);
@@ -41,6 +43,7 @@ angular.module('proposalReviewApp')
         console.log('Error: findAllByID: Values could not be loaded.');
         reject(data);
       });
+    }
     });
   }
 
