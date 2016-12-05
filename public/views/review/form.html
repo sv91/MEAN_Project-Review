@@ -30,11 +30,16 @@
         <div ng-repeat="usr in data.persons | filter:{id: '!'+activeUser.id}">
           <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer: usr._id } |  orderBy: "-timestamp" | limitTo:1'><u>{{usr.displayName}}</u>:<br />{{com.value}}</li>
         </div>
-        <li>
-          Your comment:<br />
-          <textarea class='form-control' ng-model='toSubmit.valueTA'>{{toSubmit.valueTA}}</textarea>
-          <button ng-click="saveComment()" class="btn btn-primary btn-lg">Save comment</button>
-        </li>
+        <div ng-repeat="usr in data.persons | filter:{id: activeUser.id}">
+          <li ng-repeat='com in data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer: usr._id } |  orderBy: "-timestamp" | limitTo:1'>
+            <b id="{{bubble.field}}" ng-hide='com.length'><u>{{usr.displayName}}</u>:<br />{{com.value}}</b>
+          </li>
+          <li ng-hide='(data.select.comments | filter:{ field: bubble.field} | filter:{ reviewer: usr._id } |  orderBy: "-timestamp" | limitTo:1).length'>
+            Your comment:<br />
+            <textarea class='form-control' ng-model='toSubmit.valueTA'>{{toSubmit.valueTA}}</textarea>
+            <button ng-click="saveComment()" class="btn btn-primary btn-lg">Save comment</button>
+          </li>
+        </div>
       </ul>
     </div>
   </div>
