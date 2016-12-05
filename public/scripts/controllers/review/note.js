@@ -49,10 +49,16 @@ angular.module('proposalReviewApp')
     .success(function(data) {
       $scope.data.select.editedNote = {};
       angular.forEach(data,function(val){
-        if($scope.data.select.review.notes.indexOf(val._id)>-1 && val.reviewer == $scope.activeUser.dbId){
-          $scope.data.select.editedNote.push(val);
+        console.log("VAL: "+ JSON.stringify(val));
+        console.log("index: "+ JSON.stringify($scope.data.select.review.notes.indexOf(val._id)));
+        console.log("id: "+ JSON.stringify($scope.activeUser));
+        if($scope.data.select.review.notes.indexOf(val._id)>-1 && val.reviewer == $scope.activeUser.db_id){
+          console.log("IN: "+ JSON.stringify(val));
+          $scope.data.select.editedNote=val;
+          $scope.data.select.editedNote.loaded = true;
         }
       });
+      console.log(JSON.stringify($scope.data.select.editedNote));
     })
     .error(function(data) {
       console.log('Error: Review/Note.JS: Notes could not be loaded.');
