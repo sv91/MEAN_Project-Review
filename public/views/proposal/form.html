@@ -1,52 +1,58 @@
-<!-- form.html -->
+<!-- form.html
+Manages the menu and the nested pages for the Proposal part of the app.
+-->
 <div>
   <div>
     <div id="form-container">
+      <!-- Menu -->
       <div class="page-header text-center">
         <!-- the links to our nested states using relative paths -->
         <!-- add the active class if the state matches our ui-sref -->
         <div id="status-buttons" class="text-center">
           <a ng-click="resetBubble()" ui-sref=".help"><span>?</span>Help</a>
+          <!-- Menu placeholder -->
           <a ng-click="resetBubble()" style="visibility:hidden;"><span>?</span>place</a>
           <a ng-click="resetBubble();previousStep();" id="prev" class="pN"><span><<</span>Previous</a>
           <a ng-click="resetBubble()" ui-sref-active="active" ui-sref=".type"><span>1</span>Type</a>
+          <!-- Menu adapts depending on the project type -->
           <a ng-click="resetBubble()" ng-show="record.projectType >= 0" ui-sref-active="active" ui-sref=".members"><span>2</span> Members</a>
           <a ng-click="resetBubble()" ng-show="record.projectType >= 0" ui-sref-active="active" ui-sref=".summary"><span>3</span>Summary</a>
           <a ng-click="resetBubble()" ng-show="record.projectType >= 0" ui-sref-active="active" ui-sref=".requirements"><span>4</span>Requirements</a>
           <a ng-click="resetBubble()" ng-show="record.projectType >= 1" ui-sref-active="active" ui-sref=".deliverables"><span>5</span>Deliverables</a>
           <a ng-click="resetBubble()" ng-show="record.projectType >= 0" ui-sref-active="active" ui-sref=".review"><span ng-show="record.projectType >= 1">6</span><span ng-hide="record.projectType >= 1">5</span>Review</a>
           <a ng-click="resetBubble();nextStep();" id="next" class="pN"><span>>></span> Next</a>
+          <!-- Menu placeholders -->
           <a ng-click="resetBubble()" style="visibility:hidden;"><span>?</span>place</a>
           <a ng-click="resetBubble()" style="visibility:hidden;"><span>?</span>place</a>
         </div>
+        <!-- Submit button -->
         <div class="submitDiv">
-        <a ng-click="resetBubble(); processForm();" href="" id="final" class="finalN notready" disabled ng-show="record.reachedReview"><span>✓</span>Submit the form</a>
+          <a ng-click="resetBubble(); processForm();" href="" id="final" class="finalN notready" disabled ng-show="record.reachedReview"><span>✓</span>Submit the form</a>
+        </div>
       </div>
+
+      <!-- Placeholder part to center the nested pages  -->
+      <div class="leftSide" style="visibility:hidden">
+        placeholder
       </div>
 
+      <!-- Nested pages -->
+      <div id="form-views" ui-view>
+      </div>
 
-        <div class="leftSide" style="visibility:hidden">
-          <!-- placeholder  -->
-          placeholder
+      <!-- Pop-up area for additional information -->
+      <div class="rightSide" id="rightSide">
+        <div id="bubble" class="bubble" ng-show="bubble.show">
+          {{bubble.text}}
         </div>
+      </div>
 
-        <!-- our nested state views will be injected here -->
-        <div id="form-views" ui-view>
-        </div>
-
-        <div class="rightSide" id="rightSide">
-          <div id="bubble" class="bubble" ng-show="bubble.show">
-              {{bubble.text}}
-          </div>
-        </div>
     </div>
   </div>
 </div>
 
-
-
 <!-- For tests
 <pre>
-  {{ record | json }}
+{{ record | json }}
 </pre>
 -->
