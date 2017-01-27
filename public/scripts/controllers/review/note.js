@@ -49,9 +49,6 @@ angular.module('proposalReviewApp')
     .success(function(data) {
       $scope.data.select.editedNote = {};
       angular.forEach(data,function(val){
-        console.log("VAL: "+ JSON.stringify(val));
-        console.log("index: "+ JSON.stringify($scope.data.select.review.notes.indexOf(val._id)));
-        console.log("id: "+ JSON.stringify($scope.activeUser));
         if($scope.data.select.review.notes.indexOf(val._id)>-1 && val.reviewer == $scope.activeUser.db_id){
           console.log("IN: "+ JSON.stringify(val));
           $scope.data.select.editedNote=val;
