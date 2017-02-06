@@ -1296,7 +1296,6 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
 
   // Api send ------------------------------------------------------------------
   app.post('/api/email/submission', function(req,res){
-    console.log("HERE");
     // setup e-mail data with unicode symbols
     var mailOptions = {
       to: 'alexander.vostriakov@epfl.ch', // list of receivers

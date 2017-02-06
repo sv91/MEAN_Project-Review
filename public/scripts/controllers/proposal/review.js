@@ -9,7 +9,7 @@
 */
 angular.module('proposalReviewApp')
 .controller('ReviewCtrl', function ($scope) {
-
+  // Default values of the whole proposal.
   $scope.summ.softdev=[];
   $scope.summ.collabs=[];
   $scope.summ.datatransfer=[];
@@ -68,6 +68,7 @@ angular.module('proposalReviewApp')
   */
   function refresh(){
     angular.forEach($scope.record.deliverables,function(val){
+      // Values insides the Deliverable.
       var temp ={};
       temp.softdev=[];
       temp.datatransfer=[];
@@ -80,12 +81,12 @@ angular.module('proposalReviewApp')
       temp.cloud={'runs':0,'partition':0,'time':0,'numarte':0,'sizearte':0};
       temp.hardware=[];
       temp.members=[];
+
       temp.name=val.name;
       temp.date=val.date;
       temp.risks=val.risks;
       temp.desc=val.description;
       temp.dependency=val.dependency;
-
 
       $scope.summ.hpcRessource = ($scope.summ.hpcRessource || val.hpcRessource);
       temp.hpcRessource = val.hpcRessource;
@@ -134,7 +135,7 @@ angular.module('proposalReviewApp')
         })
       }
 
-      // Filling the arrays
+      // Filling the arrays.
       add(val.softdev,$scope.summ.softdev,temp.softdev);
       add(val.datatransfer,$scope.summ.datatransfer,temp.datatransfer);
       add(val.virtualization,$scope.summ.virtualization,temp.virtualization);
@@ -142,7 +143,7 @@ angular.module('proposalReviewApp')
       add(val.hardware,$scope.summ.hardware,temp.hardware);
       add(val.collabs,$scope.summ.collabs,temp.collabs);
 
-      // Filling the members arrays
+      // Filling the members arrays.
       angular.forEach(val.members,function(val2){
         var tempM = {'name':'','pm':''};
         tempM.name=val2.name;
@@ -161,7 +162,7 @@ angular.module('proposalReviewApp')
         }
       })
 
-      // Filling the HPC arrays
+      // Filling the HPC arrays.
       angular.forEach(val.hpc,function(val2){
         if ($scope.summ.architecture.indexOf(val2.type)==-1){
           $scope.summ.architecture.push(val2.type);
@@ -182,7 +183,7 @@ angular.module('proposalReviewApp')
         temp.hpc.sizearte+= addIfNotNull(val2.size)*addIfNotNull(val2.arte);
       })
 
-      // Filling the Cloud arrays
+      // Filling the Cloud arrays.
       angular.forEach(val.cloud,function(val2){
         if ($scope.summ.architectureC.indexOf(val2.type)==-1){
           $scope.summ.architectureC.push(val2.type);
@@ -203,13 +204,13 @@ angular.module('proposalReviewApp')
         temp.cloud.sizearte+= addIfNotNull(val2.size)*addIfNotNull(val2.arte);
       })
 
-      //Compute the averages for the deliverables
+      // Compute the averages for the deliverables.
       temp.cloud.sizearte = temp.cloud.sizearte/temp.cloud.numarte;
       temp.hpc.sizearte = temp.hpc.sizearte/temp.hpc.numarte;
       $scope.summ.deliverables.push(temp);
     });
 
-    //Compute the averages for the project
+    // Compute the averages for the project.
     $scope.summ.cloud.sizearte = $scope.summ.cloud.sizearte/$scope.summ.cloud.numarte;
     $scope.summ.hpc.sizearte = $scope.summ.hpc.sizearte/$scope.summ.hpc.numarte;
   }

@@ -9,13 +9,15 @@
 */
 angular.module('proposalReviewApp')
 .controller('MembersCtrl', function ($scope, $http) {
-    $http.get('/api/teams')
-      .success(function(data) {
-        $scope.availableTeams = data;
-      })
-      .error(function(data) {
-        console.log('Error: Loading Teams: ' + data);
-      });
+  // Loading the list of BBP teams.
+  // TODO: Perhaps only do it if needed (depending of the project type).
+  $http.get('/api/teams')
+  .success(function(data) {
+    $scope.availableTeams = data;
+  })
+  .error(function(data) {
+    console.log('Error: Loading Teams: ' + data);
+  });
 })
 
 
@@ -50,6 +52,7 @@ angular.module('proposalReviewApp')
             member = true;
           }
         });
+        // Checking if the person is from BBP if the project is BBP only.
         var bbp = 0;
         if(scope.record.bbpProject == 1){
           bbp = 2;
@@ -64,22 +67,22 @@ angular.module('proposalReviewApp')
             $window.alert("You have selected previously that the project is a BBP project but "+options.displayName + " is not part of Blue Brain Project.");
           });
         } else {
-        // Verify if the selected pi is not yet selected as co-pi or member.
-        if(!copi && !member){
-          // If not, add the user as pi
-          console.log('select', arguments);
-          scope.record.pi = options;
-          // Otherwise provide a corresponding message.
-        } else if(copi){
-          $timeout(function(){
-            $window.alert(options.displayName + " is already defined as Co-Project Leader.");
-          });
-        } else if(member){
-          $timeout(function(){
-            $window.alert(options.displayName + " is already defined as Member.");
-          });
+          // Verify if the selected pi is not yet selected as co-pi or member.
+          if(!copi && !member){
+            // If not, add the user as pi.
+            console.log('select', arguments);
+            scope.record.pi = options;
+            // Otherwise provide a corresponding message.
+          } else if(copi){
+            $timeout(function(){
+              $window.alert(options.displayName + " is already defined as Co-Project Leader.");
+            });
+          } else if(member){
+            $timeout(function(){
+              $window.alert(options.displayName + " is already defined as Member.");
+            });
+          }
         }
-      }
       }
     }
   }
@@ -117,6 +120,7 @@ angular.module('proposalReviewApp')
             member = true;
           }
         });
+        // Checking if the person is from BBP if the project is BBP only.
         var bbp = 0;
         if(scope.record.bbpProject == 1){
           bbp = 2;
@@ -131,23 +135,23 @@ angular.module('proposalReviewApp')
             $window.alert("You have selected previously that the project is a BBP project but "+options.displayName + " is not part of Blue Brain Project.");
           });
         } else {
-        // Verify if the selected co-pi is not yet selected as pi or member.
-        if(!pi && !member){
-          // If not, add the user as pi
-          console.log('select', arguments);
-          scope.record.copi = options;
-          // Otherwise provide a corresponding message.
-        } else if(pi){
-          $timeout(function(){
-            $window.alert(options.displayName + " is already defined as Project Leader.");
-          });
-        } else if(member){
-          $timeout(function(){
-            $window.alert(options.displayName + " is already defined as Member.");
-          });
+          // Verify if the selected co-pi is not yet selected as pi or member.
+          if(!pi && !member){
+            // If not, add the user as pi.
+            console.log('select', arguments);
+            scope.record.copi = options;
+            // Otherwise provide a corresponding message.
+          } else if(pi){
+            $timeout(function(){
+              $window.alert(options.displayName + " is already defined as Project Leader.");
+            });
+          } else if(member){
+            $timeout(function(){
+              $window.alert(options.displayName + " is already defined as Member.");
+            });
+          }
         }
       }
-    }
     }
   }
 })
@@ -185,6 +189,7 @@ angular.module('proposalReviewApp')
         if(scope.record.copi != undefined){
           copi = (scope.record.copi.id == options.id);
         }
+        // Checking if the person is from BBP if the project is BBP only.
         var bbp = 0;
         if(scope.record.bbpProject == 1){
           bbp = 2;
@@ -199,33 +204,33 @@ angular.module('proposalReviewApp')
             $window.alert("You have selected previously that the project is a BBP project but "+options.displayName + " is not part of Blue Brain Project.");
           });
         } else {
-        // Verify if the selected member is not yet selected as pi or co-pi.
-        if(!pi && !copi){
-          // Verify if the selected user is not selected yet.
-          var present = false;
-          angular.forEach(scope.record.members,function(val){
-            if (val.id == options.id){
-              present = true;
+          // Verify if the selected member is not yet selected as pi or co-pi.
+          if(!pi && !copi){
+            // Verify if the selected user is not selected yet.
+            var present = false;
+            angular.forEach(scope.record.members,function(val){
+              if (val.id == options.id){
+                present = true;
+              }
+            });
+            if(!present){
+              // If not, add the user as pi.
+              scope.record.members.push(options);
+            } else {
+              $window.alert(options.displayName + " is already selected as member.");
             }
-          });
-          if(!present){
-            // If not, add the user as pi
-            scope.record.members.push(options);
-          } else {
-            $window.alert(options.displayName + " is already selected as member.");
+            // Otherwise provide a corresponding message.
+          } else if(pi){
+            $timeout(function(){
+              $window.alert(options.displayName + " is already defined as Project Leader.");
+            });
+          } else if(copi){
+            $timeout(function(){
+              $window.alert(options.displayName + " is already defined as Co-Project Leader.");
+            });
           }
-          // Otherwise provide a corresponding message.
-        } else if(pi){
-          $timeout(function(){
-            $window.alert(options.displayName + " is already defined as Project Leader.");
-          });
-        } else if(copi){
-          $timeout(function(){
-            $window.alert(options.displayName + " is already defined as Co-Project Leader.");
-          });
         }
       }
-    }
     }
   }
 })
@@ -267,6 +272,7 @@ angular.module('proposalReviewApp')
           if(scope.record.copi != undefined){
             copi = (scope.record.copi.id == options.id);
           }
+          // Checking if the person is from BBP if the project is BBP only.
           var bbp = 0;
           if(scope.record.bbpProject == 1){
             bbp = 2;
@@ -281,32 +287,32 @@ angular.module('proposalReviewApp')
               $window.alert("You have selected previously that the project is a BBP project but "+options.displayName + " is not part of Blue Brain Project.");
             });
           } else {
-          // Verify if the selected member is not yet selected as pi or co-pi.
-          if(!pi && !copi){
-            // Verify if the selected user is not selected yet.
-            var present = false;
-            angular.forEach(scope.record.members,function(val){
-              if (val.id == options.id){
-                present = true;
+            // Verify if the selected member is not yet selected as pi or co-pi.
+            if(!pi && !copi){
+              // Verify if the selected user is not selected yet.
+              var present = false;
+              angular.forEach(scope.record.members,function(val){
+                if (val.id == options.id){
+                  present = true;
+                }
+              });
+              if(!present){
+                // If not, add the user as pi
+                scope.record.members.push(options);
+              } else {
+                $window.alert(options.displayName + " is already selected as member.");
               }
-            });
-            if(!present){
-              // If not, add the user as pi
-              scope.record.members.push(options);
-            } else {
-              $window.alert(options.displayName + " is already selected as member.");
+              // Otherwise provide a corresponding message.
+            } else if(pi){
+              $timeout(function(){
+                $window.alert(options.displayName + " is already defined as Project Leader.");
+              });
+            } else if(copi){
+              $timeout(function(){
+                $window.alert(options.displayName + " is already defined as Co-Project Leader.");
+              });
             }
-            // Otherwise provide a corresponding message.
-          } else if(pi){
-            $timeout(function(){
-              $window.alert(options.displayName + " is already defined as Project Leader.");
-            });
-          } else if(copi){
-            $timeout(function(){
-              $window.alert(options.displayName + " is already defined as Co-Project Leader.");
-            });
           }
-}
         }
         else {
           $timeout(function(){

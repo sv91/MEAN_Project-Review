@@ -9,68 +9,77 @@
 */
 angular.module('proposalReviewApp')
 .controller('DeliverablesCtrl', function ($scope, $http, hbpCollabStore) {
-    $http.get('/api/softdevs')
-      .success(function(data) {
-        $scope.availableSoftDev = data;
-        console.log(data);
-      })
-      .error(function(data) {
-        console.log('Error: Loading SoftDevs: ' + data);
-      });
+  // Loading all the set of choices for the fields.
+  // "Software development" choices.
+  $http.get('/api/softdevs')
+  .success(function(data) {
+    $scope.availableSoftDev = data;
+    console.log(data);
+  })
+  .error(function(data) {
+    console.log('Error: Loading SoftDevs: ' + data);
+  });
 
-    $http.get('/api/datatransfers')
-      .success(function(data) {
-        $scope.availableDataTransfer = data;
-        console.log(data);
-      })
-      .error(function(data) {
-        console.log('Error: Loading DataTransfers: ' + data);
-      });
+  // "Data Transfer" choices.
+  $http.get('/api/datatransfers')
+  .success(function(data) {
+    $scope.availableDataTransfer = data;
+    console.log(data);
+  })
+  .error(function(data) {
+    console.log('Error: Loading DataTransfers: ' + data);
+  });
 
-    $http.get('/api/virtualizations')
-      .success(function(data) {
-        $scope.availableVirtualization = data;
-        console.log(data);
-      })
-      .error(function(data) {
-        console.log('Error: Loading Virtualizations: ' + data);
-      });
+  // "Virtualization" choices.
+  $http.get('/api/virtualizations')
+  .success(function(data) {
+    $scope.availableVirtualization = data;
+    console.log(data);
+  })
+  .error(function(data) {
+    console.log('Error: Loading Virtualizations: ' + data);
+  });
 
-    $http.get('/api/devenvs')
-      .success(function(data) {
-        $scope.availableDevEnv = data;
-        console.log(data);
-      })
-      .error(function(data) {
-        console.log('Error: Loading DevEnvs: ' + data);
-      });
+  // "Development Environment" choices.
+  $http.get('/api/devenvs')
+  .success(function(data) {
+    $scope.availableDevEnv = data;
+    console.log(data);
+  })
+  .error(function(data) {
+    console.log('Error: Loading DevEnvs: ' + data);
+  });
 
-    $http.get('/api/hpctypes')
-      .success(function(data) {
-        $scope.availableArchitecture = data;
-        console.log(data);
-      })
-      .error(function(data) {
-        console.log('Error: Loading Architectures: ' + data);
-      });
+  // "HPC Types" choices.
+  $http.get('/api/hpctypes')
+  .success(function(data) {
+    $scope.availableArchitecture = data;
+    console.log(data);
+  })
+  .error(function(data) {
+    console.log('Error: Loading Architectures: ' + data);
+  });
 
-    $http.get('/api/cloudtypes')
-      .success(function(data) {
-        $scope.availableArchitectureCloud = data;
-        console.log(data);
-      })
-      .error(function(data) {
-        console.log('Error: Loading ArchitectureClouds: ' + data);
-      });
+  // "Cloud Types" choices.
+  $http.get('/api/cloudtypes')
+  .success(function(data) {
+    $scope.availableArchitectureCloud = data;
+    console.log(data);
+  })
+  .error(function(data) {
+    console.log('Error: Loading ArchitectureClouds: ' + data);
+  });
 
-    $http.get('/api/roles')
-      .success(function(data) {
-        $scope.availableRoles = data;
-        console.log(data);
-      })
-      .error(function(data) {
-        console.log('Error: Loading Roles: ' + data);
-      });
+  // "Roles" choices.
+  $http.get('/api/roles')
+  .success(function(data) {
+    $scope.availableRoles = data;
+    console.log(data);
+  })
+  .error(function(data) {
+    console.log('Error: Loading Roles: ' + data);
+  });
+
   /**
   * @ngdoc function
   * @name addPerson
@@ -84,6 +93,10 @@ angular.module('proposalReviewApp')
       $scope.membersAndLead.push(person);
     }
   }
+
+  // Adding all the selected members and teams to the selection field of "Human
+  // Ressources". The verification of not having duplicates is done during the
+  // selection of the members.
 
   // Add every selected members.
   if($scope.record.members!=undefined && $scope.record.members!=null){
@@ -105,7 +118,7 @@ angular.module('proposalReviewApp')
     });
   }
 
-  // Load the Collabs informations
+  // Load the Collabs informations for the "Collab" field.
   function loadCollabs() {
     hbpCollabStore.list().then(function(rs) {return rs.toArray();})
     .then(function(arr){
@@ -113,8 +126,6 @@ angular.module('proposalReviewApp')
     })
   }
   loadCollabs();
-
-
 })
 
 
@@ -151,7 +162,7 @@ angular.module('proposalReviewApp')
   }
 
   /**
-  * Return the filter function
+  * Return the filter function.
   */
   return function(input, optional1) {
     var output=[];
@@ -227,8 +238,9 @@ angular.module('proposalReviewApp')
         scope.record.deliverables.push({'name': '', 'date': '', 'risks': '','requirement':[], 'description': '','dependency':[],'members':[{'name': '', 'role': '', 'pm':'','description':''}],'hpc':[],'cloud':[],'hardware':[]});
       };
 
+      // Functions managing the addition and deletion of elements inside a Deliverable.
 
-      // Functions for the members inside a deliverable
+      // Functions for the members inside a deliverable.
       /**
       * @ngdoc function
       * @name deleteMember
@@ -263,7 +275,7 @@ angular.module('proposalReviewApp')
       };
 
 
-      // Functions for the hardwares inside a deliverable
+      // Functions for the hardwares inside a deliverable.
       /**
       * @ngdoc function
       * @name deleteHardware
@@ -300,7 +312,7 @@ angular.module('proposalReviewApp')
       };
 
 
-      // Functions for the cloud ressources inside a deliverable
+      // Functions for the HPC ressources inside a deliverable.
       /**
       * @ngdoc function
       * @name deleteHpc
@@ -337,7 +349,7 @@ angular.module('proposalReviewApp')
       };
 
 
-      // Functions for the cloud ressources inside a deliverable
+      // Functions for the cloud ressources inside a deliverable.
       /**
       * @ngdoc function
       * @name deleteCloud

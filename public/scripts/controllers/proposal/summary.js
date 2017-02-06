@@ -9,39 +9,39 @@
 */
 angular.module('proposalReviewApp')
 .controller('SummaryCtrl', function ($scope, $http) {
-  // default value for the 'New Project' field.
+  // Default value for the 'New Project' field.
   $scope.record.newproject = 'true';
   $scope.record.projectStartDateMD = new Date();
   $scope.record.projectStartDate = new Date($scope.record.projectStartDate);
   $scope.record.projectEndDate = new Date($scope.record.projectEndDate);
 
-  // Loading available values from DB
-  //Grants
+  // Loading available values from DB.
+  // Grants.
   $http.get('/api/grants')
-    .success(function(data) {
-      $scope.availableGrants = data;
-    })
-    .error(function(data) {
-      console.log('Error: Loading Grants: ' + data);
-    });
+  .success(function(data) {
+    $scope.availableGrants = data;
+  })
+  .error(function(data) {
+    console.log('Error: Loading Grants: ' + data);
+  });
 
-  //Tasks
+  // Tasks.
   $http.get('/api/tasks')
-    .success(function(data) {
-      $scope.availableTasks = data;
-    })
-    .error(function(data) {
-      console.log('Error: Loading Tasks: ' + data);
-    });
+  .success(function(data) {
+    $scope.availableTasks = data;
+  })
+  .error(function(data) {
+    console.log('Error: Loading Tasks: ' + data);
+  });
 
-  //Tags
+  // Tags.
   $http.get('/api/tags')
-    .success(function(data) {
-      $scope.availableTags = data;
-    })
-    .error(function(data) {
-      console.log('Error: Loading Tags: ' + data);
-    });
+  .success(function(data) {
+    $scope.availableTags = data;
+  })
+  .error(function(data) {
+    console.log('Error: Loading Tags: ' + data);
+  });
 })
 
 /**
