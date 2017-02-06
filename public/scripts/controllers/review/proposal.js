@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+* @ngdoc function
+* @name proposalReviewApp.controller:ProposalCtrl
+* @description
+* # ProposalCtrl
+* Controller responsible for the .proposal page of the Review.
+*/
 angular.module('proposalReviewApp')
 .controller('ProposalCtrl', function ($scope, $stateParams, $http) {
   $scope.whole  = true;
@@ -12,6 +19,15 @@ angular.module('proposalReviewApp')
   $scope.data.menu.notes = false;
   $scope.data.menu.comments = true;
 
+  /**
+  * @ngdoc function
+  * @name findByID
+  * @description
+  * # findByID
+  * Look for an Object with a specified ID inside the provided Array.
+  * @param {Array} list The array to check for the object.
+  * @param {Object} obj The object ID.
+  */
   function findByID(list,obj){
     var toReturn;
     angular.forEach(list, function(val){
@@ -22,6 +38,15 @@ angular.module('proposalReviewApp')
     return toReturn;
   }
 
+  /**
+  * @ngdoc function
+  * @name findAllByID
+  * @description
+  * # findAllByID
+  * Look for all the Objects corresponding to a list of IDs inside the provided Array.
+  * @param {Array} list The array to check for the object.
+  * @param {Array} arr  The array of IDs.
+  */
   function findAllByID(list,arr){
     var toReturn =[];
     angular.forEach(arr, function(obj){
@@ -30,178 +55,226 @@ angular.module('proposalReviewApp')
     return toReturn;
   }
 
+  /**
+  * @ngdoc function
+  * @name getById
+  * @description
+  * # getById
+  * Fetch an Object of a certain type and ID from the corresponding table.
+  * @param {Object} val The ID of the object.
+  * @param {Object} type  The type of object.
+  */
   function getById(val,type){
     return new Promise(function (fulfill, reject){
       if(typeof val == "object"){
         fulfill();
       } else {
-      $http.get('/api/'+type+'/'+val)
-      .success(function(data) {
-        fulfill(data);
-      })
-      .error(function(data) {
-        console.log('Error: findAllByID: Values could not be loaded.');
-        reject(data);
-      });
-    }
+        $http.get('/api/'+type+'/'+val)
+        .success(function(data) {
+          fulfill(data);
+        })
+        .error(function(data) {
+          console.log('Error: findAllByID: Values could not be loaded.');
+          reject(data);
+        });
+      }
     });
   }
 
+  /**
+  * @ngdoc function
+  * @name getAllByID
+  * @description
+  * # getAllByID
+  * Fetch a set of Objects of a certain type from the corresponding table.
+  * @param {Array} list The list of object IDs.
+  * @param {Object} type The type of object.
+  */
   function getAllByID(list,type){
-    console.log("GetAllById: "+type);
     return new Promise(function (fulfill, reject){
       if(list != undefined && list != "" && list != null && list != [])
       {
+        // Checking if the list is an array or a simple element.
+        // If the later, call getById.
         if(list.constructor !== Array){
-        return getById(list,type)
-        .then(function(res){
+          return getById(list,type)
+          .then(function(res){
+            fulfill(res);
+          });
+        } else {
+          return Promise.all(list.map(function(val){
+            return getById(val,type);
+          })).then(function(res){
+            console.log("Found "+JSON.stringify(res));
+            fulfill(res);
+          });
+        }
+      } else {
+        fulfill({});
+      }
+    });
+  }
+
+  /**
+  * @ngdoc function
+  * @name getAllChildById
+  * @description
+  * # getAllChildById
+  * Get a set of IDs from a sub-element of an Object and fetch the associated
+  * Objects from the corresponding table.
+  * @param {Array} list The list of object IDs.
+  * @param {Object} child The name of the sub-element.
+  * @param {Object} type The type of object.
+  */
+  function getAllChildById(list,child,type){
+    return new Promise(function (fulfill, reject){
+      if(list != undefined && list != "" && list != null && list != [] && list != {} && list.constructor === Array)
+      {
+        return Promise.all(list.map(function(val){
+          getAllByID(val[child],type).then(function(res){
+            val[child] = res;
+          });
+        })).then(function(res){
           fulfill(res);
         });
       } else {
-        return Promise.all(list.map(function(val){
-          return getById(val,type);
-        })).then(function(res){
-          console.log("Found "+JSON.stringify(res));
-          fulfill(res);
-        });
-      }
-    } else {
-      fulfill({});
-    }
-  });
-}
-
-function getAllChildById(list,child,type){
-  return new Promise(function (fulfill, reject){
-    if(list != undefined && list != "" && list != null && list != [] && list != {} && list.constructor === Array)
-    {
-      return Promise.all(list.map(function(val){
-        getAllByID(val[child],type).then(function(res){
-          val[child] = res;
-        });
-      })).then(function(res){
-        fulfill(res);
-      });
-    } else {
-      fulfill([]);
-    }
-  });
-}
-
-
-
-function getAllGrandChildById(list,child,grand,type){
-  return new Promise(function (fulfill, reject){
-    if(list != undefined && list != "" && list != null && list != [] && list != {} && list.constructor === Array)
-    {
-      return Promise.all(list.map(function(val){
-        getAllChildByID(val[child],grand,type);
-      })).then(function(res){
-        fulfill(res);
-      });
-    } else {
-      fulfill([]);
-    }
-  });
-}
-
-$scope.data.params = $stateParams;
-
-function loadInfo(){
-  return new Promise(function(fulfill, reject){
-    $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
-    $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
-    $scope.data.select.proposal = findByID($scope.data.submissions, findByID($scope.data.proposals, $scope.data.select.project.proposal).submission);
-    $scope.data.select.proposal.pi = findByID($scope.data.persons, $scope.data.select.proposal.pi);
-    $scope.data.select.proposal.copi = findByID($scope.data.persons, $scope.data.select.proposal.copi);
-    $scope.data.select.proposal.members = findAllByID($scope.data.persons, $scope.data.select.proposal.members);
-    fulfill($scope.data.select.project.review);
-  });
-}
-
-
-loadInfo()
-.then(function(res){
-  return $http.get('/api/reviews/'+ res)
-  .success(function(data) {
-    $scope.data.select.review = data;
-    return data._id;
-  })
-  .error(function(data) {
-    console.log('Error: Review/Proposal.JS: Reviews could not be loaded.');
-  });
-})
-.then(function(res){
-  $http.get('/api/comments/')
-  .success(function(data) {
-    $scope.data.select.comments = [];
-    angular.forEach(data,function(val){
-      if($scope.data.select.review.comments.indexOf(val._id)>-1){
-        $scope.data.select.comments.push(val);
+        fulfill([]);
       }
     });
-  })
-  .error(function(data) {
-    console.log('Error: Review/Proposal.JS: Comments could not be loaded.');
-  });
-  return res;
-});
+  }
 
-getAllByID($scope.data.select.proposal.teams,'teams')
-.then(function(res){
-  $scope.data.select.proposal.teams = res;
-  return res
-}).then(function(res){
-  return getAllByID($scope.data.select.proposal.tags,'tags').then(function(res){$scope.data.select.proposal.tags = res; return res});
-}).then(function(res){
-  return getAllByID($scope.data.select.proposal.relatedProjects,'relatedprojects').then(function(res){$scope.data.select.proposal.relatedProjects = res; return res});
-}).then(function(res){
-  return getAllByID($scope.data.select.proposal.shortDeliverable,'shortdeliverables').then(function(res){$scope.data.select.proposal.shortDeliverable = res; return res});
-}).then(function(res){
-  return getAllByID($scope.data.select.proposal.publications,'publications').then(function(res){$scope.data.select.proposal.publications = res; return res});
-}).then(function(res){
-  return getAllByID($scope.data.select.proposal.grants,'grants').then(function(res){$scope.data.select.proposal.grants = res; return res});
-}).then(function(res){
-  return getAllByID($scope.data.select.proposal.tasks,'tasks').then(function(res){$scope.data.select.proposal.tasks = res; return res});
-}).then(function(res){
-  return getAllByID($scope.data.select.proposal.requirements,'requirements').then(function(res){$scope.data.select.proposal.requirements = res; return res});
-}).then(function(res){
-  return getAllByID($scope.data.select.proposal.deliverables,'deliverables').then(function(res){$scope.data.select.proposal.deliverables = res; return res});
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.requirements,'input','inputs');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.requirements,'output','outputs');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.requirements,'type','requirementtypes');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.tasks,'grant','grants');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.deliverables,'dependency','deliverables');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.deliverables,'requirements','requirements');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.deliverables,'softdev','softdevs');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.deliverables,'datatransfer','datatransfers');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.deliverables,'virtualization','virtualizations');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.deliverables,'devenv','devenvs');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.deliverables,'hpc','hpcressources');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.deliverables,'cloud','cloudressources');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.deliverables,'hardware','hardwares');
-}).then(function(res){
-  return getAllChildById($scope.data.select.proposal.deliverables,'hr','humanressources');
-}).then(function(res){
-  return getAllGrandChildById($scope.data.select.proposal.deliverables,'hpc','type','hpctypes');
-}).then(function(res){
-  return getAllGrandChildById($scope.data.select.proposal.deliverables,'cloud','type','cloudtypes');
-}).then(function(res){
-  return getAllGrandChildById($scope.data.select.proposal.deliverables,'hr','role','roles');
-});
+  /**
+  * @ngdoc function
+  * @name getAllGrandChildById
+  * @description
+  * # getAllGrandChildById
+  * Get a set of IDs from a sub-sub-element of an Object and fetch the associated
+  * Objects from the corresponding table.
+  * @param {Array} list The list of object IDs.
+  * @param {Object} child The name of the sub-element.
+  * @param {Object} grand The name of the sub-sub-element.
+  * @param {Object} type The type of object.
+  */
+  function getAllGrandChildById(list,child,grand,type){
+    return new Promise(function (fulfill, reject){
+      if(list != undefined && list != "" && list != null && list != [] && list != {} && list.constructor === Array)
+      {
+        return Promise.all(list.map(function(val){
+          getAllChildByID(val[child],grand,type);
+        })).then(function(res){
+          fulfill(res);
+        });
+      } else {
+        fulfill([]);
+      }
+    });
+  }
+
+  $scope.data.params = $stateParams;
+
+  /**
+  * @ngdoc function
+  * @name loadInfo
+  * @description
+  * # loadInfo
+  * Get the poject ID from the address and fetch all the related information.
+  */
+  function loadInfo(){
+    return new Promise(function(fulfill, reject){
+      $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
+      $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
+      $scope.data.select.proposal = findByID($scope.data.submissions, findByID($scope.data.proposals, $scope.data.select.project.proposal).submission);
+      $scope.data.select.proposal.pi = findByID($scope.data.persons, $scope.data.select.proposal.pi);
+      $scope.data.select.proposal.copi = findByID($scope.data.persons, $scope.data.select.proposal.copi);
+      $scope.data.select.proposal.members = findAllByID($scope.data.persons, $scope.data.select.proposal.members);
+      fulfill($scope.data.select.project.review);
+    });
+  }
+
+  // Load the project information, the associated review and comments.
+  loadInfo()
+  .then(function(res){
+    return $http.get('/api/reviews/'+ res)
+    .success(function(data) {
+      $scope.data.select.review = data;
+      return data._id;
+    })
+    .error(function(data) {
+      console.log('Error: Review/Proposal.JS: Reviews could not be loaded.');
+    });
+  })
+  .then(function(res){
+    $http.get('/api/comments/')
+    .success(function(data) {
+      $scope.data.select.comments = [];
+      angular.forEach(data,function(val){
+        if($scope.data.select.review.comments.indexOf(val._id)>-1){
+          $scope.data.select.comments.push(val);
+        }
+      });
+    })
+    .error(function(data) {
+      console.log('Error: Review/Proposal.JS: Comments could not be loaded.');
+    });
+    return res;
+  });
+
+  // For each property of the project that is an ID, replace the ID by the actual Object.
+  getAllByID($scope.data.select.proposal.teams,'teams')
+  .then(function(res){
+    $scope.data.select.proposal.teams = res;
+    return res
+  }).then(function(res){
+    return getAllByID($scope.data.select.proposal.tags,'tags').then(function(res){$scope.data.select.proposal.tags = res; return res});
+  }).then(function(res){
+    return getAllByID($scope.data.select.proposal.relatedProjects,'relatedprojects').then(function(res){$scope.data.select.proposal.relatedProjects = res; return res});
+  }).then(function(res){
+    return getAllByID($scope.data.select.proposal.shortDeliverable,'shortdeliverables').then(function(res){$scope.data.select.proposal.shortDeliverable = res; return res});
+  }).then(function(res){
+    return getAllByID($scope.data.select.proposal.publications,'publications').then(function(res){$scope.data.select.proposal.publications = res; return res});
+  }).then(function(res){
+    return getAllByID($scope.data.select.proposal.grants,'grants').then(function(res){$scope.data.select.proposal.grants = res; return res});
+  }).then(function(res){
+    return getAllByID($scope.data.select.proposal.tasks,'tasks').then(function(res){$scope.data.select.proposal.tasks = res; return res});
+  }).then(function(res){
+    return getAllByID($scope.data.select.proposal.requirements,'requirements').then(function(res){$scope.data.select.proposal.requirements = res; return res});
+  }).then(function(res){
+    return getAllByID($scope.data.select.proposal.deliverables,'deliverables').then(function(res){$scope.data.select.proposal.deliverables = res; return res});
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.requirements,'input','inputs');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.requirements,'output','outputs');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.requirements,'type','requirementtypes');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.tasks,'grant','grants');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.deliverables,'dependency','deliverables');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.deliverables,'requirements','requirements');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.deliverables,'softdev','softdevs');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.deliverables,'datatransfer','datatransfers');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.deliverables,'virtualization','virtualizations');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.deliverables,'devenv','devenvs');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.deliverables,'hpc','hpcressources');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.deliverables,'cloud','cloudressources');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.deliverables,'hardware','hardwares');
+  }).then(function(res){
+    return getAllChildById($scope.data.select.proposal.deliverables,'hr','humanressources');
+  }).then(function(res){
+    return getAllGrandChildById($scope.data.select.proposal.deliverables,'hpc','type','hpctypes');
+  }).then(function(res){
+    return getAllGrandChildById($scope.data.select.proposal.deliverables,'cloud','type','cloudtypes');
+  }).then(function(res){
+    return getAllGrandChildById($scope.data.select.proposal.deliverables,'hr','role','roles');
+  });
 
   $scope.data.select.loaded = true;
   $scope.data.summ = {};
@@ -209,6 +282,8 @@ getAllByID($scope.data.select.proposal.teams,'teams')
   $scope.data.summ.hpc = {};
   $scope.data.summ.deliverables = [];
 
+
+  // Calculating the totals on the whole project and for each deliverables.
   angular.forEach($scope.data.select.proposal.deliverables,function(val){
     var temp ={};
     temp.softdev=[];
@@ -233,27 +308,6 @@ getAllByID($scope.data.select.proposal.teams,'teams')
     temp.hpcRessource = val.hpcRessource;
     $scope.data.summ.cloudRessource = ($scope.data.summ.cloudRessource || val.cloudRessource);
     temp.cloudRessource = val.cloudRessource;
-
-    /**
-    * @ngdoc function
-    * @name add
-    * @description
-    * # add
-    * Verify if a value is present in the two arrays and if not add it into it.
-    * @param {Object} origin The object to add.
-    * @param {Object} summ First array.
-    * @param {Object} tempo Second array.
-    */
-    function add(origin,summ,tempo){
-      angular.forEach(origin,function(val2){
-        if (summ.indexOf(val2)==-1){
-          summ.push(val2);
-        }
-        if (tempo.indexOf(val2)==-1){
-          tempo.push(val2);
-        }
-      })
-    }
 
     /**
     * @ngdoc function
