@@ -2,9 +2,9 @@
 
 /**
 * @ngdoc overview
-* @name jsApp
+* @name proposalReviewApp
 * @description
-* # jsApp
+* # proposalReviewApp
 *
 * Main module of the application.
 */
@@ -111,10 +111,18 @@ angular
 	$urlRouterProvider.otherwise('/');
 })
 
+// Factory for the submitting of values to the database.
 .factory('sharedService', function($rootScope, $http, $timeout, $window){
 	var sharedService = {};
 
-		// Functions managing the creation of new entries in the DB ==================
+		/**
+		* @ngdoc function
+		* @name saveProject
+		* @description
+		* # saveProject
+		* Save the project in the DB and signals it to the user.
+		* @param {Object} val The project in JSON format.
+		*/
 		sharedService.saveProject = function(val){
 			return new Promise(function (fulfill, reject){
 			console.log('saveProject');
@@ -126,12 +134,24 @@ angular
 				});
 				fulfill(res);
 			}, function(){
+				$window.alert('Some Errors appeared. The project was not saved.');
 				console.log('Project Not Saved');
 				fulfill(false);
 			});
 		});
 		};
 
+
+		/**
+		* @ngdoc function
+		* @name findOrCreate
+		* @description
+		* # findOrCreate
+		* Check if an element exists already in the DB and if not creates it.
+		* @param {string} model The DB table to check.
+		* @param {Object} val The element in JSON format.
+		* @returns {int} The ID of the existing or created element.
+		*/
 		sharedService.findOrCreate = function(model, value){
 			return new Promise(function (fulfill, reject){
 				if (value != undefined && value != null && value != '' && value != {}){
@@ -143,7 +163,7 @@ angular
 							fulfill(res);
 						},function(){
 							// If not we create the element.
-							sharedService.createElem(model, treated)
+							sharedService.createInDB(model, treated)
 							.then(function(res){
 								//Return the ID of the created element if successful.
 								fulfill(res);
@@ -161,6 +181,17 @@ angular
 			});
 		}
 
+
+				/**
+				* @ngdoc function
+				* @name findId
+				* @description
+				* # findId
+				* Check if an element exists already in the DB and if not creates it.
+				* @param {string} model The DB table to check.
+				* @param {Object} values The element in JSON format.
+				* @returns {int} The ID of the existing or created element.
+				*/
 		sharedService.findId = function(model,values){
 			return new Promise(function (fulfill, reject){
 				$http.get('/api/'+ model)
@@ -192,6 +223,17 @@ angular
 			});
 		}
 
+
+		/**
+		* @ngdoc function
+		* @name treatSelect
+		* @description
+		* # treatSelect
+		* Call the right treatment method coresponding to the given DB table.
+		* @param {string} model The DB table to check.
+		* @param {Object} values The element in JSON format to be treated.
+		* @returns {Promise} The promise of the values treated according to its model.
+		*/
 		sharedService.treatSelect = function(model,value) {
 			return new Promise(function (fulfill, reject){
 				switch(model) {
@@ -273,20 +315,17 @@ angular
 			});
 		};
 
-		sharedService.createElem = function(model, value) {
-			return new Promise(function (fulfill, reject){
-				if(value != undefined && value != null && value != "" && value != {} ){
-					sharedService.createInDB(model,value)
-					.then(function(res){
-						fulfill(res);
-					});
-				} else {
-					console.log("Error: createElem: Element not created due to empty value.\nModel: "+model+"\nValue: "+ JSON.stringify(value));
-					reject();
-				}
-			});
-		}
 
+		/**
+		* @ngdoc function
+		* @name createInDB
+		* @description
+		* # createInDB
+		* Create an element in a specified DB table with the provided values.
+		* @param {string} model The DB table to check.
+		* @param {Object} values The element in JSON format to be treated.
+		* @returns {Promise} The promise of the ID of the newly created value in the DB.
+		*/
 		sharedService.createInDB = function(model,value) {
 			return new Promise(function (fulfill, reject){
 				if(value != undefined && value != null && value != "" && value != {} ){
@@ -307,6 +346,18 @@ angular
 		};
 
 
+		/**
+		* @ngdoc function
+		* @name findOrCreateTable
+		* @description
+		* # findOrCreateTable
+		* Equivalent of findOrCreate but for multiple inputs.
+		* Check for each of its input values if they exists in a provided DB table,
+		* if not create it.
+		* @param {string} model The DB table to check.
+		* @param {Object} values The elements in JSON format to be treated.
+		* @returns {Promise} The promise of an array of ID of the found or created elements.
+		*/
 		sharedService.findOrCreateTable = function(model,value){
 			return new Promise(function (fulfill, reject){
 				if(value != undefined && value != "" && value != null && value != [])
@@ -322,6 +373,16 @@ angular
 			});
 		}
 
+
+		/**
+		* @ngdoc function
+		* @name getIdTable
+		* @description
+		* # getIdTable
+		* Take an array of objects and returns and array of those objects IDs.
+		* @param {Array} value The input array.
+		* @returns {Array} IDs .
+		*/
 		sharedService.getIdTable = function(value){
 			var temp = [];
 			angular.forEach(value, function(val){
@@ -330,6 +391,15 @@ angular
 			return temp;
 		};
 
+
+		/**
+		* @ngdoc function
+		* @name treatReview
+		* @description
+		* # treatReview
+		* Creates a Review object with default values.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatReview = function(){
 			return new Promise(function (fulfill, reject){
 				var treatedValues = {
@@ -342,8 +412,19 @@ angular
 			});
 		}
 
+
+		/**
+		* @ngdoc function
+		* @name treatProject
+		* @description
+		* # treatProject
+		* Treat the input values to correspond to the fields of the Project table in the DB..
+		* @param {Object} value The values to adapt to the Project table.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatProject = function(value){
 			return new Promise(function (fulfill, reject){
+				// Get the ID of the Proposal Object and of the Review Object.
 				sharedService.findOrCreate('proposals',value)
 				.then(function(res){
 					var results = {};
@@ -368,6 +449,17 @@ angular
 			});
 		}
 
+
+		/**
+		* @ngdoc function
+		* @name treatProposal
+		* @description
+		* # treatProposal
+		* Treat the input values to correspond to the fields of the Proposal table in the DB.
+		* Get the ID of the submitter and of the submission and adds the current date.
+		* @param {Object} value The values to adapt to the Proposal table.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatProposal = function(value){
 			return new Promise(function (fulfill, reject){
 				sharedService.findOrCreate('persons',value.activeUser)
@@ -395,6 +487,17 @@ angular
 			});
 		}
 
+
+		/**
+		* @ngdoc function
+		* @name treatSubmission
+		* @description
+		* # treatSubmission
+		* Treat the input values to correspond to the fields of the Submission table in the DB.
+		* Get all the required values.
+		* @param {Object} value The values to adapt to the Submission table.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatSubmission = function(value){
 			return new Promise(function (fulfill, reject){
 				// Promises chain to get the needed information, each step get the new
@@ -507,6 +610,16 @@ angular
 			});
 		}
 
+
+		/**
+		* @ngdoc function
+		* @name treatPerson
+		* @description
+		* # treatPerson
+		* Treat the input values to correspond to the fields of the Person table in the DB.
+		* @param {Object} value The values to adapt to the Person table.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatPerson = function(value){
 			return new Promise(function (fulfill, reject){
 				var treatedValues = null;
@@ -520,6 +633,18 @@ angular
 			});
 		}
 
+
+		/**
+		* @ngdoc function
+		* @name treatTag
+		* @description
+		* # treatTag
+		* Treat the input values to correspond to the fields of the Tag table in the DB.
+		*	If no _id property is provided in the input (so for new tags), set the
+		* field "use" to 1. It have been done in prevision of sorting tags by their use.
+		* @param {Object} value The values to adapt to the Tag table.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatTag = function(value){
 			return new Promise(function (fulfill, reject){
 				var treatedValues = {};
@@ -535,6 +660,16 @@ angular
 			});
 		}
 
+
+		/**
+		* @ngdoc function
+		* @name treatRequirement
+		* @description
+		* # treatRequirement
+		* Treat the input values to correspond to the fields of the Requirement table in the DB.
+		* @param {Object} value The values to adapt to the Requirement table.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatRequirement = function(value){
 			return new Promise(function (fulfill, reject){
 				sharedService.findOrCreateTable('inputs',value.input)
@@ -565,6 +700,16 @@ angular
 			});
 		}
 
+
+		/**
+		* @ngdoc function
+		* @name treatInputOutput
+		* @description
+		* # treatInputOutput
+		* Treat the input values to correspond to the fields of the Input or Output tables in the DB.
+		* @param {Object} value The values to adapt to the Input or Output tables.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatInputOutput = function(value){
 			return new Promise(function (fulfill, reject){
 				var treatedValues = null;
@@ -580,6 +725,16 @@ angular
 			});
 		};
 
+
+		/**
+		* @ngdoc function
+		* @name treatDeliverable
+		* @description
+		* # treatDeliverable
+		* Treat the input values to correspond to the fields of the Deliverable table in the DB.
+		* @param {Object} value The values to adapt to the Deliverable table.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatDeliverable = function(value){
 			return new Promise(function (fulfill, reject){
 				sharedService.findOrCreateTable('deliverables',value.dependency)
@@ -664,6 +819,16 @@ angular
 			});
 		}
 
+
+		/**
+		* @ngdoc function
+		* @name treatHpcCloud
+		* @description
+		* # treatHpcCloud
+		* Treat the input values to correspond to the fields of the Hpc or Cloud tables in the DB.
+		* @param {Object} value The values to adapt to the Project table.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatHpcCloud = function(value){
 			return new Promise(function (fulfill, reject){
 				var treatedValues = null;
@@ -681,6 +846,16 @@ angular
 			});
 		};
 
+
+		/**
+		* @ngdoc function
+		* @name treatHardware
+		* @description
+		* # treatHardware
+		* Treat the input values to correspond to the fields of the Hardware table in the DB.
+		* @param {Object} value The values to adapt to the Hardware table.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatHardware = function(value){
 			return new Promise(function (fulfill, reject){
 				var treatedValues = null;
@@ -696,6 +871,16 @@ angular
 			});
 		};
 
+
+		/**
+		* @ngdoc function
+		* @name treatHr
+		* @description
+		* # treatHr
+		* Treat the input values to correspond to the fields of the HumanRessources table in the DB.
+		* @param {Object} value The values to adapt to the HumanRessources table.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatHr = function(value){
 			return new Promise(function (fulfill, reject){
 				var treatedValues = null;
@@ -711,6 +896,16 @@ angular
 			});
 		};
 
+
+		/**
+		* @ngdoc function
+		* @name treatOther
+		* @description
+		* # treatOther
+		* Check if the input is not empty, if it is returns null.
+		* @param {Object} value The values to check.
+		* @returns {Promise} Promise of the treated values.
+		*/
 		sharedService.treatOther = function(value){
 			return new Promise(function (fulfill, reject){
 				var treatedValues = null;
@@ -724,12 +919,28 @@ angular
 	return sharedService;
 })
 
+/**
+* @ngdoc function
+* @name reviewAppController
+* @description
+* # reviewAppController
+* Controller responsible for the whole Review part of the app.
+*/
 .controller('reviewAppController', function ($scope, $http, $sessionStorage, sharedService, $timeout, $window) {
 	$scope.data.menu ={};
   $scope.data.menu.project = '';
   $scope.data.menu.notes = false;
   $scope.data.menu.comments = false;
 
+
+	/**
+	* @ngdoc function
+	* @name goToMenu
+	* @description
+	* # goToMenu
+	* Resets values and goes to the specified page.
+	* @param {string} address The DB table to check.
+	*/
 	$scope.goToMenu = function(address, $window){
 		$scope.data.menu.project = '';
 	  $scope.data.menu.notes = false;
@@ -746,7 +957,7 @@ angular
 		console.log('Error: reviewAppController: Projects could not be loaded.');
 	});
 
-	// when landing on the page, get all the projects and show them
+	// when landing on the page, get all the proposals and show them
 	$http.get('/api/proposals')
 	.success(function(data) {
 		$scope.data.proposals = data;
@@ -755,7 +966,7 @@ angular
 		console.log('Error: reviewAppController: Proposals could not be loaded.');
 	});
 
-	// when landing on the page, get all the projects and show them
+	// when landing on the page, get all the submissions and show them
 	$http.get('/api/submissions')
 	.success(function(data) {
 		$scope.data.submissions = data;
@@ -764,7 +975,7 @@ angular
 		console.log('Error: reviewAppController: Submissions could not be loaded.');
 	});
 
-	// when landing on the page, get all the projects and show them
+	// when landing on the page, get all the reviews and show them
 	$http.get('/api/reviews')
 	.success(function(data) {
 		$scope.data.reviews = data;
@@ -773,6 +984,7 @@ angular
 		console.log('Error: reviewAppController: Reviews could not be loaded.');
 	});
 
+	// when landing on the page, get all the persons and show them
 	$http.get('/api/persons')
 	.success(function(data) {
 		$scope.persons = data;
@@ -782,6 +994,14 @@ angular
 		console.log('Error: MainController: Persons could not be loaded.');
 	});
 
+
+	/**
+	* @ngdoc function
+	* @name saveComment
+	* @description
+	* # saveComment
+	* Save the current comment in the DB and updates the Review table.
+	*/
 	$scope.saveComment = function() {
 		sharedService.findOrCreate('persons',$scope.activeUser)
 		.then(function(res){
@@ -799,6 +1019,7 @@ angular
 						console.log("Review successfully updated.");
 						  $http.get('/api/comments/')
 						  .success(function(data) {
+								// Update the page with the new values
 						    $scope.data.select.comments = [];
 						    angular.forEach(data,function(val){
 						      if($scope.data.select.review.comments.indexOf(val._id)>-1){
@@ -824,6 +1045,14 @@ angular
 		});
 	};
 
+
+	/**
+	* @ngdoc function
+	* @name saveNote
+	* @description
+	* # saveNote
+	* Save the current Note in the DB and updates the Review table.
+	*/
 	$scope.saveNote = function() {
 		var c = confirm("Your notes will be saved and you will notbe able to change it. \nAre you sure you finished?");
 		if (c == true) {
@@ -861,6 +1090,7 @@ angular
 							$timeout(function(){
 								$window.alert('Notes Saved.');
 							});
+							// Go back to the Review page of the current project.
 							window.location.href = '/#/review/'+$scope.data.select.projectId;
 						})
 						.error(function(data) {
@@ -875,6 +1105,13 @@ angular
 	};
 })
 
+/**
+* @ngdoc function
+* @name MainController
+* @description
+* # MainController
+* Main controller of the App.
+*/
 .controller('MainController', function($scope, $http, sharedService, $sessionStorage) {
 	if ($scope.data == undefined){
 		$scope.data = $sessionStorage;
@@ -893,6 +1130,15 @@ angular
 	};
 	$scope.activeUser;
 
+
+	/**
+	* @ngdoc function
+	* @name getActiveUser
+	* @description
+	* # getActiveUser
+	* Get the information of the current user of the app.
+	* @returns {Promise} Promise of the information of the current user.
+	*/
 	function getActiveUser(){
 		return new Promise(function(fulfill,reject){
 			$http.get('https://services.humanbrainproject.eu/idm/v1/api/user/me')
@@ -906,6 +1152,7 @@ angular
 		});
 	}
 
+	// Get the ID of the actuveUser from the DB.
 	getActiveUser().then(function(res){
 		sharedService.findOrCreate('persons',res)
 		.then(function(res2){
@@ -978,6 +1225,13 @@ angular
 	};
 })
 
+/**
+* @ngdoc function
+* @name proposalAppController
+* @description
+* # proposalAppController
+* Controller responsible for the proposal part of the App.
+*/
 .controller('proposalAppController', function($scope, hbpCollabStore, $sessionStorage, $http, $state, sharedService) {
 	// we will store all of our form data in this object
 	if($scope.record == undefined | $scope.record == null){
@@ -1010,6 +1264,14 @@ angular
 		document.getElementById('final').className = classes;
 	}, true);
 
+
+	/**
+	* @ngdoc function
+	* @name checkValues
+	* @description
+	* # checkValues
+	* Call the right treatment method coresponding to the chosen project type.
+	*/
 	function checkValues(){
 		switch($scope.record.projectType){
 			case '0':
@@ -1026,6 +1288,16 @@ angular
 		}
 	}
 
+
+	/**
+	* @ngdoc function
+	* @name checkInput
+	* @description
+	* # checkInput
+	* Check if the given value is part of a provided set of values.
+	* @param {string} field The value to check.
+	* @param {Array} acceptedValues The set of accepted values.
+	*/
 	function checkInput(field,acceptedValues){
 		if(acceptedValues.indexOf(field)== -1){
 			return false;
@@ -1035,6 +1307,16 @@ angular
 		}
 	}
 
+
+	/**
+	* @ngdoc function
+	* @name checkNotEmpty
+	* @description
+	* # checkNotEmpty
+	* Check if a field is empty or part of a list of values to avoid.
+	* @param {Object} field The field to check.
+	* @param {Array} avoid The values to avoid.
+	*/
 	function checkNotEmpty(field,avoid){
 		if (typeof field === 'undefined'){
 			return false;
@@ -1059,6 +1341,15 @@ angular
 		}
 	}
 
+
+	/**
+	* @ngdoc function
+	* @name checkBasic
+	* @description
+	* # checkBasic
+	* Default checks of the filling of the fields.
+	* @returns {bool} Are the required fields properly filled.
+	*/
 	function checkBasic(){
 		var pi = checkNotEmpty($scope.record.pi.displayName); // some fields from a person can be empty
 		return checkInput($scope.record.bbpProject,['0','1']) &&
@@ -1072,11 +1363,29 @@ angular
 					 checkNotEmpty($scope.record.usecase);
 	}
 
+
+	/**
+	* @ngdoc function
+	* @name checkBasic
+	* @description
+	* # checkBasic
+	* Checks of the filling of the fields corresponding to a Bronze proposal.
+	* @returns {bool} Are the required fields properly filled.
+	*/
 	function checkBronze(){
 		return checkBasic() && checkNotEmpty($scope.record.shortDeliverable) &&
 					 checkNotEmpty($scope.record.requirements,["feature","input","output"]);
 	}
 
+
+	/**
+	* @ngdoc function
+	* @name checkBasic
+	* @description
+	* # checkBasic
+	* Checks of the filling of the fields corresponding to a Silver proposal.
+	* @returns {bool} Are the required fields properly filled.
+	*/
 	function checkSilver(){
 		return checkBasic() &&
 		       checkNotEmpty($scope.record.technologicalSummary) &&
@@ -1084,6 +1393,15 @@ angular
 			 		 checkNotEmpty($scope.record.requirements);
 	}
 
+
+	/**
+	* @ngdoc function
+	* @name checkBasic
+	* @description
+	* # checkBasic
+	* Checks of the filling of the fields corresponding to a Gold proposal.
+	* @returns {bool} Are the required fields properly filled.
+	*/
 	function checkGold(){
 		return checkBasic() &&
 		       checkNotEmpty($scope.record.technologicalSummary) &&
@@ -1135,7 +1453,16 @@ angular
 		{'current':'help', 					'previous':'', 							'previousOpt':'', 						'next' : '', 							'nextOpt':''}
 	];
 
-	// Process to the next or previous step
+
+	/**
+	* @ngdoc function
+	* @name changeState
+	* @description
+	* # changeState
+	* Return which states are previous or next.
+	* @param {string} direction "previous" or "next".
+	* @returns {string} values The state for the given direction.
+	*/
 	function changeState(direction){
 		var stat = "main.proposalApp.";
 		var toReturn = '';
@@ -1159,7 +1486,15 @@ angular
 		return toReturn;
 	};
 
-	// Go to the needed state
+
+	/**
+	* @ngdoc function
+	* @name goToState
+	* @description
+	* # goToState
+	* Go to the next state in the provided direction.
+	* @param {string} direction "previous" or "next".
+	*/
 	function goToState(direction){
 		var goTo = changeState(direction);
 		if (goTo != undefined & goTo != null & goTo !='main.proposalApp.'){
@@ -1167,16 +1502,39 @@ angular
 		}
 	}
 
-	// Go to the next state
+
+	/**
+	* @ngdoc function
+	* @name nextStep
+	* @description
+	* # nextStep
+	* Go to the next state forward.
+	*/
 	$scope.nextStep = function(){
 		goToState('next');
 	};
 
-	// Go to the previous state
+
+	/**
+	* @ngdoc function
+	* @name previousStep
+	* @description
+	* # previousStep
+	* Go to the previous step.
+	*/
 	$scope.previousStep = function(){
 		goToState('previous');
 	};
 
+
+	/**
+	* @ngdoc function
+	* @name sendEmail
+	* @description
+	* # sendEmail
+	* Function to send email.
+	* @param {string} project The project ID.
+	*/
 	function sendEmail(project){
     var val = {
 			'to' : 'twotesting',
@@ -1193,7 +1551,15 @@ angular
       });
   };
 
-	// function to process the form
+
+
+	/**
+	* @ngdoc function
+	* @name processForm
+	* @description
+	* # processForm
+	* Save the proposal and send an email.
+	*/
 	$scope.processForm = function() {
 		if($scope.record.good){
 			sharedService.saveProject($scope.record)
