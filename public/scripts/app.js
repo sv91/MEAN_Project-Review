@@ -54,6 +54,11 @@ angular
 		templateUrl: 'views/review/note.html',
 		controller:'NoteCtrl'
 	})
+	.state('main.reviewApp.accept', {
+		url: '/review/:param/accept',
+		templateUrl: 'views/review/accept.html',
+		controller:'AcceptCtrl'
+	})
 	.state('summary', {
 		url: '/review/:param/summary',
 		templateUrl: 'views/review/summary.html'
