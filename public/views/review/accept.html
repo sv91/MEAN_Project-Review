@@ -1,0 +1,24 @@
+<div ng-show="good_grade">
+  Are you sure you want to accept this project?
+  <table width="100%">
+    <td class="inTwo">
+      <div id="proposal">
+        <div class="reviewButtonFrame">
+          <a ng-click="go_back();" class="btn btn-default reviewButton" href=""><span>✖</span> No</a>
+        </div>
+      </div>
+    </td>
+    <td class="inTwoEmptySeparator">
+    </td>
+    <td class="inTwo">
+      <div id="note">
+        <div class="reviewButtonFrame">
+          <a ng-click="finalizeProject();" class="btn btn-default reviewButton" href=""><span>✔</span> Yes</a>
+        </div>
+      </div>
+    </td>
+  </table>
+</div>
+<div ng-hide="good_grade">
+  This project does not have a good enough grade to be accepted.
+</div>
