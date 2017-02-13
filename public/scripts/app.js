@@ -631,7 +631,8 @@ angular
 				if(value != undefined && value!=null && value!=''){
 					treatedValues = {
 						'id'					: value.id,
-						'displayName'	: value.displayName
+						'displayName'	: value.displayName,
+						'username'		: value.username
 					};
 				}
 				fulfill(treatedValues);

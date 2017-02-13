@@ -107,4 +107,15 @@ angular.module('proposalReviewApp')
     return toReturn;
   }
 
+  /**
+  * @ngdoc function
+  * @name go_back
+  * @description
+  * # go_back
+  * Goes back to the previous page..
+  */
+  $scope.go_back = function($window){
+    window.location.href = '/#/review/'+$scope.data.select.projectId;
+  }
+
 });

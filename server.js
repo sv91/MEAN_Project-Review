@@ -66,6 +66,7 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
   var Person = mongoose.model('Person', {
     id            : Number,
     displayName   : String,
+    username      : String
   });
 
   // Team ----------------------------------------------------------------------
@@ -452,7 +453,8 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
     app.post('/api/persons', function(req, res){
       Person.create({
         id            : req.body.id,
-        displayName   : req.body.displayName
+        displayName   : req.body.displayName,
+        username      : req.body.username
       }, function(err,project){
         if (err)
           HandleError(err,res);
