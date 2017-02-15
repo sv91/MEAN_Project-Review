@@ -112,10 +112,29 @@ angular.module('proposalReviewApp')
   * @name go_back
   * @description
   * # go_back
-  * Goes back to the previous page..
+  * Goes back to the previous page.
   */
   $scope.go_back = function($window){
     window.location.href = '/#/review/'+$scope.data.select.projectId;
+  }
+
+  /**
+  * @ngdoc function
+  * @name finalizeProject
+  * @description
+  * # finalizeProject
+  * Creates EPFL groups, generate a Jira ticket with the requirements and
+  * notifies the needed persons.
+  */
+  $scope.finalizeProject = function(){
+    // Create the data for the Post request to create a Jira issue
+    var jira = {};
+    jira.fields = {};
+    jira.fields.project = {"key":"HELP2"};
+    jira.fields.summary = "[Project Requirements]" ;
+    jira.fields.description = JSON.stringify();
+
+
   }
 
 });

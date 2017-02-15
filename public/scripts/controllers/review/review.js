@@ -8,7 +8,7 @@
 * Controller responsible for the .review page.
 */
 angular.module('proposalReviewApp')
-.controller('ReviewerCtrl', function ($scope, $stateParams, $http) {
+.controller('ReviewerCtrl', function ($scope, $stateParams, $http, sharedService) {
   $scope.data.params = $stateParams;
   $scope.data.select.loaded = false;
   $scope.data.menu.project = $scope.data.params[Object.keys($scope.data.params)[0]];
@@ -42,24 +42,6 @@ angular.module('proposalReviewApp')
     div.style.backgroundColor = "rgb("+r+","+g+","+b+")";
   }, true);
 
-  /**
-  * @ngdoc function
-  * @name findByID
-  * @description
-  * # findByID
-  * Look for an Object with a specified ID inside the provided Array.
-  * @param {Array} list The array to check for the object.
-  * @param {Object} obj The object ID.
-  */
-  function findByID(list,obj){
-    var toReturn;
-    angular.forEach(list, function(val){
-      if(val._id == obj){
-        toReturn = val;
-      }
-    });
-    return toReturn;
-  }
 
   /**
   * @ngdoc function
@@ -71,7 +53,7 @@ angular.module('proposalReviewApp')
   function loadInfo(){
     return new Promise(function(fulfill, reject){
       $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
-      $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
+      $scope.data.select.project = sharedService.findByID($scope.data.projects, $scope.data.select.projectId);
       fulfill($scope.data.select.project.review);
     });
   }

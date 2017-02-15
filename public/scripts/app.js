@@ -119,6 +119,157 @@ angular
 // Factory for the submitting of values to the database.
 .factory('sharedService', function($rootScope, $http, $timeout, $window){
 	var sharedService = {};
+	/**
+	* @ngdoc function
+	* @name findByID
+	* @description
+	* # findByID
+	* Look for an Object with a specified ID inside the provided Array.
+	* @param {Array} list The array to check for the object.
+	* @param {Object} obj The object ID.
+	*/
+	sharedService.findByID = function(list,obj){
+		var toReturn;
+		angular.forEach(list, function(val){
+			if(val._id == obj){
+				toReturn = val;
+			}
+		});
+		return toReturn;
+	}
+
+	/**
+	* @ngdoc function
+	* @name findAllByID
+	* @description
+	* # findAllByID
+	* Look for all the Objects corresponding to a list of IDs inside the provided Array.
+	* @param {Array} list The array to check for the object.
+	* @param {Array} arr  The array of IDs.
+	*/
+	sharedService.findAllByID = function(list,arr){
+		var toReturn =[];
+		angular.forEach(arr, function(obj){
+			toReturn.push(sharedService.findByID(list,obj));
+		});
+		return toReturn;
+	}
+
+	/**
+	* @ngdoc function
+	* @name getById
+	* @description
+	* # getById
+	* Fetch an Object of a certain type and ID from the corresponding table.
+	* @param {Object} val The ID of the object.
+	* @param {Object} type  The type of object.
+	*/
+	sharedService.getById = function(val,type){
+		return new Promise(function (fulfill, reject){
+			if(typeof val == "object"){
+				fulfill();
+			} else {
+				$http.get('/api/'+type+'/'+val)
+				.success(function(data) {
+					fulfill(data);
+				})
+				.error(function(data) {
+					console.log('Error: findAllByID: Values could not be loaded.');
+					reject(data);
+				});
+			}
+		});
+	}
+
+	/**
+	* @ngdoc function
+	* @name getAllByID
+	* @description
+	* # getAllByID
+	* Fetch a set of Objects of a certain type from the corresponding table.
+	* @param {Array} list The list of object IDs.
+	* @param {Object} type The type of object.
+	*/
+	sharedService.getAllByID = function(list,type){
+		return new Promise(function (fulfill, reject){
+			if(list != undefined && list != "" && list != null && list != [])
+			{
+				// Checking if the list is an array or a simple element.
+				// If the later, call getById.
+				if(list.constructor !== Array){
+					return sharedService.getById(list,type)
+					.then(function(res){
+						fulfill(res);
+					});
+				} else {
+					return Promise.all(list.map(function(val){
+						return sharedService.getById(val,type);
+					})).then(function(res){
+						console.log("Found "+JSON.stringify(res));
+						fulfill(res);
+					});
+				}
+			} else {
+				fulfill({});
+			}
+		});
+	}
+
+	/**
+	* @ngdoc function
+	* @name getAllChildById
+	* @description
+	* # getAllChildById
+	* Get a set of IDs from a sub-element of an Object and fetch the associated
+	* Objects from the corresponding table.
+	* @param {Array} list The list of object IDs.
+	* @param {Object} child The name of the sub-element.
+	* @param {Object} type The type of object.
+	*/
+	sharedService.getAllChildById = function(list,child,type){
+		return new Promise(function (fulfill, reject){
+			if(list != undefined && list != "" && list != null && list != [] && list != {} && list.constructor === Array)
+			{
+				return Promise.all(list.map(function(val){
+					sharedService.getAllByID(val[child],type).then(function(res){
+						val[child] = res;
+					});
+				})).then(function(res){
+					fulfill(res);
+				});
+			} else {
+				fulfill([]);
+			}
+		});
+	}
+
+	/**
+	* @ngdoc function
+	* @name getAllGrandChildById
+	* @description
+	* # getAllGrandChildById
+	* Get a set of IDs from a sub-sub-element of an Object and fetch the associated
+	* Objects from the corresponding table.
+	* @param {Array} list The list of object IDs.
+	* @param {Object} child The name of the sub-element.
+	* @param {Object} grand The name of the sub-sub-element.
+	* @param {Object} type The type of object.
+	*/
+	sharedService.getAllGrandChildById = function(list,child,grand,type){
+		return new Promise(function (fulfill, reject){
+			if(list != undefined && list != "" && list != null && list != [] && list != {} && list.constructor === Array)
+			{
+				return Promise.all(list.map(function(val){
+					sharedService.getAllChildByID(val[child],grand,type);
+				})).then(function(res){
+					fulfill(res);
+				});
+			} else {
+				fulfill([]);
+			}
+		});
+	}
+
 
 		/**
 		* @ngdoc function
@@ -629,11 +780,13 @@ angular
 			return new Promise(function (fulfill, reject){
 				var treatedValues = null;
 				if(value != undefined && value!=null && value!=''){
+					console.log("Treated :" +JSON.stringify(value));
 					treatedValues = {
 						'id'					: value.id,
 						'displayName'	: value.displayName,
 						'username'		: value.username
 					};
+						console.log("Treated :" +JSON.stringify(treatedValues));
 				}
 				fulfill(treatedValues);
 			});

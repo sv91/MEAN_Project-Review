@@ -8,7 +8,7 @@
 * Controller responsible for the .note page.
 */
 angular.module('proposalReviewApp')
-.controller('NoteCtrl', function ($scope, $stateParams, $http) {
+.controller('NoteCtrl', function ($scope, $stateParams, $http, sharedService) {
   // Getting the project ID from the address.
   $scope.data.params = $stateParams;
   $scope.data.menu.project = $scope.data.params[Object.keys($scope.data.params)[0]];
@@ -16,25 +16,6 @@ angular.module('proposalReviewApp')
   $scope.data.select.editedNote = {};
   $scope.data.menu.notes = true;
   $scope.data.menu.comments = false;
-
-  /**
-  * @ngdoc function
-  * @name findByID
-  * @description
-  * # findByID
-  * Look for an Object with a specified ID inside the provided Array.
-  * @param {Array} list The array to check for the object.
-  * @param {Object} obj The object ID.
-  */
-  function findByID(list,obj){
-    var toReturn;
-    angular.forEach(list, function(val){
-      if(val._id == obj){
-        toReturn = val;
-      }
-    });
-    return toReturn;
-  }
 
   /**
   * @ngdoc function
@@ -46,7 +27,7 @@ angular.module('proposalReviewApp')
   function loadInfo(){
     return new Promise(function(fulfill, reject){
       $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
-      $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
+      $scope.data.select.project = sharedService.findByID($scope.data.projects, $scope.data.select.projectId);
       fulfill($scope.data.select.project.review);
     });
   }
