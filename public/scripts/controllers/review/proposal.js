@@ -68,62 +68,7 @@ angular.module('proposalReviewApp')
     return res;
   });
 
-  // For each property of the project that is an ID, replace the ID by the actual Object.
-  sharedService.getAllByID($scope.data.select.proposal.teams,'teams')
-  .then(function(res){
-    $scope.data.select.proposal.teams = res;
-    return res
-  }).then(function(res){
-    return sharedService.getAllByID($scope.data.select.proposal.tags,'tags').then(function(res){$scope.data.select.proposal.tags = res; return res});
-  }).then(function(res){
-    return sharedService.getAllByID($scope.data.select.proposal.relatedProjects,'relatedprojects').then(function(res){$scope.data.select.proposal.relatedProjects = res; return res});
-  }).then(function(res){
-    return sharedService.getAllByID($scope.data.select.proposal.shortDeliverable,'shortdeliverables').then(function(res){$scope.data.select.proposal.shortDeliverable = res; return res});
-  }).then(function(res){
-    return sharedService.getAllByID($scope.data.select.proposal.publications,'publications').then(function(res){$scope.data.select.proposal.publications = res; return res});
-  }).then(function(res){
-    return sharedService.getAllByID($scope.data.select.proposal.grants,'grants').then(function(res){$scope.data.select.proposal.grants = res; return res});
-  }).then(function(res){
-    return sharedService.getAllByID($scope.data.select.proposal.tasks,'tasks').then(function(res){$scope.data.select.proposal.tasks = res; return res});
-  }).then(function(res){
-    return sharedService.getAllByID($scope.data.select.proposal.requirements,'requirements').then(function(res){$scope.data.select.proposal.requirements = res; return res});
-  }).then(function(res){
-    return sharedService.getAllByID($scope.data.select.proposal.deliverables,'deliverables').then(function(res){$scope.data.select.proposal.deliverables = res; return res});
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.requirements,'input','inputs');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.requirements,'output','outputs');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.requirements,'type','requirementtypes');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.tasks,'grant','grants');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.deliverables,'dependency','deliverables');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.deliverables,'requirements','requirements');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.deliverables,'softdev','softdevs');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.deliverables,'datatransfer','datatransfers');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.deliverables,'virtualization','virtualizations');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.deliverables,'devenv','devenvs');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.deliverables,'hpc','hpcressources');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.deliverables,'cloud','cloudressources');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.deliverables,'hardware','hardwares');
-  }).then(function(res){
-    return sharedService.getAllChildById($scope.data.select.proposal.deliverables,'hr','humanressources');
-  }).then(function(res){
-    return sharedService.getAllGrandChildById($scope.data.select.proposal.deliverables,'hpc','type','hpctypes');
-  }).then(function(res){
-    return sharedService.getAllGrandChildById($scope.data.select.proposal.deliverables,'cloud','type','cloudtypes');
-  }).then(function(res){
-    return sharedService.getAllGrandChildById($scope.data.select.proposal.deliverables,'hr','role','roles');
-  });
+  sharedService.loadWholeProject($scope.data.select.proposal);
 
   $scope.data.select.loaded = true;
   $scope.data.summ = {};

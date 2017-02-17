@@ -1075,6 +1075,73 @@ angular
 			});
 		};
 
+		/**
+		* @ngdoc function
+		* @name loadWholeProject
+		* @description
+		* # loadWholeProject
+		* For each property of the project that is an ID, replace the ID by the actual Object.
+		* @param {Object} value The values to check.
+		*/
+		sharedService.loadWholeProject = function(value){
+		// For each property of the project that is an ID, replace the ID by the actual Object.
+	  sharedService.getAllByID(value.teams,'teams')
+	  .then(function(res){
+	    value.teams = res;
+	    return res
+	  }).then(function(res){
+	    return sharedService.getAllByID(value.tags,'tags').then(function(res){value.tags = res; return res});
+	  }).then(function(res){
+	    return sharedService.getAllByID(value.relatedProjects,'relatedprojects').then(function(res){value.relatedProjects = res; return res});
+	  }).then(function(res){
+	    return sharedService.getAllByID(value.shortDeliverable,'shortdeliverables').then(function(res){value.shortDeliverable = res; return res});
+	  }).then(function(res){
+	    return sharedService.getAllByID(value.publications,'publications').then(function(res){value.publications = res; return res});
+	  }).then(function(res){
+	    return sharedService.getAllByID(value.grants,'grants').then(function(res){value.grants = res; return res});
+	  }).then(function(res){
+	    return sharedService.getAllByID(value.tasks,'tasks').then(function(res){value.tasks = res; return res});
+	  }).then(function(res){
+	    return sharedService.getAllByID(value.requirements,'requirements').then(function(res){value.requirements = res; return res});
+	  }).then(function(res){
+	    return sharedService.getAllByID(value.deliverables,'deliverables').then(function(res){value.deliverables = res; return res});
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.requirements,'input','inputs');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.requirements,'output','outputs');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.requirements,'type','requirementtypes');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.tasks,'grant','grants');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.deliverables,'dependency','deliverables');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.deliverables,'requirements','requirements');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.deliverables,'softdev','softdevs');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.deliverables,'datatransfer','datatransfers');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.deliverables,'virtualization','virtualizations');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.deliverables,'devenv','devenvs');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.deliverables,'hpc','hpcressources');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.deliverables,'cloud','cloudressources');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.deliverables,'hardware','hardwares');
+	  }).then(function(res){
+	    return sharedService.getAllChildById(value.deliverables,'hr','humanressources');
+	  }).then(function(res){
+	    return sharedService.getAllGrandChildById(value.deliverables,'hpc','type','hpctypes');
+	  }).then(function(res){
+	    return sharedService.getAllGrandChildById(value.deliverables,'cloud','type','cloudtypes');
+	  }).then(function(res){
+	    return sharedService.getAllGrandChildById(value.deliverables,'hr','role','roles');
+	  });
+	};
+
 	return sharedService;
 })
 

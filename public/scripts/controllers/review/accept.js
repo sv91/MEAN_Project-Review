@@ -8,7 +8,10 @@
 * Controller responsible for the .accept page of the Review.
 */
 angular.module('proposalReviewApp')
-.controller('AcceptCtrl', function ($scope, $stateParams, $http) {
+.controller('AcceptCtrl', function ($scope, $stateParams, $http, sharedService) {
+  $scope.data.select = {};
+  $scope.data.groups={};
+
   // Limit grade to be accepted
   var passingGrade = 70;
   $scope.good_grade = false;
@@ -27,7 +30,11 @@ angular.module('proposalReviewApp')
   function loadInfo(){
     return new Promise(function(fulfill, reject){
       $scope.data.select.projectId = $scope.data.params[Object.keys($scope.data.params)[0]];
-      $scope.data.select.project = findByID($scope.data.projects, $scope.data.select.projectId);
+      $scope.data.select.project = sharedService.findByID($scope.data.projects, $scope.data.select.projectId);
+      $scope.data.select.proposal = sharedService.findByID($scope.data.submissions, sharedService.findByID($scope.data.proposals, $scope.data.select.project.proposal).submission);
+      $scope.data.select.proposal.pi = sharedService.findByID($scope.data.persons, $scope.data.select.proposal.pi);
+      $scope.data.select.proposal.copi = sharedService.findByID($scope.data.persons, $scope.data.select.proposal.copi);
+      $scope.data.select.proposal.members = sharedService.findAllByID($scope.data.persons, $scope.data.select.proposal.members);
       fulfill($scope.data.select.project.review);
     });
   }
@@ -90,25 +97,6 @@ angular.module('proposalReviewApp')
 
   /**
   * @ngdoc function
-  * @name findByID
-  * @description
-  * # findByID
-  * Look for an Object with a specified ID inside the provided Array.
-  * @param {Array} list The array to check for the object.
-  * @param {Object} obj The object ID.
-  */
-  function findByID(list,obj){
-    var toReturn;
-    angular.forEach(list, function(val){
-      if(val._id == obj){
-        toReturn = val;
-      }
-    });
-    return toReturn;
-  }
-
-  /**
-  * @ngdoc function
   * @name go_back
   * @description
   * # go_back
@@ -127,13 +115,26 @@ angular.module('proposalReviewApp')
   * notifies the needed persons.
   */
   $scope.finalizeProject = function(){
+    sharedService.loadWholeProject($scope.data.select.proposal);
+
     // Create the data for the Post request to create a Jira issue
     var jira = {};
     jira.fields = {};
     jira.fields.project = {"key":"HELP2"};
     jira.fields.summary = "[Project Requirements]" ;
-    jira.fields.description = JSON.stringify();
+    jira.fields.description = JSON.stringify($scope.data.select.proposal);
+    console.log(JSON.stringify(jira));
 
+    $scope.data.select.loaded = true;
+
+
+    $http.get("https://bbp.epfl.ch/api/wallet/group/v1/bbp-dev-proj01")
+    .success(function(res){
+      console.log(JSON.stringify(res));
+    })
+    .error(function() {
+      console.log('Error: Loading groups');
+    });
 
   }
 
