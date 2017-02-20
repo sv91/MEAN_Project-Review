@@ -7,6 +7,7 @@ var morgan          = require('morgan');
 var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 var nodemailer      = require('nodemailer');
+var https           = require('https');
 
 // Configuration ===============================================================
 mongoose.connect('mongodb://localhost:27017/proposaldb');
@@ -1294,12 +1295,15 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
 
   // Api send ------------------------------------------------------------------
   app.get('/groups/:target_id', function(req, res){
-    $http.get("https://bbp.epfl.ch/api/wallet/group/v1/bbp-dev-proj"+req.params.target_id)
-    .success(function(res){
-      return res;
-    })
-    .error(function() {
-      console.log('Error: Loading groups');
+    var opt = {
+    host : 'https://bbp.epfl.ch', // here only the domain name
+    // (no http/https !)
+    port : 443,
+    path : '/api/wallet/group/v1/bbp-dev-proj'+req.params.target_id, // the rest of the url with parameters if needed
+    method : 'GET' // do GET
+    };
+    https.request(opt, function(results){
+      return results;
     });
   });
 
