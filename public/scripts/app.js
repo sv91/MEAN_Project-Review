@@ -167,7 +167,7 @@ angular
 			}
     })
     .error(function() {
-      console.log('Error: Loading groups');
+      console.log('Error: Loading groups at group '+id);
     });
 	});
 	}
