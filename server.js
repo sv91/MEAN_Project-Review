@@ -1290,6 +1290,42 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
       deleteOne(req,res,Note);
     });
 
+  // Groups EPFL
+
+  // Api send ------------------------------------------------------------------
+  app.get('/groups/:target_id', function(req, res){
+    $http.get("https://bbp.epfl.ch/api/wallet/group/v1/bbp-dev-proj"+req.params.target_id)
+    .success(function(res){
+      return res;
+    })
+    .error(function() {
+      console.log('Error: Loading groups');
+    });
+  });
+
+  app.post('/api/email/submission', function(req,res){
+    // setup e-mail data with unicode symbols
+    var mailOptions = {
+      to: 'alexander.vostriakov@epfl.ch', // list of receivers
+      subject: req.body.title, // Subject line
+      text: req.body.text, // plaintext body
+      html: req.body.html
+    };
+    switch(req.body.to) {
+    case 'onlyone':
+        mailOptions.to = 'alexander.vostriakov@epfl.ch';
+        break;
+    case 'twotesting':
+        mailOptions.to = 'alexander.vostriakov@epfl.ch, fabien.delalondre@epfl.ch';
+        break;
+    case 'reviewingteam':
+        mailOptions.to = '';
+        break;
+    default:
+        mailOptions.to = '';
+    }
+
+
   // Application ---------------------------------------------------------------
   app.get('*', function(req, res) {
     res.sendFile('./public/index.html'); //load the single view file

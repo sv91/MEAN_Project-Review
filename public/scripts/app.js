@@ -157,7 +157,7 @@ angular
 
 	sharedService.checkEPFLGroups = function(id){
 		return new Promise(function (fulfill, reject){
-		$http.get("https://bbp.epfl.ch/api/wallet/group/v1/bbp-dev-proj"+id)
+		$http.get("/groups/"+id)
     .success(function(res){
       console.log(JSON.stringify(res));
 			if(res.data == [] | res.data == undefined | res.data == "" ){
