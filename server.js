@@ -1295,6 +1295,7 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
 
   // Api send ------------------------------------------------------------------
   app.get('/groups/:target_id', function(req, res){
+    console.log('In');
     var opt = {
     host : 'https://bbp.epfl.ch', // here only the domain name
     // (no http/https !)

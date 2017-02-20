@@ -127,7 +127,9 @@ angular.module('proposalReviewApp')
 
     $scope.data.select.loaded = true;
 
-    console.log("Empty group: "+sharedService.checkEPFLGroups(1));
+    sharedService.checkEPFLGroups(1).then(function(res){
+      console.log("Empty group: "+ res);
+    });
 
   }
 
