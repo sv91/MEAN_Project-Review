@@ -155,6 +155,23 @@ angular
 		return toReturn;
 	}
 
+	sharedService.checkEPFLGroups = function(id){
+		return new Promise(function (fulfill, reject){
+		$http.get("https://bbp.epfl.ch/api/wallet/group/v1/bbp-dev-proj"+id)
+    .success(function(res){
+      console.log(JSON.stringify(res));
+			if(res.data == [] | res.data == undefined | res.data == "" ){
+				fulfill(sharedService.checkEPFLGroups(id+1));
+			} else {
+				fulfill(id);
+			}
+    })
+    .error(function() {
+      console.log('Error: Loading groups');
+    });
+	});
+	}
+
 	/**
 	* @ngdoc function
 	* @name getById

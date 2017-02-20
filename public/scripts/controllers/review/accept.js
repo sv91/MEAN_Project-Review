@@ -127,14 +127,7 @@ angular.module('proposalReviewApp')
 
     $scope.data.select.loaded = true;
 
-
-    $http.get("https://bbp.epfl.ch/api/wallet/group/v1/bbp-dev-proj01")
-    .success(function(res){
-      console.log(JSON.stringify(res));
-    })
-    .error(function() {
-      console.log('Error: Loading groups');
-    });
+    console.log("Empty group: "+sharedService.checkEPFLGroups(1));
 
   }
 
