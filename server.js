@@ -1304,6 +1304,7 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
     method : 'GET' // do GET
     };
     https.request(opt, function(results){
+      console.log('Results: '+JSON.stringify(results));
       return results;
     });
   });
