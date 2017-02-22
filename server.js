@@ -1293,9 +1293,33 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
 
   // Groups EPFL
 
-  // Api send ------------------------------------------------------------------
+  // Get group list ------------------------------------------------------------------
   app.get('/groups', function(req, res){
     request('https://bbp.epfl.ch/api/wallet/group/v1/', function (error, response, body) {
+      console.log('error:', error); // Print the error if one occurred
+      console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+      res.json(body);
+    });
+  });
+
+  // Create a group ------------------------------------------------------------------
+  app.put('/groups', function(req, res){
+    request({
+      method: 'PUT',
+      uri: 'https://bbp.epfl.ch/api/wallet/group/v1/bbp-dev-proj' + req.params.target_id;
+    }, function (error, response, body) {
+      console.log('error:', error); // Print the error if one occurred
+      console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+      res.json(body);
+    });
+  });
+
+  // Add a member to a group ------------------------------------------------------------------
+  app.put('/groups/:target_id', function(req, res){
+    request({
+      method: 'PUT',
+      uri: 'https://bbp.epfl.ch/api/wallet/group/v1/bbp-dev-proj' + req.params.target_id + '/'+req.body.type+'/'+req.body.name;
+    }, function (error, response, body) {
       console.log('error:', error); // Print the error if one occurred
       console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
       res.json(body);

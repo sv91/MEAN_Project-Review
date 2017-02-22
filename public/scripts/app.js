@@ -159,7 +159,18 @@ angular
 		return new Promise(function (fulfill, reject){
 		$http.get("/groups")
     .success(function(res){
-      console.log("Groups: "+JSON.stringify(res));
+			var exists = true;
+			var id = 0;
+			while(exists){
+				id += 1;
+				exists = false;
+				angular.forEach(res, function(val){
+					if(val.name == 'bbp-dev-proj'+id){
+						exists = true;
+					}
+				});
+			}
+			fulfill(id);
     })
     .error(function() {
       console.log('Error: Loading groups at group '+id);
