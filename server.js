@@ -1294,7 +1294,7 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
   // Groups EPFL
 
   // Api send ------------------------------------------------------------------
-  app.get('/groups/:target_id', function(req, res){
+  app.get('/groups', function(req, res){
     request('https://bbpteam.epfl.ch/api/wallet/group/v1/bbp-dev-proj'+req.params.target_id, function (error, response, body) {
       console.log('error:', error); // Print the error if one occurred
       console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received

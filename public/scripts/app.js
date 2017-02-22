@@ -157,7 +157,7 @@ angular
 
 	sharedService.checkEPFLGroups = function(){
 		return new Promise(function (fulfill, reject){
-		$http.get("/groups/")
+		$http.get("/groups")
     .success(function(res){
       console.log("Groups: "+JSON.stringify(res));
     })
