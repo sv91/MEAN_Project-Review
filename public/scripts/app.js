@@ -217,7 +217,6 @@ angular
 					return Promise.all(list.map(function(val){
 						return sharedService.getById(val,type);
 					})).then(function(res){
-						console.log("Found "+JSON.stringify(res));
 						fulfill(res);
 					});
 				}
@@ -792,13 +791,11 @@ angular
 			return new Promise(function (fulfill, reject){
 				var treatedValues = null;
 				if(value != undefined && value!=null && value!=''){
-					console.log("Treated :" +JSON.stringify(value));
 					treatedValues = {
 						'id'					: value.id,
 						'displayName'	: value.displayName,
 						'username'		: value.username
 					};
-						console.log("Treated :" +JSON.stringify(treatedValues));
 				}
 				fulfill(treatedValues);
 			});

@@ -123,11 +123,10 @@ angular.module('proposalReviewApp')
     jira.fields.project = {"key":"HELP2"};
     jira.fields.summary = "[Project Requirements]" ;
     jira.fields.description = JSON.stringify($scope.data.select.proposal);
-    console.log(JSON.stringify(jira));
 
     $scope.data.select.loaded = true;
 
-    sharedService.checkEPFLGroups(1).then(function(res){
+    sharedService.checkEPFLGroups().then(function(res){
       console.log("Empty group: "+ res);
     });
 
