@@ -1298,7 +1298,7 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
     request('https://bbp.epfl.ch/api/wallet/group/v1/', function (error, response, body) {
       console.log('error:', error); // Print the error if one occurred
       console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-      return body;
+      res.json(body);
     });
   });
 
