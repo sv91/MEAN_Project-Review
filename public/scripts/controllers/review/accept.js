@@ -108,6 +108,28 @@ angular.module('proposalReviewApp')
 
   /**
   * @ngdoc function
+  * @name pushMember
+  * @description
+  * # pushMember
+  * Add a person to a group.
+  */
+  function pushMember(type,member,group){
+    return new Promise(function (fulfill, reject){
+      var data = {'type': type, 'name': member};
+      $http.put('/groups/'+group, data)
+      .success(function(res2) {
+        console.log('Added the member "'+member+'" to the group n°"'+group+'".');
+        fulfill(res2);
+      })
+      .error(function(data) {
+        console.log('Error: Review/Accept.JS: pushMember failed to add the member "'+member+'" to the group n°"'+group+'".');
+        reject();
+      });
+    });
+  }
+
+  /**
+  * @ngdoc function
   * @name finalizeProject
   * @description
   * # finalizeProject
@@ -122,14 +144,28 @@ angular.module('proposalReviewApp')
     jira.fields = {};
     jira.fields.project = {"key":"HELP2"};
     jira.fields.summary = "[Project Requirements]" ;
-    jira.fields.description = JSON.stringify($scope.data.select.proposal);
+    jira.fields.description = $scope.data.select.proposal;
 
     $scope.data.select.loaded = true;
 
     sharedService.checkEPFLGroups().then(function(res){
       console.log("Empty group: "+ res);
+      var data = {'id': res};
+      $http.put('/groups', data)
+      .success(function(res2) {
+        pushMember("admins",$scope.data.select.proposal.pi.username,res).then(function(res){
+          return res;
+        });
+        angular.forEach($scope.data.select.proposal.members,function(val){
+          pushMember("members",val.username,res).then(function(res){
+            return res;
+          });
+        });
+      })
+      .error(function(data) {
+        console.log('Error: Review/Accept.JS: Notes could not be loaded.');
+      });
     });
-
   }
 
 });
