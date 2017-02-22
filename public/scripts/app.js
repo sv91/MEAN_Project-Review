@@ -155,16 +155,11 @@ angular
 		return toReturn;
 	}
 
-	sharedService.checkEPFLGroups = function(id){
+	sharedService.checkEPFLGroups = function(){
 		return new Promise(function (fulfill, reject){
-		$http.get("/groups/"+id)
+		$http.get("/groups/")
     .success(function(res){
-      console.log(JSON.stringify(res));
-			if(res.data == [] | res.data == undefined | res.data == "" ){
-				fulfill(sharedService.checkEPFLGroups(id+1));
-			} else {
-				fulfill(id);
-			}
+      console.log("Groups: "+JSON.stringify(res));
     })
     .error(function() {
       console.log('Error: Loading groups at group '+id);
