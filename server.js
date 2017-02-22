@@ -7,7 +7,7 @@ var morgan          = require('morgan');
 var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 var nodemailer      = require('nodemailer');
-var https           = require('https');
+var request         = require('request');
 
 // Configuration ===============================================================
 mongoose.connect('mongodb://localhost:27017/proposaldb');
@@ -1296,16 +1296,11 @@ var transporter = nodemailer.createTransport('smtps://review.proposal.app%40gmai
   // Api send ------------------------------------------------------------------
   app.get('/groups/:target_id', function(req, res){
     console.log('In');
-    var opt = {
-    host : 'https://bbp.epfl.ch', // here only the domain name
-    // (no http/https !)
-    port : 443,
-    path : '/api/wallet/group/v1/bbp-dev-proj'+req.params.target_id, // the rest of the url with parameters if needed
-    method : 'GET' // do GET
-    };
-    https.request(opt, function(results){
-      console.log('Results: '+JSON.stringify(results));
-      return results;
+    request('https://bbpteam.epfl.ch/api/wallet/group/v1/bbp-dev-proj'+req.params.target_id, function (error, response, body) {
+      console.log('error:', error); // Print the error if one occurred
+      console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+      console.log('body:', body); // Print the HTML for the Google homepage.
+      return response;
     });
   });
 

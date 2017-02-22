@@ -1106,8 +1106,8 @@ angular
 	  .then(function(res){
 	    value.teams = res;
 	    return res
-	  }).then(function(res){
-	    return sharedService.getAllByID(value.tags,'tags').then(function(res){value.tags = res; return res});
+	//  }).then(function(res){
+	 //   return sharedService.getAllByID(value.tags,'tags').then(function(res){value.tags = res; return res});
 	  }).then(function(res){
 	    return sharedService.getAllByID(value.relatedProjects,'relatedprojects').then(function(res){value.relatedProjects = res; return res});
 	  }).then(function(res){
