@@ -1,0 +1,7 @@
+forge "http://forge.puppetlabs.com"
+
+mod "puppetlabs/stdlib", "4.15.1"
+mod "puppetlabs/apt", "2.3.0"
+mod 'puppetlabs-mongodb', '0.17.0'
+mod 'puppet-nodejs', '2.3.0'
+mod 'puppetlabs-vcsrepo', '1.5.0'

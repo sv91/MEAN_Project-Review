@@ -143,12 +143,12 @@ angular.module('proposalReviewApp')
     var jira = {};
     jira.fields = {};
     jira.fields.project = {"key":"HELP2"};
-    jira.fields.summary = "[Project Requirements]" ;
+    jira.fields.summary = "[Project Requirements]"+$scope.data.select.proposal.projectTitle ;
     jira.fields.description = $scope.data.select.proposal;
-
+    window.open("https://bbpteam.epfl.ch/project/issues/secure/CreateIssueDetails!init.jspa?pid=12160&issuetype=11&summary="+encodeURI(jira.fields.summary)+"&description="+encodeURI(JSON.stringify(jira.fields.description)));
     $scope.data.select.loaded = true;
 
-    sharedService.checkEPFLGroups().then(function(res){
+  /*  sharedService.checkEPFLGroups().then(function(res){
       console.log("Empty group: "+ res);
       var data = {'id': res};
       $http.put('/groups', data)
@@ -166,6 +166,7 @@ angular.module('proposalReviewApp')
         console.log('Error: Review/Accept.JS: Notes could not be loaded.');
       });
     });
+    */
   }
 
 });
