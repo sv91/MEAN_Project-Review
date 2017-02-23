@@ -145,7 +145,7 @@ angular.module('proposalReviewApp')
     jira.fields.project = {"key":"HELP2"};
     jira.fields.summary = "[Project Requirements]"+$scope.data.select.proposal.projectTitle ;
     jira.fields.description = $scope.data.select.proposal;
-    window.open("https://bbpteam.epfl.ch/project/issues/secure/CreateIssueDetails!init.jspa?pid=12160&issuetype=11&summary="+encodeURI(jira.fields.summary)+"&description="+encodeURI(JSON.stringify(jira.fields.description)));
+    window.open("https://bbpteam.epfl.ch/project/issues/secure/CreateIssueDetails!init.jspa?pid=12160&issuetype=11&reporter="+$scope.activeUser.username+"&summary="+encodeURI(jira.fields.summary)+"&description="+encodeURI(JSON.stringify(jira.fields.description)));
     $scope.data.select.loaded = true;
 
   /*  sharedService.checkEPFLGroups().then(function(res){
