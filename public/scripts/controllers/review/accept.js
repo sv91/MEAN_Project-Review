@@ -139,16 +139,9 @@ angular.module('proposalReviewApp')
   $scope.finalizeProject = function(){
     sharedService.loadWholeProject($scope.data.select.proposal);
 
-    // Create the data for the Post request to create a Jira issue
-    var jira = {};
-    jira.fields = {};
-    jira.fields.project = {"key":"HELP2"};
-    jira.fields.summary = "[Project Requirements]"+$scope.data.select.proposal.projectTitle ;
-    jira.fields.description = $scope.data.select.proposal;
-    window.open("https://bbpteam.epfl.ch/project/issues/secure/CreateIssueDetails!init.jspa?pid=12160&issuetype=11&reporter="+$scope.activeUser.username+"&summary="+encodeURI(jira.fields.summary)+"&description="+encodeURI(JSON.stringify(jira.fields.description)));
     $scope.data.select.loaded = true;
 
-  /*  sharedService.checkEPFLGroups().then(function(res){
+    sharedService.checkEPFLGroups().then(function(res){
       console.log("Empty group: "+ res);
       var data = {'id': res};
       $http.put('/groups', data)
@@ -161,6 +154,15 @@ angular.module('proposalReviewApp')
             return res;
           });
         });
+
+        // Create the data for the Post request to create a Jira issue
+        var jira = {};
+        jira.fields = {};
+        jira.fields.project = {"key":"HELP2"};
+        jira.fields.summary = "[Project Requirements]" + $scope.data.select.proposal.projectTitle;
+        jira.fields.description = $scope.data.select.proposal;
+        jira.fields.description.group = "bbp-dev-proj" + res;
+        window.open("https://bbpteam.epfl.ch/project/issues/secure/CreateIssueDetails!init.jspa?pid=12160&issuetype=11&reporter="+$scope.activeUser.username+"&summary="+encodeURI(jira.fields.summary)+"&description="+encodeURI(JSON.stringify(jira.fields.description)));
       })
       .error(function(data) {
         console.log('Error: Review/Accept.JS: Notes could not be loaded.');
